@@ -1,0 +1,33 @@
+# Notice
+
+Supplementary licensing information. **Not part of the licence grant** — see `LICENSE`
+for the terms, which are unmodified MIT.
+
+## Three independent licensing questions
+
+| Subject | Governed by | Status |
+|---|---|---|
+| **Software** | `LICENSE` | MIT — **provisional default, requires confirmation** |
+| **Documentation** | not yet decided | The governance documents in `docs/` are substantial original work and may warrant separate terms (for example CC-BY) |
+| **Public scientific data** | the source's own terms, per record | Recorded in the provenance schema `license` field (`ADR-0003`, `SCI0-003`) |
+
+These do not follow from one another. An MIT-licensed codebase does not license the data
+it ingests, and redistributing a snapshot is governed by the source terms — ChEMBL,
+BindingDB, PubChem and RCSB PDB each impose their own.
+
+## Data redistribution
+
+No dataset is committed to this repository (ENG §13; `data/` is DVC-tracked and
+git-ignored). Snapshots are content-hashed artefacts held outside version control, and any
+redistribution is subject to the per-record licence recorded in provenance, not to the
+terms above.
+
+## Open decisions
+
+1. Confirm or replace the MIT software licence.
+2. Decide whether documentation carries separate terms.
+3. Confirm that snapshot redistribution, if intended, is permitted by every source in
+   `ADR-0003` §2.
+
+Items 1 and 3 should be settled before the first public push. Item 3 in particular is a
+question about the *sources*, not about this code.

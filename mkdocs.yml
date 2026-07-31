@@ -1,0 +1,39 @@
+site_name: orthosteric
+site_description: Comparative evidence learning for mechanistic orthosteric selectivity
+strict: true
+docs_dir: docs
+
+theme:
+  name: material
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_source: false
+
+nav:
+  - Home: index.md
+  - Governance:
+      - Constitution: PROJECT_CONSTITUTION_v4.6.md
+      - Engineering Standards: ENGINEERING_STANDARDS.md
+      - Foundation Protocol: IMPLEMENTATION_PROTOCOL_FOUNDATION.md
+      - Scientific Protocol: IMPLEMENTATION_PROTOCOL_SCIENTIFIC.md
+      - Project Specification: PROJECT_SPECIFICATION.md
+      - Governance Versions: GOVERNANCE_VERSIONS.md
+  - Execution:
+      - Implementation Backlog: IMPLEMENTATION_BACKLOG.md
+      - Foundation State: FOUNDATION_STATE.md
+  - Decisions:
+      - ADR-0001 Foundation authorization: adr/ADR-0001-foundation-authorization.md
+      - ADR-0002 Governance closure: adr/ADR-0002-governance-closure.md
+      - ADR-0003 Public knowledge-only training: adr/ADR-0003-public-knowledge-only-training-policy.md
+      - ADR-0004 FND-10 first module: adr/ADR-0004-fnd10-first-module.md
+      - ADR-0005 Package name (superseded): adr/ADR-0005-package-name.md
+      - ADR-0007 Package rename: adr/ADR-0007-package-rename.md
+  - API:
+      - runtime: api/runtime.md

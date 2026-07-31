@@ -1,0 +1,59 @@
+name: CI
+
+# Phase 1 checks only (ENG §20). Phase 2 and Phase 3 checks are added when the work
+# they guard begins; building them before there is code to run through them repeats the
+# constitution-before-construction inversion.
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+jobs:
+  phase1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # seal-timestamp and lockfile checks need history
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+
+      - name: Ruff lint
+        run: python -m ruff check src tests scripts
+
+      - name: Ruff format check
+        run: python -m ruff format --check src tests scripts
+
+      - name: MyPy strict
+        run: python -m mypy
+
+      - name: Pytest with coverage
+        run: python -m pytest --cov --cov-report=term-missing
+
+      - name: Import-graph contracts
+        run: PYTHONPATH=src lint-imports --config .importlinter
+
+      - name: tests mirrors src
+        run: python scripts/checks/tests_mirror_src.py
+
+      - name: Seal timestamp
+        run: python scripts/checks/seal_timestamp.py
+
+      - name: No unresolved FILL marker
+        run: python scripts/checks/no_fill_markers.py
+
+      - name: No significance test on the S8c gradient
+        run: python scripts/checks/no_s8c_significance_test.py
+
+      - name: Lockfile change requires an ADR
+        run: python scripts/checks/lockfile_requires_adr.py
+
+      - name: Docs build strict
+        run: python -m mkdocs build --strict

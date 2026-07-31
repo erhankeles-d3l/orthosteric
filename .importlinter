@@ -1,0 +1,35 @@
+[importlinter]
+root_package = orthosteric
+include_external_packages = True
+
+[importlinter:contract:layers]
+name = Contract 4 - layer dependency direction (SI17)
+type = layers
+layers =
+    orthosteric.eval
+    orthosteric.explain
+    orthosteric.train
+    orthosteric.model
+    orthosteric.features
+    orthosteric.pocket
+    orthosteric.data
+    orthosteric.runtime
+exhaustive = false
+
+[importlinter:contract:notebooks]
+name = Contract 2 - src never imports notebooks or scratch
+type = forbidden
+source_modules =
+    orthosteric
+forbidden_modules =
+    notebooks
+    scratch
+
+[importlinter:contract:tier2]
+name = Contract 3 - no training path reaches Tier 2 (inert until data.tier2_gate exists)
+type = forbidden
+source_modules =
+    orthosteric.train
+forbidden_modules =
+    orthosteric.data.tier2_gate
+unmatched_ignore_imports_alerting = none

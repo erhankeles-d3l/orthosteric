@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "orthosteric"
+version = "0.1.0"
+description = "Comparative evidence learning for mechanistic orthosteric selectivity, benchmarked on Class I PI3Ks"
+requires-python = "==3.12.*"
+license = { file = "LICENSE" }
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "pytest-cov>=5",
+  "mypy>=1.11",
+  "ruff>=0.6",
+  "pre-commit>=3.8",
+  "mkdocs>=1.6",
+  "mkdocs-material>=9.5",
+  "mkdocstrings[python]>=0.26",
+  "import-linter>=2.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/orthosteric"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E","F","I","N","UP","B","A","C4","DTZ","PT","RET","SIM","ARG","PL","RUF","D","ANN","S"]
+ignore = ["D203","D213"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "PLR2004"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+disallow_any_explicit = false
+files = ["src", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q --strict-markers"
+
+[tool.coverage.run]
+source = ["src/orthosteric"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
