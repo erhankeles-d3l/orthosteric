@@ -151,3 +151,77 @@ finding is not affected by the corrections above.
 **UNRESOLVED — evidence insufficient to establish any single per-isoform Km(ATP) value
 with confidence sufficient for sealing.** This is the honest conclusion of this evidence
 review, stated plainly rather than papered over with an inferred table.
+
+---
+
+## Addendum — narrowly constrained follow-up search
+
+**Status: two genuine dedicated primary kinetics papers identified; numeric values not
+yet extracted (both access-restricted in this session). This materially strengthens the
+evidence base without resolving it.**
+
+### New source 1: Huang et al. 2011, *Anal. Bioanal. Chem.*
+
+**Citation:** Huang W, Jiang D, Wang X, Wang K, Sims CE, Allbritton NL, Zhang Q. "Kinetic
+analysis of PI3K reactions with fluorescent PIP2 derivatives." Anal Bioanal Chem.
+2011;401(6):1881–1888. DOI: 10.1007/s00216-011-5257-z. PMID: 21789487.
+
+**FACT — verified from PubMed abstract/figure-legend snippet:** the paper contains a
+figure explicitly titled "Measurement of Km for ATP for the PI3K reactions with FL-PIP2
+(A) or BODIPY-PIP2 (B) as the lipid substrate. Each experiment was carried out in
+duplicate and repeated three times."
+
+**This is qualitatively different from every source in the original AUDITOR-5 pass**: it
+is a dedicated kinetics paper reporting an actual Km(ATP) determination via replicated
+experiments (n=3, duplicate each), not an assay-design choice or a sponsor-document
+citation. This is the strongest-quality lead found in either research pass.
+
+**NOT ESTABLISHED:** the actual numeric Km(ATP) value(s). The full text is paywalled
+(Springer; "a shareable link is not currently available for this article") and was not
+retrievable in this session.
+
+**Source type:** primary, peer-reviewed. **Confidence in existence of a real
+determination:** HIGH. **Confidence in any specific number:** NONE — no number is
+reported here because none was retrieved.
+
+### New source 2: Maheshwari et al. 2017, *J. Biol. Chem.*
+
+**Citation:** Maheshwari S, Miller MS, O'Meally R, Cole RN, Amzel LM, Gabelli SB.
+"Kinetic and structural analyses reveal residues in phosphoinositide 3-kinase alpha that
+are critical for catalysis and substrate recognition." J Biol Chem. 2017;292:13541–13550.
+DOI: 10.1074/jbc.M116.772426.
+
+**FACT — verified from search snippets:** this is a dedicated kinetic and structural
+study specifically on PI3Kα catalysis, from a research group (Gabelli/Amzel, Johns
+Hopkins) with an established, multi-paper track record on PI3Kα structural biochemistry.
+
+**NOT ESTABLISHED:** the actual numeric Km(ATP) or Km(PIP2) values reported in this
+paper. Full text was not retrieved in this session (search snippets returned only
+citation lists from papers that cite it, not its own body text with numeric results).
+
+**Source type:** primary, peer-reviewed. **Confidence in existence of a real
+determination:** HIGH, specifically for PI3Kα. **Confidence in any specific number:**
+NONE.
+
+### What this changes and what it does not
+
+**Changes:** the evidence hierarchy proposed in the main body of this document (§6,
+source hierarchy) is now populated at its top tier with two real candidates for at least
+two isoforms (an unspecified PI3K isoform or isoforms in Huang 2011; PI3Kα specifically
+in Maheshwari 2017), rather than being populated only by assay-design inferences and
+sponsor documents. This is a genuine, disclosed improvement in evidence quality.
+
+**Does not change:** no per-isoform numeric Km(ATP) value can be reported here. The
+conclusion of the main document — that AUDITOR-5 evidence is insufficient to seal any
+value — is unchanged. What has changed is the quality of what remains to be retrieved:
+the Auditor (or someone with full-text access to *Anal. Bioanal. Chem.* and *JBC*) has
+two specific, dated, dedicated primary papers to pull, rather than needing to search from
+scratch.
+
+### Recommended next step, for the Auditor's consideration
+
+Obtaining full-text access to Huang et al. 2011 and Maheshwari et al. 2017 — both
+standard subscription/institutional-access journals, not open-access — is very likely
+sufficient to resolve at minimum PI3Kα's Km(ATP), and possibly others depending on Huang
+et al.'s isoform scope (not established from the snippet). This is a much narrower,
+more tractable next step than a general literature search.

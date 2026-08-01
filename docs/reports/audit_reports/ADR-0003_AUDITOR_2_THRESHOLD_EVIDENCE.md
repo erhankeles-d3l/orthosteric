@@ -164,3 +164,53 @@ the graph-connectivity question and is retained unchanged.
   the real corpus.
 
 **Independent Auditor decision still required: YES.**
+
+---
+
+## Addendum — empirical precedent search (published multi-target kinase datasets)
+
+**Status: one genuine, disclosed tension identified between field practice and this
+project's own pre-registration principle. No candidate number derived from it.**
+
+### What was found
+
+Established multi-target kinase drug-target-interaction benchmarks (KIBA, Davis, Metz —
+the standard reference datasets in this exact modeling area) are curated using a
+**post-hoc filtering threshold**: per the curation described in the DTI literature (e.g.,
+"Multi-View Self-Attention for Interpretable Drug-Target Interaction Prediction," arXiv
+2005.00397, citing the filtering methodology of an earlier curation), "a filter threshold
+is applied to each dataset for which compounds and targets with a total number of samples
+not above the threshold are removed."
+
+**FACT — directly supported by source:** this describes filtering **after** inspecting
+the raw dataset's actual structure, choosing a threshold that seems reasonable given what
+the data actually look like — not a threshold fixed in advance of ever seeing the data.
+
+**The exact numeric threshold values used by KIBA/Davis/Metz curators were not retrieved
+in this pass** and are not reported here.
+
+### The tension this creates, stated plainly rather than resolved
+
+This project's own Constitution §1.4 requires thresholds to be **fixed before results are
+seen** — precisely to prevent the kind of post-hoc, data-informed threshold-setting that
+is standard practice in the field this project is drawing methodological precedent from.
+
+This is not a reason to weaken the project's pre-registration requirement. It is a
+disclosure that the field's typical practice does not provide a "these are the numbers
+everyone uses" precedent that can be adopted directly — because the field's own numbers
+were chosen with knowledge of the data they were applied to, which is exactly the
+practice ADR-0003 §5 and Constitution §1.4 are designed to avoid repeating here.
+
+**RECOMMENDATION — not a governance decision:** if the Auditor wants an externally
+grounded floor for N_c/N_b/N_w, the more defensible route is not "what number did KIBA/
+Davis/Metz use" (since that number was itself chosen post-hoc) but rather "what filtering
+threshold, chosen before Stage 0 data are inspected, would a reasonable practitioner in
+this field consider defensible" — which is a judgment call for the Auditor, informed by
+but not derived from, the field's post-hoc precedents.
+
+### What remains the Auditor's decision
+
+Unchanged from the main document: no candidate range for N_c or N_b is proposed. This
+addendum adds context (the field's typical practice is post-hoc, which is exactly the
+practice this project's pre-registration rule exists to avoid) but does not supply a
+number.
