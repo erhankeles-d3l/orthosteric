@@ -1,6 +1,6 @@
 # ADR-0006 [Architectural] — Repository Structure Revisions
 
-**Status:** Proposed
+**Status:** Accepted
 **Date:** 2026-07-31
 **Reversibility:** costly after SCI code lands — decide before `feature/SCI0-001`
 
