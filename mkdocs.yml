@@ -34,6 +34,7 @@ nav:
       - ADR-0003 Public knowledge-only training: adr/ADR-0003-public-knowledge-only-training-policy.md
       - ADR-0004 FND-10 first module: adr/ADR-0004-fnd10-first-module.md
       - ADR-0005 Package name (superseded): adr/ADR-0005-package-name.md
+      - ADR-0006 Repository structure: adr/ADR-0006-repository-structure.md
       - ADR-0007 Package rename: adr/ADR-0007-package-rename.md
   - API:
       - runtime: api/runtime.md
