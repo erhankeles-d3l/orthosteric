@@ -1,6 +1,6 @@
 # ADR-0003 [Scientific] — Public Knowledge-Only Training Policy
 
-**Status:** Proposed — requires Independent Scientific Auditor sign-off (Constitution §7.7; ENG §1: a `Scientific` ADR may not be authored by the model developer alone)
+**Status:** Active — computational evidence-adjudication framework adopted under AMENDMENT-ADR-0003-COMPUTATIONAL-ADJUDICATION (commit 7e607e9, Project Owner authorization 2026-08-02).  The mandatory independent human Auditor gate is replaced by a pre-specified deterministic decision procedure implemented in `src/orthosteric/data/adjudication.py` (procedure version 1.0).  ADR-0003 §3–§10 remain unchanged; the amendment governs the *resolution mechanism* only.
 **Date:** —
 **Supersedes:** nothing
 **Numbering note:** assumes `ADR-0001` authorizes Foundation and `ADR-0002` closes the governance-hierarchy and PROJECT_SPECIFICATION items.

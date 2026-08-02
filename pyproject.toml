@@ -36,7 +36,17 @@ select = ["E","F","I","N","UP","B","A","C4","DTZ","PT","RET","SIM","ARG","PL","R
 ignore = ["D203","D213"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "PLR2004"]
+"tests/*" = ["S101", "PLR2004", "D103", "D205", "D209"]
+"src/orthosteric/data/*.py" = [
+    "D101", "D102", "D103",
+    "ARG001",
+    "PLR2004", "PLR0912",
+    "S310", "S607",
+    "RUF001", "RUF002", "RUF003",
+    "D205",
+    "ANN401",
+]
+"scripts/refresh_corpus.py" = ["D103", "S607"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
