@@ -2,6 +2,54 @@
 
 Maintained from the first commit, never retrofitted (ENG §8).
 
+## [Unreleased]
+
+### SCI-0 — Data Acquisition Layer (in progress)
+
+#### SCI0-001 — Backlog refinement (Done)
+- Existing refinement document at `docs/specifications/SCI0-001-refinement-data-acquisition.md`
+  adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
+- Backlog status updated to `Done`
+
+#### SCI0-002 — `data/` package scaffold (Done)
+- `config.py`: externalized configuration (ENG §5); no hardcoded URLs, paths,
+  timeouts, or worker counts
+- `exceptions.py`: complete domain exception hierarchy (`OrthoDataError` base;
+  `ProvenanceError`, `TierViolationError`, `SnapshotIntegrityError`,
+  `GovernanceException`, `NormalizationError`, `ConfigurationError`)
+- `models.py`: shared domain enums — `DataTier`, `SourceDB`, `MeasurementKind`,
+  `CensoringKind`, `RecordStatus` (StrEnum; no descriptors, no features)
+- `tier2_gate.py`: enforces the Constitution §0.4 Tier 2 information barrier
+  in code at the data-layer boundary
+- `data/README.md`: full Constitution section mapping (§0.1, §0.4, §2.3, §3.3)
+- `__init__.py`: `__all__` declared, sorted, typed; 18 public names
+- Subpackage stubs: `sources/`, `harmonization/`, `provenance/`, `snapshots/`
+- 47 tests passing (19 new scaffold tests + 28 existing adjudication tests)
+
+## [Unreleased]
+
+### SCI-0 — Data Acquisition Layer (in progress)
+
+#### SCI0-001 — Backlog refinement (Done)
+- Existing refinement document at `docs/specifications/SCI0-001-refinement-data-acquisition.md`
+  adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
+- Backlog status updated to `Done`
+
+#### SCI0-002 — `data/` package scaffold (Done)
+- `config.py`: externalized configuration (ENG §5); no hardcoded URLs, paths,
+  timeouts, or worker counts
+- `exceptions.py`: complete domain exception hierarchy (`OrthoDataError` base;
+  `ProvenanceError`, `TierViolationError`, `SnapshotIntegrityError`,
+  `GovernanceException`, `NormalizationError`, `ConfigurationError`)
+- `models.py`: shared domain enums — `DataTier`, `SourceDB`, `MeasurementKind`,
+  `CensoringKind`, `RecordStatus` (StrEnum; no descriptors, no features)
+- `tier2_gate.py`: enforces the Constitution §0.4 Tier 2 information barrier
+  in code at the data-layer boundary
+- `data/README.md`: full Constitution section mapping (§0.1, §0.4, §2.3, §3.3)
+- `__init__.py`: `__all__` declared, sorted, typed; 18 public names
+- Subpackage stubs: `sources/`, `harmonization/`, `provenance/`, `snapshots/`
+- 47 tests passing (19 new scaffold tests + 28 existing adjudication tests)
+
 ## [0.1.0] — 2026-07-31
 
 ### Foundation (`FND-1` … `FND-11`)

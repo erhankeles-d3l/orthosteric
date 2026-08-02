@@ -209,7 +209,8 @@ Updated at every task. One row per objective; `Superseded` rows retained.
 
 | ID | Status | Commit | Task report | Notes |
 |---|---|---|---|---|
-| `SCI0-001` | `Pending` | — | — | first objective of the project |
-| … | | | | all `SCI0-002`–`SCI0-031` `Pending` |
+| `SCI0-001` | `Done` | — | feature/sci0-001-sci0-002 | refinement document at docs/specifications/SCI0-001-refinement-data-acquisition.md adopted |
+| `SCI0-002` | `Done` | — | feature/sci0-001-sci0-002 | data/ scaffold: config, exceptions, models, tier2_gate, README, subpackage stubs |
+| … | | | | `SCI0-003`–`SCI0-031` `Pending` |
 
 **At most one `Active` row at any time.** If none is `Active` and none is `Pending` in the current state, the state's Exit gate is evaluated; if it passes, the FSM advances. **If no unfinished objective exists anywhere in the committed phase, the protocol is complete — do not invent work (`SI18`).**

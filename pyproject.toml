@@ -38,13 +38,14 @@ ignore = ["D203","D213"]
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101", "PLR2004", "D103", "D205", "D209"]
 "src/orthosteric/data/*.py" = [
-    "D101", "D102", "D103",
+    "D101", "D102", "D103", "D104", "D107",
     "ARG001",
     "PLR2004", "PLR0912",
     "S310", "S607",
     "RUF001", "RUF002", "RUF003",
     "D205",
     "ANN401",
+    "N818",  # GovernanceException name is a deliberate design choice
 ]
 "scripts/refresh_corpus.py" = ["D103", "S607"]
 
