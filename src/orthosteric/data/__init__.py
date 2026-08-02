@@ -8,6 +8,15 @@ information barrier), §2.3 (selectivity definition), §3.3 (provenance).
 See README.md in this directory for the full section mapping.
 """
 
+from orthosteric.data.activity import (
+    AnyActivityRecord,
+    BiochemicalRecord,
+    CellularRecord,
+    CensoredValue,
+    RelationalOperator,
+    censored_fraction,
+    is_censored,
+)
 from orthosteric.data.adjudication import (
     AdjudicationResult,
     AdjudicationStatus,
@@ -41,6 +50,10 @@ __all__ = [
     "ActivityRecord",
     "AdjudicationResult",
     "AdjudicationStatus",
+    "AnyActivityRecord",
+    "BiochemicalRecord",
+    "CellularRecord",
+    "CensoredValue",
     "CensoringKind",
     "ConfigurationError",
     "CorpusSnapshot",
@@ -53,9 +66,12 @@ __all__ = [
     "OrthoDataError",
     "ProvenanceError",
     "RecordStatus",
+    "RelationalOperator",
     "SnapshotIntegrityError",
     "SnapshotManifest",
     "SourceDB",
     "TierViolationError",
+    "censored_fraction",
+    "is_censored",
     "run_adr0003_adjudication",
 ]

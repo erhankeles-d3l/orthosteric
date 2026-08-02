@@ -11,6 +11,21 @@ Maintained from the first commit, never retrofitted (ENG §8).
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
 
+#### SCI0-004 — Activity record schema (Done)
+- `data/activity.py`: `BiochemicalRecord` (IC50/Ki/Kd) and `CellularRecord`
+  (EC50 only) are distinct frozen dataclasses; pooling is rejected at
+  construction (Constitution §2.3(3))
+- `CensoredValue`: magnitude + unit + relational operator + censoring kind;
+  operator/censoring consistency validated at construction
+- `RelationalOperator`: =, >, <, >=, <= as StrEnum
+- Biochemical/cellular separation enforced at the Python type level — no
+  function accepting `BiochemicalRecord` can silently receive EC50
+
+#### SCI0-005 — Censored-data handling (Done)
+- `is_censored()` / `censored_fraction()` — interface for censored likelihood
+  downstream; right-censored inactives retained, never imputed
+- 10 new tests; all SCI0-004/005 exit criteria pass
+
 #### SCI0-003 — Provenance record schema and writer (Done)
 - `data/provenance/enums.py`: closed-vocabulary enums — `SourceType`, `Tier`,
   `MeasurementType`, `MeasurementClass`, `ExtractionTier`, `LocatorType`,
@@ -53,6 +68,21 @@ Maintained from the first commit, never retrofitted (ENG §8).
 - Existing refinement document at `docs/specifications/SCI0-001-refinement-data-acquisition.md`
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
+
+#### SCI0-004 — Activity record schema (Done)
+- `data/activity.py`: `BiochemicalRecord` (IC50/Ki/Kd) and `CellularRecord`
+  (EC50 only) are distinct frozen dataclasses; pooling is rejected at
+  construction (Constitution §2.3(3))
+- `CensoredValue`: magnitude + unit + relational operator + censoring kind;
+  operator/censoring consistency validated at construction
+- `RelationalOperator`: =, >, <, >=, <= as StrEnum
+- Biochemical/cellular separation enforced at the Python type level — no
+  function accepting `BiochemicalRecord` can silently receive EC50
+
+#### SCI0-005 — Censored-data handling (Done)
+- `is_censored()` / `censored_fraction()` — interface for censored likelihood
+  downstream; right-censored inactives retained, never imputed
+- 10 new tests; all SCI0-004/005 exit criteria pass
 
 #### SCI0-003 — Provenance record schema and writer (Done)
 - `data/provenance/enums.py`: closed-vocabulary enums — `SourceType`, `Tier`,
