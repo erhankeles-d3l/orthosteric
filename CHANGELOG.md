@@ -11,6 +11,23 @@ Maintained from the first commit, never retrofitted (ENG §8).
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
 
+#### SCI0-006b — Literature-mining adapters: CrossRef, PubMed, PMC OA (Done)
+- `data/sources/literature/_extractor.py`: `ExtractionStatus` enum
+  (CANDIDATE → SPAN_VERIFIED / DISCARDED / OA_INACCESSIBLE);
+  `LiteratureExtractionRecord` with full provenance; `verify_span()`
+  binding-rule implementation: unanchored or unverifiable → DISCARDED,
+  never retained at low confidence; `coverage_bias_report()` with
+  per-year and per-journal OA fraction breakdowns
+- `data/sources/literature/_crossref.py`: DOI metadata + TDM-permission
+  detection from license URL; `PublicationMetadata`; CC-BY/CC0 permitted
+- `data/sources/literature/_pubmed.py`: PubMed E-utilities search + fetch;
+  `PubMedRecord`; identifies PMCID for OA routing
+- `data/sources/literature/_pmc.py`: PMC-OA full-text fetch; extraction in
+  priority order (supplementary tables → manuscript tables → assay sections
+  → free text); `verify_span()` called inline — no CANDIDATE records leave
+  the connector
+- 18 new tests; all SCI0-006b exit criteria pass
+
 #### SCI0-006 — Source connectors: ChEMBL, BindingDB, PubChem BioAssay (Done)
 - `data/sources/_base.py`: common `SourceConnector` ABC + `RawSourceRecord`
   (single internal type returned by all three connectors); `Admissibility`
@@ -87,6 +104,23 @@ Maintained from the first commit, never retrofitted (ENG §8).
 - Existing refinement document at `docs/specifications/SCI0-001-refinement-data-acquisition.md`
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
+
+#### SCI0-006b — Literature-mining adapters: CrossRef, PubMed, PMC OA (Done)
+- `data/sources/literature/_extractor.py`: `ExtractionStatus` enum
+  (CANDIDATE → SPAN_VERIFIED / DISCARDED / OA_INACCESSIBLE);
+  `LiteratureExtractionRecord` with full provenance; `verify_span()`
+  binding-rule implementation: unanchored or unverifiable → DISCARDED,
+  never retained at low confidence; `coverage_bias_report()` with
+  per-year and per-journal OA fraction breakdowns
+- `data/sources/literature/_crossref.py`: DOI metadata + TDM-permission
+  detection from license URL; `PublicationMetadata`; CC-BY/CC0 permitted
+- `data/sources/literature/_pubmed.py`: PubMed E-utilities search + fetch;
+  `PubMedRecord`; identifies PMCID for OA routing
+- `data/sources/literature/_pmc.py`: PMC-OA full-text fetch; extraction in
+  priority order (supplementary tables → manuscript tables → assay sections
+  → free text); `verify_span()` called inline — no CANDIDATE records leave
+  the connector
+- 18 new tests; all SCI0-006b exit criteria pass
 
 #### SCI0-006 — Source connectors: ChEMBL, BindingDB, PubChem BioAssay (Done)
 - `data/sources/_base.py`: common `SourceConnector` ABC + `RawSourceRecord`
