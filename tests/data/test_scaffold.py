@@ -28,7 +28,13 @@ from orthosteric.data.exceptions import (
     SnapshotIntegrityError,
     TierViolationError,
 )
-from orthosteric.data.models import CensoringKind, DataTier, MeasurementKind, SourceDB
+from orthosteric.data.models import (
+    CensoringKind,
+    DataTier,
+    MeasurementClass,
+    MeasurementType,
+    SourceDB,
+)
 from orthosteric.data.tier2_gate import assert_tier1
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -117,10 +123,14 @@ def test_governance_exception_carries_rule_id() -> None:
 # ──────────────────────────────────────────────────────────────────────────────
 
 
-def test_measurement_kind_cellular_distinct() -> None:
-    """EC50 cellular must be distinct from all biochemical quantities."""
-    biochemical = {MeasurementKind.IC50_BIOCHEMICAL, MeasurementKind.KI, MeasurementKind.KD}
-    assert MeasurementKind.EC50_CELLULAR not in biochemical
+def test_measurement_type_and_class_are_separate() -> None:
+    """MeasurementType and MeasurementClass must be separate enums (§2.3(3))."""
+    # All four measurement types exist
+    assert {MeasurementType.IC50, MeasurementType.KI, MeasurementType.KD, MeasurementType.EC50}
+    # Both measurement classes exist
+    assert MeasurementClass.BIOCHEMICAL.value != MeasurementClass.CELLULAR.value  # type: ignore[comparison-overlap]
+    # EC50 is a MeasurementType value, classification as biochemical vs cellular
+    # is carried in MeasurementClass — not collapsed into one enum
 
 
 def test_censoring_kind_has_all_three() -> None:

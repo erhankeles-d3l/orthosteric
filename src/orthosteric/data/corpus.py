@@ -13,6 +13,8 @@ from dataclasses import asdict, dataclass, field
 from enum import Enum, StrEnum
 from typing import Any
 
+from orthosteric.data.provenance.enums import MeasurementType
+
 # ──────────────────────────────────────────────────────────────────────────────
 # Provenance tiers  (AUDITOR-4 framework)
 # ──────────────────────────────────────────────────────────────────────────────
@@ -39,13 +41,6 @@ class Isoform(StrEnum):
     BETA = "PI3Kbeta"
     GAMMA = "PI3Kgamma"
     DELTA = "PI3Kdelta"
-
-
-class MeasurementType(StrEnum):
-    IC50 = "IC50"
-    KI = "Ki"
-    KD = "Kd"
-    EC50 = "EC50"
 
 
 # ──────────────────────────────────────────────────────────────────────────────

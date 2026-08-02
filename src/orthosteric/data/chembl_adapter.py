@@ -22,9 +22,9 @@ from typing import Any
 from orthosteric.data.corpus import (
     EvidenceRecord,
     Isoform,
-    MeasurementType,
     ProvenanceTier,
 )
+from orthosteric.data.provenance.enums import MeasurementType
 
 # ChEMBL REST endpoint
 CHEMBL_API = "https://www.ebi.ac.uk/chembl/api/data"

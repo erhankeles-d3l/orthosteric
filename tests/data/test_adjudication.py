@@ -5,9 +5,9 @@ from orthosteric.data.corpus import (
     CorpusSnapshot,
     EvidenceRecord,
     Isoform,
-    MeasurementType,
     ProvenanceTier,
 )
+from orthosteric.data.provenance.enums import MeasurementType
 
 
 def _rec(

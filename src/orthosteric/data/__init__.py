@@ -28,14 +28,17 @@ from orthosteric.data.exceptions import (
     TierViolationError,
 )
 from orthosteric.data.models import (
+    ActivityRecord,
     CensoringKind,
     DataTier,
-    MeasurementKind,
+    MeasurementClass,
+    MeasurementType,
     RecordStatus,
     SourceDB,
 )
 
 __all__ = [
+    "ActivityRecord",
     "AdjudicationResult",
     "AdjudicationStatus",
     "CensoringKind",
@@ -44,7 +47,8 @@ __all__ = [
     "DataTier",
     "EvidenceRecord",
     "GovernanceException",
-    "MeasurementKind",
+    "MeasurementClass",
+    "MeasurementType",
     "NormalizationError",
     "OrthoDataError",
     "ProvenanceError",
