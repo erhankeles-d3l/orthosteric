@@ -11,6 +11,25 @@ Maintained from the first commit, never retrofitted (ENG §8).
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
 
+#### SCI0-003 — Provenance record schema and writer (Done)
+- `data/provenance/enums.py`: closed-vocabulary enums — `SourceType`, `Tier`,
+  `MeasurementType`, `MeasurementClass`, `ExtractionTier`, `LocatorType`,
+  `SourceConfidence`, `LicenseType`, `Unit`
+- `data/provenance/models.py`: immutable frozen dataclasses — `Quantity`
+  (Decimal + Unit; no bare floats), `SpanAnchor`, `SourceMetadata`, 
+  `PublicationMetadata`, `AssayMetadata`, `ExtractionMetadata`,
+  `ProvenanceRecord`; `SCHEMA_VERSION = "1.0.0"`
+- `data/provenance/validator.py`: structural validation; raises
+  `ProvenanceValidationError` with all problems at once; literature sources
+  require a verified span anchor (SCI0-006b gate)
+- `data/provenance/writer.py`: deterministic JSON serialization (sorted keys,
+  Decimal in canonical fixed-point, explicit UTC offset); `serialize` /
+  `deserialize` / `to_json_bytes`
+- `data/models.py`: extended with `ActivityRecord` — links every measurement
+  to a `provenance_id` (Constitution §3.3)
+- 34 provenance tests (carried from verified supplementary package, namespace
+  renamed from `pi3k_cel` to `orthosteric`); 81 total tests passing
+
 #### SCI0-002 — `data/` package scaffold (Done)
 - `config.py`: externalized configuration (ENG §5); no hardcoded URLs, paths,
   timeouts, or worker counts
@@ -34,6 +53,25 @@ Maintained from the first commit, never retrofitted (ENG §8).
 - Existing refinement document at `docs/specifications/SCI0-001-refinement-data-acquisition.md`
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
+
+#### SCI0-003 — Provenance record schema and writer (Done)
+- `data/provenance/enums.py`: closed-vocabulary enums — `SourceType`, `Tier`,
+  `MeasurementType`, `MeasurementClass`, `ExtractionTier`, `LocatorType`,
+  `SourceConfidence`, `LicenseType`, `Unit`
+- `data/provenance/models.py`: immutable frozen dataclasses — `Quantity`
+  (Decimal + Unit; no bare floats), `SpanAnchor`, `SourceMetadata`, 
+  `PublicationMetadata`, `AssayMetadata`, `ExtractionMetadata`,
+  `ProvenanceRecord`; `SCHEMA_VERSION = "1.0.0"`
+- `data/provenance/validator.py`: structural validation; raises
+  `ProvenanceValidationError` with all problems at once; literature sources
+  require a verified span anchor (SCI0-006b gate)
+- `data/provenance/writer.py`: deterministic JSON serialization (sorted keys,
+  Decimal in canonical fixed-point, explicit UTC offset); `serialize` /
+  `deserialize` / `to_json_bytes`
+- `data/models.py`: extended with `ActivityRecord` — links every measurement
+  to a `provenance_id` (Constitution §3.3)
+- 34 provenance tests (carried from verified supplementary package, namespace
+  renamed from `pi3k_cel` to `orthosteric`); 81 total tests passing
 
 #### SCI0-002 — `data/` package scaffold (Done)
 - `config.py`: externalized configuration (ENG §5); no hardcoded URLs, paths,

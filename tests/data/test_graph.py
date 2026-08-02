@@ -4,10 +4,10 @@ from orthosteric.data.corpus import (
     CorpusSnapshot,
     EvidenceRecord,
     Isoform,
-    MeasurementType,
     ProvenanceTier,
 )
 from orthosteric.data.graph import build_graph_stats
+from orthosteric.data.provenance.enums import MeasurementType
 
 
 def _rec(cid: str, iso: Isoform, study: str = "S1") -> EvidenceRecord:
