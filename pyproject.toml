@@ -37,6 +37,11 @@ ignore = ["D203","D213"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101", "PLR2004", "D103", "D205", "D209"]
+"src/orthosteric/data/sources/*.py" = [
+    "ARG002",  # **kwargs kept for interface contract
+    "S112",    # try/except/continue in network retry loops
+    "BLE001",  # broad exception in network loops
+]
 "src/orthosteric/data/*.py" = [
     "D101", "D102", "D103", "D104", "D107",
     "ARG001",
@@ -48,6 +53,7 @@ ignore = ["D203","D213"]
     "N818",  # GovernanceException name is a deliberate design choice
 ]
 "scripts/refresh_corpus.py" = ["D103", "S607"]
+"tests/data/sources/*.py" = ["PLC0415"]  # monkeypatch requires local import
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

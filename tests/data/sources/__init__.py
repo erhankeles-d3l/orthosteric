@@ -1,1 +1,1 @@
-"""Placeholder test package for orthosteric.data.sources (populated at SCI0-003+)."""
+"""Tests for SCI0-006 source connectors."""

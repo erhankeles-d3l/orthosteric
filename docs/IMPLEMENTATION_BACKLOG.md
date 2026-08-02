@@ -214,6 +214,7 @@ Updated at every task. One row per objective; `Superseded` rows retained.
 | `SCI0-003` | `Done` | — | feature/sci0-003 | provenance schema + writer; ActivityRecord in models.py; 34 tests |
 | `SCI0-004` | `Done` | — | feature/sci0-004-sci0-005 | BiochemicalRecord/CellularRecord schema; CensoredValue |
 | `SCI0-005` | `Done` | — | feature/sci0-004-sci0-005 | censored_fraction; no code path discards censored records |
+| `SCI0-006` | `Done` | — | feature/sci0-006 | source connectors: ChEMBL, BindingDB, PubChem; tier-at-ingestion; 20 tests |
 | … | | | | `SCI0-006`–`SCI0-031` `Pending` |
 
 **At most one `Active` row at any time.** If none is `Active` and none is `Pending` in the current state, the state's Exit gate is evaluated; if it passes, the FSM advances. **If no unfinished objective exists anywhere in the committed phase, the protocol is complete — do not invent work (`SI18`).**

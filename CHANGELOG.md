@@ -11,6 +11,25 @@ Maintained from the first commit, never retrofitted (ENG §8).
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
 
+#### SCI0-006 — Source connectors: ChEMBL, BindingDB, PubChem BioAssay (Done)
+- `data/sources/_base.py`: common `SourceConnector` ABC + `RawSourceRecord`
+  (single internal type returned by all three connectors); `Admissibility`
+  enum: TIER1_PRIMARY / TIER2_GATED / INADMISSIBLE
+- `data/sources/_tier_map.py`: authoritative target→tier map; ChEMBL IDs,
+  gene symbols, UniProt ACs; all four Tier 1 and six Tier 2 PI3K targets
+  covered; case-insensitive gene lookup
+- `data/sources/_chembl.py`: ChEMBL REST connector; Tier assigned at
+  `_parse_activity()` before any record crosses the module boundary;
+  inadmissible records returned with reason code, never silently dropped
+- `data/sources/_bindingdb.py`: BindingDB REST connector; UniProt-first
+  tier assignment with gene-name fallback
+- `data/sources/_pubchem.py`: PubChem BioAssay PUG REST connector;
+  gene-symbol tier assignment; right-censored inactives detected from
+  ActivityOutcome field
+- 20 new tests; all SCI0-006 exit criteria pass
+- `chembl_adapter.py` retained (adjudication prototype); sources layer
+  is the production path
+
 #### SCI0-004 — Activity record schema (Done)
 - `data/activity.py`: `BiochemicalRecord` (IC50/Ki/Kd) and `CellularRecord`
   (EC50 only) are distinct frozen dataclasses; pooling is rejected at
@@ -68,6 +87,25 @@ Maintained from the first commit, never retrofitted (ENG §8).
 - Existing refinement document at `docs/specifications/SCI0-001-refinement-data-acquisition.md`
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
+
+#### SCI0-006 — Source connectors: ChEMBL, BindingDB, PubChem BioAssay (Done)
+- `data/sources/_base.py`: common `SourceConnector` ABC + `RawSourceRecord`
+  (single internal type returned by all three connectors); `Admissibility`
+  enum: TIER1_PRIMARY / TIER2_GATED / INADMISSIBLE
+- `data/sources/_tier_map.py`: authoritative target→tier map; ChEMBL IDs,
+  gene symbols, UniProt ACs; all four Tier 1 and six Tier 2 PI3K targets
+  covered; case-insensitive gene lookup
+- `data/sources/_chembl.py`: ChEMBL REST connector; Tier assigned at
+  `_parse_activity()` before any record crosses the module boundary;
+  inadmissible records returned with reason code, never silently dropped
+- `data/sources/_bindingdb.py`: BindingDB REST connector; UniProt-first
+  tier assignment with gene-name fallback
+- `data/sources/_pubchem.py`: PubChem BioAssay PUG REST connector;
+  gene-symbol tier assignment; right-censored inactives detected from
+  ActivityOutcome field
+- 20 new tests; all SCI0-006 exit criteria pass
+- `chembl_adapter.py` retained (adjudication prototype); sources layer
+  is the production path
 
 #### SCI0-004 — Activity record schema (Done)
 - `data/activity.py`: `BiochemicalRecord` (IC50/Ki/Kd) and `CellularRecord`
