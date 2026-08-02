@@ -1,23 +1,11 @@
-"""orthosteric.data.
-================
-Pre-ADR Empirical Evidence Acquisition and Computational Adjudication.
+"""orthosteric.data — public data acquisition and adjudication API.
 
-Implements the computational evidence-adjudication framework specified by
-AMENDMENT-ADR-0003-COMPUTATIONAL-ADJUDICATION.
+Objective: SCI0-002 (package scaffold); extended by SCI0-003 onwards.
 
-Governance boundary
--------------------
-This package constructs a non-exhaustive empirical evidence corpus from
-approved public sources (ADR-0003 §2), characterises it, and applies
-deterministic decision procedures to derive the five ADR-0003 methodological
-parameters.  It does NOT:
-  - seal final thresholds without completing the full adjudication;
-  - retrain or evaluate the selectivity model;
-  - modify ADR-0003 substantive content;
-  - silently alter a rule when new evidence is inconvenient.
+Constitution sections served: §0.1 (tier architecture), §0.4 (Tier 2
+information barrier), §2.3 (selectivity definition), §3.3 (provenance).
 
-Governance exceptions (INSUFFICIENT_EVIDENCE / GOVERNANCE_EXCEPTION) are
-raised as structured exceptions rather than silently replaced with guesses.
+See README.md in this directory for the full section mapping.
 """
 
 from orthosteric.data.adjudication import (
@@ -30,12 +18,40 @@ from orthosteric.data.corpus import (
     EvidenceRecord,
     SnapshotManifest,
 )
+from orthosteric.data.exceptions import (
+    ConfigurationError,
+    GovernanceException,
+    NormalizationError,
+    OrthoDataError,
+    ProvenanceError,
+    SnapshotIntegrityError,
+    TierViolationError,
+)
+from orthosteric.data.models import (
+    CensoringKind,
+    DataTier,
+    MeasurementKind,
+    RecordStatus,
+    SourceDB,
+)
 
 __all__ = [
     "AdjudicationResult",
     "AdjudicationStatus",
+    "CensoringKind",
+    "ConfigurationError",
     "CorpusSnapshot",
+    "DataTier",
     "EvidenceRecord",
+    "GovernanceException",
+    "MeasurementKind",
+    "NormalizationError",
+    "OrthoDataError",
+    "ProvenanceError",
+    "RecordStatus",
+    "SnapshotIntegrityError",
     "SnapshotManifest",
+    "SourceDB",
+    "TierViolationError",
     "run_adr0003_adjudication",
 ]
