@@ -11,6 +11,27 @@ Maintained from the first commit, never retrofitted (ENG §8).
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
 
+#### SCI0-007 — Structural sources: PDB + UniProt + AlphaFold fallback (Done)
+- `data/sources/structural/_isoform_map.py`: authoritative PI3K isoform↔UniProt
+  map (α=P42336, β=P42338, γ=P48736, δ=O00329) with gene symbols
+- `data/sources/structural/_pdb.py`: RCSB PDB REST connector; §2.1 admissibility
+  rules (human, resolution ≤ 2.8 Å, bound ligand); `_assess_admissibility()`;
+  `_build_construct()` → `ConstructDescriptor`; `StructureAdmissibility` enum;
+  `StructureSource.EXPERIMENTAL_PDB` default
+- `data/sources/structural/_alphafold.py`: AlphaFold DB fallback connector;
+  Rules AF-1–AF-9 from AMENDMENT-SCI0007-ALPHAFOLD-FALLBACK.md;
+  Rule AF-4 (mean pLDDT ≥ 70); Rule AF-6 (no experimental metadata fabrication);
+  `GovernanceException` on accession mismatch (Rule AF-3)
+- `data/sources/structural/_uniprot.py`: UniProt REST connector; sequence +
+  isoform identity only; PDB cross-references
+- `data/sources/structural/_structure_record.py`: `StructureRecord` (references
+  ProvenanceRecord via provenance_id); `ConstructDescriptor` (frozen dataclass
+  with sequence range, mutations, tags, regulatory subunit, activation-loop state,
+  missing residue ranges); `ActivationLoopState` enum
+- Governance: `AMENDMENT-SCI0007-ALPHAFOLD-FALLBACK.md` authorizing the
+  constrained fallback with 9 deterministic rules; SCI0-001-refinement updated
+- 32 new tests (24 experimental PDB + 8 AlphaFold fallback rules); 161 total
+
 #### SCI0-006b — Literature-mining adapters: CrossRef, PubMed, PMC OA (Done)
 - `data/sources/literature/_extractor.py`: `ExtractionStatus` enum
   (CANDIDATE → SPAN_VERIFIED / DISCARDED / OA_INACCESSIBLE);
@@ -104,6 +125,27 @@ Maintained from the first commit, never retrofitted (ENG §8).
 - Existing refinement document at `docs/specifications/SCI0-001-refinement-data-acquisition.md`
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
+
+#### SCI0-007 — Structural sources: PDB + UniProt + AlphaFold fallback (Done)
+- `data/sources/structural/_isoform_map.py`: authoritative PI3K isoform↔UniProt
+  map (α=P42336, β=P42338, γ=P48736, δ=O00329) with gene symbols
+- `data/sources/structural/_pdb.py`: RCSB PDB REST connector; §2.1 admissibility
+  rules (human, resolution ≤ 2.8 Å, bound ligand); `_assess_admissibility()`;
+  `_build_construct()` → `ConstructDescriptor`; `StructureAdmissibility` enum;
+  `StructureSource.EXPERIMENTAL_PDB` default
+- `data/sources/structural/_alphafold.py`: AlphaFold DB fallback connector;
+  Rules AF-1–AF-9 from AMENDMENT-SCI0007-ALPHAFOLD-FALLBACK.md;
+  Rule AF-4 (mean pLDDT ≥ 70); Rule AF-6 (no experimental metadata fabrication);
+  `GovernanceException` on accession mismatch (Rule AF-3)
+- `data/sources/structural/_uniprot.py`: UniProt REST connector; sequence +
+  isoform identity only; PDB cross-references
+- `data/sources/structural/_structure_record.py`: `StructureRecord` (references
+  ProvenanceRecord via provenance_id); `ConstructDescriptor` (frozen dataclass
+  with sequence range, mutations, tags, regulatory subunit, activation-loop state,
+  missing residue ranges); `ActivationLoopState` enum
+- Governance: `AMENDMENT-SCI0007-ALPHAFOLD-FALLBACK.md` authorizing the
+  constrained fallback with 9 deterministic rules; SCI0-001-refinement updated
+- 32 new tests (24 experimental PDB + 8 AlphaFold fallback rules); 161 total
 
 #### SCI0-006b — Literature-mining adapters: CrossRef, PubMed, PMC OA (Done)
 - `data/sources/literature/_extractor.py`: `ExtractionStatus` enum

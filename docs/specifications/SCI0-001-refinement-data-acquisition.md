@@ -100,7 +100,7 @@ A large share of kinase SAR never reaches ChEMBL. Accepted under ADR-0003 §2 (p
 **Exit:** every extracted value resolves to a source span under test; unanchored extractions are rejected; OA coverage fraction and audit error rate reported.
 
 ### `SCI0-007` — Structural sources: PDB, UniProt
-PDB: metadata and coordinates for human structures with a bound ATP-site ligand. UniProt: sequence and isoform identity only. **AlphaFold excluded** (defect 7).
+PDB: metadata and coordinates for human structures with a bound ATP-site ligand. UniProt: sequence and isoform identity only. **AlphaFold: constrained fallback only** — experimental PDB is mandatory when an admissible human experimental structure exists; AlphaFold permitted only when no admissible experimental PDB exists, subject to the nine deterministic rules in AMENDMENT-SCI0007-ALPHAFOLD-FALLBACK.md (supersedes defect 7).
 **Exit:** structures lacking resolution or a bound ligand are flagged and excluded from the §2.1 reference set; exclusion count reported.
 
 **Construct descriptor (structured, not free text).** PDB entries differ substantially in construct design, and Constitution §2.1 states that a construct mismatch **threatens correspondence stability under A.1(4)** — so this descriptor feeds the stability assessment, not merely structure filtering.
