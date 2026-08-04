@@ -11,6 +11,23 @@ Maintained from the first commit, never retrofitted (ENG §8).
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
 
+#### SCI0-008c — Identifier harmonization (Done)
+- `data/harmonization/_identifier_harmonizer.py`: `IdentifierHarmonizer`
+  assigns deterministic internal IDs (InChIKey from SCI0-008b output) and
+  cross-references compounds across source databases
+- Internal ID = InChIKey: source-agnostic, deterministic, 27-char, stereo-
+  preserving; follows directly from SCI0-008b guarantee + spec requirement
+- Cross-reference accumulation: `cross_refs: dict[source_db, [source_ids]]`
+  — multiple source IDs for the same InChIKey merged without conflict
+- Conflict detection: same `source_compound_id` → different InChIKey → 
+  `ConflictStatus.CONFLICT` + `StructureConflict` record; never silently merged
+- Fail-closed: invalid SMILES / no SMILES → `ConflictStatus.UNRESOLVED`;
+  all records returned, none dropped
+- Stereoisomers preserved: enantiomers and E/Z isomers get distinct InChIKeys
+  (inherits SCI0-008b guarantee, verified by exit-criterion tests)
+- RDKit version propagated to `HarmonizedCompound.rdkit_version` (SCI0-011)
+- 15 new tests; 194 total passing
+
 #### SCI0-008b — Chemical standardization (RDKit) (Done)
 - `data/harmonization/_chem_standardizer.py`: `ChemicalStandardizer` with
   deterministic 9-step pipeline: parse → metal disconnect → salt strip →
@@ -142,6 +159,23 @@ Maintained from the first commit, never retrofitted (ENG §8).
 - Existing refinement document at `docs/specifications/SCI0-001-refinement-data-acquisition.md`
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
+
+#### SCI0-008c — Identifier harmonization (Done)
+- `data/harmonization/_identifier_harmonizer.py`: `IdentifierHarmonizer`
+  assigns deterministic internal IDs (InChIKey from SCI0-008b output) and
+  cross-references compounds across source databases
+- Internal ID = InChIKey: source-agnostic, deterministic, 27-char, stereo-
+  preserving; follows directly from SCI0-008b guarantee + spec requirement
+- Cross-reference accumulation: `cross_refs: dict[source_db, [source_ids]]`
+  — multiple source IDs for the same InChIKey merged without conflict
+- Conflict detection: same `source_compound_id` → different InChIKey → 
+  `ConflictStatus.CONFLICT` + `StructureConflict` record; never silently merged
+- Fail-closed: invalid SMILES / no SMILES → `ConflictStatus.UNRESOLVED`;
+  all records returned, none dropped
+- Stereoisomers preserved: enantiomers and E/Z isomers get distinct InChIKeys
+  (inherits SCI0-008b guarantee, verified by exit-criterion tests)
+- RDKit version propagated to `HarmonizedCompound.rdkit_version` (SCI0-011)
+- 15 new tests; 194 total passing
 
 #### SCI0-008b — Chemical standardization (RDKit) (Done)
 - `data/harmonization/_chem_standardizer.py`: `ChemicalStandardizer` with
