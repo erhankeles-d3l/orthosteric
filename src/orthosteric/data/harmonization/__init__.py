@@ -20,9 +20,21 @@ from orthosteric.data.harmonization._chem_standardizer import (
     StandardizationStatus,
     StandardizedStructure,
 )
+from orthosteric.data.harmonization._identifier_harmonizer import (
+    ConflictStatus,
+    HarmonizedCompound,
+    IdentifierHarmonizer,
+    SourceRef,
+    StructureConflict,
+)
 
 __all__ = [
     "ChemicalStandardizer",
+    "ConflictStatus",
+    "HarmonizedCompound",
+    "IdentifierHarmonizer",
+    "SourceRef",
     "StandardizationStatus",
     "StandardizedStructure",
+    "StructureConflict",
 ]
