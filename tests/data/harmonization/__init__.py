@@ -1,1 +1,1 @@
-"""Placeholder test package for orthosteric.data.harmonization (populated at SCI0-003+)."""
+"""Tests for SCI0-008b chemical standardization."""

@@ -11,6 +11,23 @@ Maintained from the first commit, never retrofitted (ENG §8).
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
 
+#### SCI0-008b — Chemical standardization (RDKit) (Done)
+- `data/harmonization/_chem_standardizer.py`: `ChemicalStandardizer` with
+  deterministic 9-step pipeline: parse → metal disconnect → salt strip →
+  normalize → uncharge → canonical tautomer → sanitize → canonical SMILES
+  → InChI/InChIKey
+- `SetRemoveSp3Stereo(False)` + `SetReassignStereo(True)` on tautomer
+  enumerator — stereoisomers remain distinct (exit criterion 1)
+- `StandardizedStructure` frozen dataclass: canonical_smiles, inchi, inchikey,
+  rdkit_version, content_hash, salt_stripped, steps_applied — no descriptor
+  fields (exit criterion 2)
+- Output is deterministic given same SMILES + RDKit version (exit criterion 3)
+- RDKit version recorded in every output (`rdkit_version` field) per SCI0-011:
+  RDKit version affects InChIKey so toolchain is part of corpus identity
+- Failed records returned with status + reason, never silently dropped
+- rdkit>=2024.3 added to project dependencies
+- 18 new tests; 179 total passing
+
 #### SCI0-007 — Structural sources: PDB + UniProt + AlphaFold fallback (Done)
 - `data/sources/structural/_isoform_map.py`: authoritative PI3K isoform↔UniProt
   map (α=P42336, β=P42338, γ=P48736, δ=O00329) with gene symbols
@@ -125,6 +142,23 @@ Maintained from the first commit, never retrofitted (ENG §8).
 - Existing refinement document at `docs/specifications/SCI0-001-refinement-data-acquisition.md`
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
 - Backlog status updated to `Done`
+
+#### SCI0-008b — Chemical standardization (RDKit) (Done)
+- `data/harmonization/_chem_standardizer.py`: `ChemicalStandardizer` with
+  deterministic 9-step pipeline: parse → metal disconnect → salt strip →
+  normalize → uncharge → canonical tautomer → sanitize → canonical SMILES
+  → InChI/InChIKey
+- `SetRemoveSp3Stereo(False)` + `SetReassignStereo(True)` on tautomer
+  enumerator — stereoisomers remain distinct (exit criterion 1)
+- `StandardizedStructure` frozen dataclass: canonical_smiles, inchi, inchikey,
+  rdkit_version, content_hash, salt_stripped, steps_applied — no descriptor
+  fields (exit criterion 2)
+- Output is deterministic given same SMILES + RDKit version (exit criterion 3)
+- RDKit version recorded in every output (`rdkit_version` field) per SCI0-011:
+  RDKit version affects InChIKey so toolchain is part of corpus identity
+- Failed records returned with status + reason, never silently dropped
+- rdkit>=2024.3 added to project dependencies
+- 18 new tests; 179 total passing
 
 #### SCI0-007 — Structural sources: PDB + UniProt + AlphaFold fallback (Done)
 - `data/sources/structural/_isoform_map.py`: authoritative PI3K isoform↔UniProt

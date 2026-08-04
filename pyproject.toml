@@ -8,7 +8,9 @@ version = "0.1.0"
 description = "Comparative evidence learning for mechanistic orthosteric selectivity, benchmarked on Class I PI3Ks"
 requires-python = "==3.12.*"
 license = { file = "LICENSE" }
-dependencies = []
+dependencies = [
+    "rdkit>=2024.3",  # SCI0-008b; RDKit version affects InChIKey (SCI0-011)
+]
 
 [project.optional-dependencies]
 dev = [
@@ -37,6 +39,10 @@ ignore = ["D203","D213"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101", "PLR2004", "D103", "D205", "D209"]
+"src/orthosteric/data/harmonization/*.py" = [
+    "S110",  # try/except/pass in RDKit metal disconnection
+    "N812",  # rdkit version import alias
+]
 "src/orthosteric/data/sources/**/*.py" = [
     "S310", "S607", "BLE001", "ARG002",
 ]
