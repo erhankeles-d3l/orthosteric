@@ -216,6 +216,7 @@ Updated at every task. One row per objective; `Superseded` rows retained.
 | `SCI0-005` | `Done` | — | feature/sci0-004-sci0-005 | censored_fraction; no code path discards censored records |
 | `SCI0-006` | `Done` | — | feature/sci0-006 | source connectors: ChEMBL, BindingDB, PubChem; tier-at-ingestion; 20 tests |
 | `SCI0-006b` | `Done` | — | feature/sci0-006b | literature adapters: CrossRef, PubMed, PMC OA; span-verification gate; OA bias report |
+| `SCI0-007` | `Done` | — | feature/sci0-007 | PDB+UniProt+AlphaFold fallback; §2.1 admissibility; construct descriptor; 9 AF rules |
 | … | | | | `SCI0-006`–`SCI0-031` `Pending` |
 
 **At most one `Active` row at any time.** If none is `Active` and none is `Pending` in the current state, the state's Exit gate is evaluated; if it passes, the FSM advances. **If no unfinished objective exists anywhere in the committed phase, the protocol is complete — do not invent work (`SI18`).**

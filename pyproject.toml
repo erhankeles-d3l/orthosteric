@@ -37,6 +37,9 @@ ignore = ["D203","D213"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101", "PLR2004", "D103", "D205", "D209"]
+"src/orthosteric/data/sources/**/*.py" = [
+    "S310", "S607", "BLE001", "ARG002",
+]
 "src/orthosteric/data/sources/*.py" = [
     "ARG002",  # **kwargs kept for interface contract
     "S112",    # try/except/continue in network retry loops
@@ -54,6 +57,7 @@ ignore = ["D203","D213"]
 ]
 "scripts/refresh_corpus.py" = ["D103", "S607"]
 "tests/data/sources/*.py" = ["PLC0415"]  # monkeypatch requires local import
+
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
@@ -76,3 +80,7 @@ branch = true
 
 [tool.coverage.report]
 show_missing = true
+
+[[tool.mypy.overrides]]
+module = "tests.data.sources.structural.*"
+disable_error_code = ["comparison-overlap", "unused-ignore"]
