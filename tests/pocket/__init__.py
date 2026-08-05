@@ -1,1 +1,1 @@
-"""Tests for the pocket package."""
+"""Tests for pocket/ — structural preprocessing and pocket extraction (Phase C SCI-1)."""

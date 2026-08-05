@@ -198,6 +198,58 @@ Open, and blocking one policy from classifying rather than abstaining:
 `UncertaintyPolicy` requires the label-noise floor from `SCI0-016`, which has
 not run; it abstains and raises `RULE_MISSING/SCI0-016` until then.
 
+## Phase C · **Comparative Structural Learning Platform** — `ADR-0010`
+
+Phase B (evidence engineering, SCI0-001..SCI0-031) is complete (modulo
+corpus acquisition authorization). Phase C begins structural representation
+learning. New package taxonomy (ADR-0010): `pocket/`, `features/`,
+`learning/`, `interpretation/`, `generation/`. Old stubs `model/`, `train/`,
+`explain/` retired. Layer order: `generation/` → `policy/` → `eval/` →
+`interpretation/` → `learning/` → `features/` → `pocket/` → `quality/` →
+`data/` → `runtime/`.
+
+## SCI-1 — Structural Feature Generation · **Phase C, committed**
+
+Populates `pocket/` (preprocessing + extraction) then `features/`
+(representation construction). Every module: deterministic, provenanced,
+fully tested.
+
+| ID | Status | Record | Objective |
+|---|---|---|---|
+| `SCI1-000` | `Done` | `ADR-0010` | Phase C architecture spec + package stubs + layer order. **This PR.** |
+| `SCI1-001` | **Next** | — | `pocket/` data models: `StructureRecord`, `StructureProvenance`, `PocketDefinitionPolicy`, `PocketResidueSet` (pure-Python, no external deps) |
+| `SCI1-002` | Pending | — | `pocket/` geometry + rotamer: `_pocket_geometry`, `_rotamer_state`, `_solvent_accessibility` (introduces BioPython/numpy) |
+| `SCI1-003` | Pending | — | `pocket/` residue mapping: `_residue_mapping` (cross-isoform correspondence, Constitution §2.1) |
+| `SCI1-004` | Pending | — | `features/` interaction fingerprints: `_interaction_fingerprint` |
+| `SCI1-005` | Pending | — | `features/` contact maps + graph: `_contact_map`, `_structural_graph` |
+| `SCI1-006` | Pending | — | `features/` descriptors + comparative set: `_pocket_descriptor`, `_comparative_feature` |
+| `SCI1-007` | Pending | — | `features/` MD interface stubs: `_md_interface` |
+| `SCI1-008` | Pending | — | `features/` governed config: `FeatureConfig`, versioned |
+
+## SCI-2 — Comparative Representation Learning · **Phase C, provisional**
+
+Populates `learning/`. Constitution §4.1–§4.7.
+
+| ID | Objective |
+|---|---|
+| `SCI2-001` | Refine `SCI-2` backlog; comparative encoder; direct log-ratio prediction head; degeneracy battery |
+
+## SCI-3 — Mechanistic Interpretation · **Phase C, provisional**
+
+Populates `interpretation/`. Constitution §4.7, §2.5, §5.3–§5.4.
+
+| ID | Objective |
+|---|---|
+| `SCI3-001` | Refine `SCI-3` backlog; discrete-rule interface; counterfactual perturbation |
+
+## SCI-4 — Molecular Design · **Phase C, deferred**
+
+Populates `generation/`. Deferred until SCI-3 complete.
+
+| ID | Objective |
+|---|---|
+| `SCI4-001` | Refine `SCI-4` backlog after SCI-3 outcomes |
+
 ## SCI-0.5 — Mutation propagation · **provisional** (Phase 3, Option B only)
 
 | ID | Objective |

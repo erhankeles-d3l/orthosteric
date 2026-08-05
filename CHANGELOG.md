@@ -6,6 +6,64 @@ Maintained from the first commit, never retrofitted (ENG §8).
 
 ### SCI-0 — Data Acquisition Layer (in progress)
 
+#### ADR-0010 / SCI1-000..SCI1-001 — Phase C: Comparative Structural Learning Platform Architecture + SCI-1 Milestone 2 (Done)
+
+**Architecture (ADR-0010, SCI1-000)**
+- Phase C Authorization implemented: project transitions from evidence
+  engineering to structural representation learning
+- New package taxonomy with import-layer enforcement:
+  `generation/` > `policy/` > `eval/` > `interpretation/` > `learning/` >
+  `features/` > `pocket/` > `quality/` > `data/` > `runtime/`
+- Retired empty stubs `model/`, `train/`, `explain/` (superseded by
+  `learning/`, `learning/`, `interpretation/` respectively) — zero code lost
+- Created stub packages: `learning/`, `interpretation/`, `generation/`
+  (src + tests), with documented responsibilities and ENG §2 entries
+- Updated `.importlinter` Contract 3 (Tier 2 protection) from `train/` to
+  `learning/`
+- Updated ENG §2 package table, `IMPLEMENTATION_PROTOCOL_SCIENTIFIC.md` §16
+  (dataflow + state machine + package ownership), `IMPLEMENTATION_BACKLOG.md`
+  (Phase C + SCI-1..SCI-4 sections)
+- ADR-0010 documents: Phase C pipeline, package taxonomy, layer order
+  rationale, 6 scientific invariants (no apo pocket, no learned pocket
+  detection, provenance mandatory, determinism, comparative learning
+  principle, measurement/interpretation separation), 7-milestone SCI-1 roadmap
+
+**SCI-1 Milestone 2: `pocket/` data models (SCI1-001)**
+- `pocket/_structure_record.py`: typed frozen data models with zero external
+  dependencies — `StructureRecord`, `StructureProvenance`,
+  `ConstructDescriptor`, `LigandRecord`, `ChainRecord`, `ResidueRecord`,
+  `StructureSource`, `ConstructClass`, `ConformationalState`,
+  `LigandShapeClass`, `DataTier`, `make_record_id()`
+  - Experimental-priority invariant encoded in `StructureSource` — code
+    cannot silently treat AlphaFold as experimental (validated in constructor)
+  - `LIGAND_BOUND` state with no ATP-site ligands is a type-level error
+    (Constitution §2.1 apo prohibition, §A.6 C6 corollary)
+  - `has_propeller_ligand`: distinguishes propeller-shaped (induced
+    specificity pocket) from flat ligands (Constitution §0.3, S6)
+  - `content_sha256()`: deterministic content hash; `make_record_id()`
+    stable against mutation-tuple ordering
+  - `ConstructDescriptor.construct_class` records regulatory-subunit
+    composition — Constitution §2.1 construct policy (mixed constructs must
+    be flagged, never silently pooled)
+
+- `pocket/_pocket_definition.py`: governed pocket definition with all 4
+  Constitution §2.1 rules — `PocketDefinitionPolicy`, `PocketResidueSet`,
+  `PocketResidue`, `SubRegion`
+  - `GOVERNED_DISTANCE_CUTOFF_ANGSTROM = 5.0` (Constitution §2.1) — a
+    named constant modifiable only via GDR, never via an undocumented kwarg
+  - `default_pocket_definition_policy()` enforces apo prohibition,
+    propeller-coverage requirement, governed cutoff and stability threshold
+  - `SubRegion` enum: all Constitution §0.3 sub-regions (adenine hinge,
+    affinity pocket, **specificity pocket**, tryptophan shelf, water network)
+  - `PocketResidue.present_with_propeller_ligand`: records which residues
+    are part of the induced specificity pocket (C6 corollary — cannot be
+    seen in apo/flat-ligand structures)
+  - `PocketDefinitionPolicy.validate_input_structure()`: checks apo
+    prohibition and AlphaFold provenance flagging without raising (caller
+    decides whether to exclude or flag)
+
+- 38 new tests (22 structure-record + 16 pocket-definition); 503 total passing
+
 #### ADR-0009 / GDR-003 / CQA-001 — Corpus Quality Assessment Layer (`quality/`) (Done)
 - New architectural layer `src/orthosteric/quality/`, authorized by `ADR-0009`
   [Architectural]. Interposes between the descriptive `CorpusProfile`
