@@ -218,7 +218,7 @@ fully tested.
 |---|---|---|---|
 | `SCI1-000` | `Done` | `ADR-0010` | Phase C architecture spec + package stubs + layer order. **This PR.** |
 | `SCI1-001` | **Next** | — | `pocket/` data models: `StructureRecord`, `StructureProvenance`, `PocketDefinitionPolicy`, `PocketResidueSet` (pure-Python, no external deps) |
-| `SCI1-002` | Pending | — | `pocket/` geometry + rotamer: `_pocket_geometry`, `_rotamer_state`, `_solvent_accessibility` (introduces BioPython/numpy) |
+| `SCI1-002` | **Done** | — | `pocket/` geometry + rotamer: `_pocket_geometry`, `_rotamer_state`, `_solvent_accessibility` (BioPython/numpy) |
 | `SCI1-003` | Pending | — | `pocket/` residue mapping: `_residue_mapping` (cross-isoform correspondence, Constitution §2.1) |
 | `SCI1-004` | Pending | — | `features/` interaction fingerprints: `_interaction_fingerprint` |
 | `SCI1-005` | Pending | — | `features/` contact maps + graph: `_contact_map`, `_structural_graph` |
@@ -263,7 +263,7 @@ Derived from Constitution §2.1, §4.6, §9.3. Creates `pocket/`, `features/`, `
 | ID | Objective | Notes |
 |---|---|---|
 | `SCI1-001` | Refine `SCI-1` backlog against `SCI-0` audit outcomes | §3 |
-| `SCI1-002` | `pocket/` scaffold — README with Constitution sections served | |
+| `SCI1-002` | `pocket/` scaffold — README with Constitution sections served | **DONE** |
 | `SCI1-003` | Reference structure loader; construct and resolution recording | §2.1 |
 | `SCI1-004` | Ligand-ensemble union pocket builder — **rejects apo input** | §2.1(1); R4 |
 | `SCI1-005` | Rotamer-state ensemble representation | §2.1(2); sequence/backbone-only is non-compliant |
