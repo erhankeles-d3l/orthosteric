@@ -6,6 +6,7 @@ include_external_packages = True
 name = Contract 4 - layer dependency direction (SI17)
 type = layers
 layers =
+    orthosteric.policy
     orthosteric.eval
     orthosteric.explain
     orthosteric.train

@@ -130,6 +130,30 @@ data/  chembl/  bindingdb/  pubchem/  pdb/  literature/
 
 **Ordering constraint.** `SCI0-028` must be `Done` before `SCI0-015` begins. Running the connectivity audit before its thresholds are sealed would let the kill criterion be chosen after seeing the data — a Constitution §1.4 violation and the exact failure R23 describes.
 
+## Decision Policy Layer (`policy/`) · **architectural layer, not a stage**
+
+Authorized by `ADR-0008` [Architectural]. Not an `SCI-N` stage: `SCI-4` is
+Cross-family transfer (Constitution §9.6, criterion S7) and is untouched. See
+`ADR-0008` for why this is a layer rather than a stage.
+
+| ID | Status | Record | Branch | Objective |
+|---|---|---|---|---|
+| `DPL-001` | `Done` | `ADR-0008` | feature/adr-0008-decision-policy-layer | `policy/` package: `Policy` ABC, `PolicyEngine`, `PolicyConfig`, configurable `SelectivityTierTable`, selectivity/potency/confidence/uncertainty policies, `DecisionRecord` provenance |
+
+Operates exclusively on model outputs. Never modifies evidence, harmonized
+data, features, or learned models — enforced by the `.importlinter` layer order
+(`policy/` is highest, so no lower layer may import it). No policy output is
+criterion-eligible (Constitution §1.4 firewall).
+
+Deliberately **not** implemented, because no evidence layer exists to support
+them and no threshold would be anything but invented: `ADMETPolicy`,
+`DevelopabilityPolicy`. The `Policy` ABC admits them without changes to
+existing code when such an evidence layer is added.
+
+Open, and blocking one policy from classifying rather than abstaining:
+`UncertaintyPolicy` requires the label-noise floor from `SCI0-016`, which has
+not run; it abstains and raises `RULE_MISSING/SCI0-016` until then.
+
 ## SCI-0.5 — Mutation propagation · **provisional** (Phase 3, Option B only)
 
 | ID | Objective |

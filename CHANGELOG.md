@@ -6,6 +6,68 @@ Maintained from the first commit, never retrofitted (ENG §8).
 
 ### SCI-0 — Data Acquisition Layer (in progress)
 
+#### ADR-0008 / DPL-001 — Decision Policy Layer (`policy/`) (Done)
+- New architectural layer `src/orthosteric/policy/`, authorized by `ADR-0008`
+  [Architectural]. Operates exclusively on model outputs; never modifies
+  evidence, harmonized data, features, or learned models
+- **Two governance conflicts found during review and resolved in the ADR, not
+  papered over:**
+  1. The request labelled this `SCI-4`, but `SCI-4` is already *Cross-family
+     transfer* — Constitution §9.6, criterion **S7**, which carries the
+     project's entire generality claim under §9.6's binding honesty clause.
+     Implemented as an **unnumbered architectural layer** instead (consistent
+     with `data/`, `features/`, `model/`, `eval/`, `explain/`), so no stage is
+     renumbered and S7 is untouched. `SCI-3` is likewise *Knowledge extraction*,
+     not "prediction"
+  2. ENG §2's package-responsibility table is authoritative and exhaustive;
+     adding `policy/` required amending it, which per ENG §1 required an
+     Accepted ADR first
+- **Criterion firewall (Constitution §1.4):** `policy/` is the *highest* layer
+  in `.importlinter`, so no lower layer may import it — a prioritization
+  threshold mechanically cannot reach evidence, features, training, prediction,
+  or criterion evaluation. Every `PolicyOutcome`/`DecisionRecord` carries
+  `criterion_eligible = False`. Policy thresholds are **not** sealed artefacts
+  and are not added to `sealed/MANIFEST.md`
+- Configurable `SelectivityTierTable` — defaults 10× / 30× / 100× / 300× /
+  1000× as *configuration*, not implementation constants; validated for strictly
+  ascending order and unique names
+- Selectivity computed in log space per Constitution §2.3(4)
+  (`Δ = pAct_ref − pAct_x`), with fold-change `10 ** Δ` exposed as a derived
+  view — mathematically identical to `Activity_x / Activity_ref`. Full
+  `SelectivityVector` retained (per-isoform Δ, folds, and limiting isoform), so
+  nothing is lost to the scalar `Smin`
+- **Governed gates applied before any tier is assigned**, all sourced from the
+  Constitution rather than invented: §2.3(6) potency floor → `UNDEFINED_POTENCY_
+  FLOOR` (undefined, *not* a low tier); §2.2 Indeterminate → `UNDEFINED_
+  INDETERMINATE` (never read as sparing); §2.3(3) mixed biochemical/cellular →
+  `UNDEFINED_MIXED_CLASS`; missing point estimate → `UNDEFINED_MISSING_
+  PREDICTION` (missing ≠ inactive)
+- `ConfidencePolicy` composes joint confidence as a **product** per §2.4, never
+  `min` — §2.4 states the min-rule is wrong; the correlation assumption is
+  recorded in `detail` as §2.4 requires
+- `UncertaintyPolicy` **abstains** when no label-noise floor is configured
+  rather than defaulting to §2.4's "typically ≥ 0.3 log units", which is a
+  general observation, not this project's measured floor (an `SCI0-016` output)
+- **AUDITOR-5 interaction surfaced, not worked around:** there is no
+  cross-isoform-harmonized potency metric — Cheng–Prusoff is blocked. Every
+  `PredictionInput` carries a required `NormalizationStatus`; tiers computed
+  from `NOT_NORMALIZED` inputs still compute but carry `AUDITOR5_ADVISORY` into
+  the `DecisionRecord`, marked as not comparable across differing `[ATP]`. No
+  ATP Km inferred
+- Provenance per decision: policy id + version, full embedded threshold
+  configuration, software provenance (reusing `SCI0-011`'s `SoftwareProvenance`),
+  model version, evidence snapshot SHA-256, prediction id, timestamp.
+  `decision_content_sha256` **excludes the timestamp**, per the `SCI0-011`
+  precedent, so identical inputs yield an identical hash
+- Extensibility: `Policy` ABC + engine registration; a new policy requires no
+  change to any existing module (test-verified). `ADMETPolicy` /
+  `DevelopabilityPolicy` deliberately not implemented — no supporting evidence
+  layer exists and any threshold would be invented
+- Updated: `.importlinter` (9th layer), ENG §2 package table + layer order,
+  `IMPLEMENTATION_PROTOCOL_SCIENTIFIC.md` §16 (dataflow diagram + stage-vs-layer
+  distinction + package-ownership row), backlog, `policy/README.md`
+- 78 new tests; 397 total passing
+
 #### GDR-001 — Duplicate-resolution policy resolved via literature review (Done)
 - `docs/governance/decision-records/GDR-001-duplicate-resolution-policy.md`:
   resolves AUDITOR-3 (SCI0-028 item 5/6). Under Project Owner authorization
