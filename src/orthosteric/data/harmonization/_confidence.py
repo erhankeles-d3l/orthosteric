@@ -352,8 +352,13 @@ class ConfidenceScorer:
                 value=None,
                 basis="Single observation in group; no replication to assess agreement",
             )
+        # RESOLVED_REPLICATE_MEDIAN (GDR-001) still reflects >=2 distinct
+        # exact values in the group -- the aggregation policy is now resolved,
+        # but the underlying disagreement signal is unchanged and must still
+        # be surfaced here, not hidden by the fact that a median now exists.
         disagrees = group.conflict_status in (
             GroupConflictStatus.RULE_MISSING,
+            GroupConflictStatus.RESOLVED_REPLICATE_MEDIAN,
             GroupConflictStatus.LOGICAL_CONTRADICTION,
         )
         return ConfidenceComponent(

@@ -4,9 +4,14 @@
 factor, the duplicate-resolution policy, and the per-isoform ATP Km source.
 **Prepared:** 2026-08-05, autonomously, by the computational pipeline (no human
 scientific adjudication performed in producing this report).
-**Outcome:** `SCI0-028` **cannot be implemented at this time.** Every required
-seal is classified `RULE_MISSING` below. No numeric threshold, similarity
-measure, or scientific policy is proposed anywhere in this document
+**Outcome (revised 2026-08-05, second pass):** `SCI0-028` **still cannot be
+fully implemented.** Of the six required seals, **one is now `RESOLVED`**
+(duplicate-resolution policy, via `GDR-001` — literature-review authority
+granted by the Project Owner, 2026-08-05) and **one carries a non-numeric
+clarification** (the counting basis for `N_c`/`N_b`/`N_w`, resolved by
+textual analysis, not literature review, and not itself a numeric seal).
+The remaining four items are unchanged: `RULE_MISSING`. No numeric
+threshold or ATP Km value is proposed anywhere in this document
 (`CLAUDE.md` §1).
 **Ordering consequence:** `SCI0-015` remains blocked. The backlog's own ordering
 constraint — "`SCI0-028` must be `Done` before `SCI0-015` begins" — is
@@ -78,16 +83,29 @@ sealed artefacts of any kind, for any objective, including `SCI0-028`.
 
 | # | Item | Classification | Governing citation |
 |---|---|---|---|
-| 1 | `N_c` — min. size of largest connected component | `RULE_MISSING` | §3 below |
-| 2 | `N_b` — min. bridging-compound count | `RULE_MISSING` | §3 below |
+| 1 | `N_c` — min. size of largest connected component | `RULE_MISSING` (counting basis clarified; numeric value still missing) | §3 below |
+| 2 | `N_b` — min. bridging-compound count | `RULE_MISSING` (counting basis clarified; numeric value still missing) | §3 below |
 | 3 | `N_w` — min. within-study four-isoform compound count | `RULE_MISSING` | §4 below |
 | 4 | S4b sharpness factor (interval-width multiplier `k`) | `RULE_MISSING` | §5 below |
-| 5 | Duplicate-resolution policy | `RULE_MISSING` | §6 below |
-| 6 | Per-isoform ATP Km source, construct scope, version policy, conflict rule | `RULE_MISSING` | §7 below |
+| 5 | Duplicate-resolution policy | **`RESOLVED`** — `GDR-001`, 2026-08-05 | §6 below |
+| 6 | Per-isoform ATP Km source, construct scope, version policy, conflict rule | `RULE_MISSING` (additional search performed; no independent second Km,ATP source located) | §7 below |
 
-**Zero of six items are `RULE_AVAILABLE`.** No implementation or Decision
-Record is prepared in this report, per the instruction that `RULE_AVAILABLE`
-items alone receive implementation.
+**One of six items is fully resolved; one carries a non-numeric definitional
+clarification only.** Neither resolution required, or resulted in, inventing
+a numeric threshold. `N_c`, `N_b`, `N_w`, S4b, and the ATP Km source remain
+`RULE_MISSING` and continue to block `SCI0-015`.
+
+### 2.1 Second-pass authorization (2026-08-05)
+
+The Project Owner subsequently authorized this pipeline to resolve scientific
+methodology questions not already settled by governance, via comprehensive
+literature review, where the evidence supports a single defensible choice —
+stopping only if the literature does not, if multiple options remain
+scientifically equivalent with materially different consequences, or if a
+decision would substantially change the project's objectives or claims. This
+section records how that authority was applied to the six items above, and
+why it resolved only one of them.
+
 
 ---
 
@@ -140,6 +158,24 @@ over raw activity records or over `SCI0-012` scaffold-deduplicated compound
 identities is not stated in the Constitution, `ADR-0003`, or the backlog, and
 changes the counting unit for `SCI0-014`'s `build_graph_stats_from_records()`
 output.
+
+**Counting-basis clarification (resolved 2026-08-05, not by literature review
+— by textual analysis of existing governance text; no numeric value involved).**
+`Amendment A10` itself states R1's failure condition as: "Largest connected
+component < `N_c` **compounds**, or bridging **compounds** < `N_b`... or
+< 8 **scaffold families** in the connected component." The amendment text
+already distinguishes "compounds" from "scaffold families" as two different
+counting units within the same criterion — it would not use both terms if
+they meant the same thing. "Compounds" here can only mean unique compound
+identity (`HarmonizedCompound.internal_id` / InChIKey, per `SCI0-008b`/`c`),
+which is also how `SCI0-014`'s `build_graph_stats_from_records()` is already
+implemented ("Nodes: compound InChIKeys — one node per unique compound").
+The ambiguity flagged in `ADR-0003_AUDITOR_2_THRESHOLD_EVIDENCE.md` — "raw
+records or scaffold-deduplicated compounds" — is resolved: it is neither raw
+records nor scaffold-deduplicated; it is unique compound (InChIKey) identity,
+distinct from both. This clarification changes no code (`SCI0-014` already
+counts this way) and sets no numeric value. `N_c` and `N_b`'s actual floors
+remain `RULE_MISSING` for the reasons above.
 
 **Downstream dependency.** `docs/IMPLEMENTATION_BACKLOG.md` Part VIII (Amendment
 A10 of `CONSTITUTION_AMENDMENT_SET_v4.7.md`) makes `N_c` and `N_b` load-bearing
@@ -219,54 +255,103 @@ stated in the backlog.
 
 ---
 
-## 6. Duplicate-resolution policy
+## 6. Duplicate-resolution policy — RESOLVED (GDR-001, 2026-08-05)
 
-**Classification:** `RULE_MISSING`, with an internal documentation
-inconsistency that itself needs reconciliation.
+**Classification revised: `RESOLVED`.** See
+`docs/governance/decision-records/GDR-001-duplicate-resolution-policy.md`
+for the full record. Summary:
 
-`ADR-0003_INDEPENDENT_AUDITOR_BRIEF.md` (AUDITOR-3 row):
+Within a fully-specified evidence-identity group (same compound, isoform,
+**construct**, **organism**, measurement type, measurement class, assay, and
+source), two or more non-identical exact values are combined by their
+**median**. This resolves AUDITOR-3's four listed options (median /
+most-recent / highest-confidence / other) in favor of median, on the
+strength of:
 
+- domain-specific literature explicitly using median for this exact
+  operation — combining duplicate/replicate bioactivity measurements before
+  modeling (Yang et al., Rep3Net, arXiv:2512.00521; an uncertainty-aware
+  chemical-language-model RL study, arXiv:2606.24990; Zhang et al.,
+  *J. Cheminformatics* 2019, DOI `10.1186/s13321-019-0370-7`);
+- quantified evidence on the specific noise pattern median is designed to
+  resist in exactly this kind of data (Kramer et al., *J. Med. Chem.* 2012,
+  55, 5165–5173; Landrum & Riniker, *J. Chem. Inf. Model.* 2024, 64,
+  1560–1567; summarized in Schiebroek, Landrum & Riniker, DOI
+  `10.1021/acs.jcim.6c01018`);
+- general robust-statistics grounding for median over mean under this
+  failure mode (Huber, *Robust Statistics*, 1981/2004);
+- the absence of any literature support located for "most-recent" as a
+  bioactivity duplicate-resolution criterion, and the domain-specific
+  argument against it (Ki/IC50 is a physical constant, not time-varying);
+  and
+- the argument that "highest-confidence-only" discards corroborating
+  replicate information within a group already this narrowly scoped, where
+  confidence is better used across groups (`SCI0-010`'s existing role) than
+  as an intra-group tie-breaker.
+
+**Scope, stated precisely so it is not over-read.** This resolves only how
+to combine records that share source, assay, construct, organism, isoform,
+and measurement type — i.e., literal replicate measurements. It does **not**
+authorize combining values across different studies or sources (Constitution
+§2.3(1) as amended and `SCI0-013`'s within-study stratum remain the sole
+basis for evaluation criteria, unaffected), and it does **not** resolve
+AUDITOR-5 (ATP Km / Cheng-Prusoff), which remains `INSUFFICIENT_EVIDENCE`.
+
+**Accompanying correctness fix.** The evidence-identity key in
+`_deduplicator.py`, as originally merged, omitted `construct` and `organism`
+— fields the schema already carries — creating a latent risk that a
+wild-type and a mutant construct (or two species) sharing a nominal
+`assay_id` could be blended by the new median policy. `GDR-001` adds both
+fields to the identity key as a prerequisite, strictly narrowing existing
+groups (never broadening them), before the aggregation decision takes effect.
+
+**Implementation.** `src/orthosteric/data/harmonization/_deduplicator.py`
+updated: identity key extended; `GroupConflictStatus.RESOLVED_REPLICATE_
+MEDIAN` introduced; `RULE_MISSING` retained in the enum but no longer
+produced by current logic; `Deduplicator.POLICY_ID` bumped to
+`sci0009_identity_grouping_median_replicates_v2_gdr001` (propagates a new
+snapshot hash via `SCI0-011`'s `PolicyManifest.deduplication_policy` for any
+corpus rebuilt after this change). `src/orthosteric/data/harmonization/
+_confidence.py`'s `duplicate_agreement` component updated so the disagreement
+signal still fires for `RESOLVED_REPLICATE_MEDIAN` groups — resolving how to
+combine differing values does not mean they stopped differing.
+
+**Confidence level: high**, for this narrowly-scoped question specifically
+(see `GDR-001` for the full statement and its explicit limits).
+
+**What was previously an internal inconsistency is now settled by this
+resolution, not merely flagged.** `adjudication.py`'s procedure-v1.0
+`RESOLVED` output for AUDITOR-3 and `_deduplicator.py`'s prior fail-closed
+behavior disagreed (as recorded in the first pass of this report, below,
+retained for the historical record). `GDR-001` supersedes both in effect:
+the aggregation method it adopts (median) happens to match what
+`adjudication.py`'s procedure v1.0 already computed, but `GDR-001` is now
+the authoritative resolution and citation for this decision, not
+`adjudication.py`'s earlier output, which was reached through a different,
+now-superseded authorization pathway (`ADR-0003`'s computational-adjudication
+amendment, not the literature-review authority `GDR-001` was made under).
+`adjudication.py` is not modified by this pass; a future pass may wish to
+annotate it to point at `GDR-001` for traceability, but that is a
+documentation nicety, not a correctness requirement, since `_deduplicator.py`
+(the module that actually runs) is now internally consistent and cites
+`GDR-001` directly.
+
+**Historical record of the discrepancy, as originally written (first pass,
+before `GDR-001`):**
+
+> `ADR-0003_INDEPENDENT_AUDITOR_BRIEF.md` (AUDITOR-3 row):
+>
 > No default or candidate policy text exists anywhere; ADR-0003 §7.8 is
 > referenced by number but the referenced content is the open item itself,
 > not a resolution.
-
-The brief's decision checklist (§ "Decision Record," near the end of the
-document) lists AUDITOR-3 with an unchecked box: `☐ Accepted ☐ Rejected
-☐ Modified — details: __________`.
-
-**Inconsistency requiring reconciliation, not resolution by this report.**
-`src/orthosteric/data/adjudication.py` implements an `AdjudicationStatus.
-RESOLVED` outcome for AUDITOR-3 (procedure v1.0, log-median aggregation
-stratified by isoform × construct × species). The current
-`src/orthosteric/data/harmonization/_deduplicator.py` module — merged more
-recently — states the opposite in its module docstring:
-
-> A prior draft of this module implemented log-median aggregation under a
-> mislabeled "(RESOLVED)" comment; that draft is superseded by this one and
-> must not be resurrected without an actual Auditor sign-off changing
-> ADR-0003's Status line.
-
-These two files currently disagree about whether AUDITOR-3 is resolved.
-`adjudication.py` was not edited by this report; `_deduplicator.py`'s stricter,
-fail-closed reading governs the corpus today (`SCI0-009`, merged as
-`commit 92c013e`) and is the behavior actually running. This report does not
-adjudicate which file is right — that is exactly the kind of scientific
-call this task explicitly excludes — but records the discrepancy as a
-concrete item for a Governance Decision Record to settle: either (a) accept
-that `adjudication.py`'s procedure v1.0 output for AUDITOR-3 was premature and
-formally supersede it, or (b) accept it and correct `_deduplicator.py`'s
-docstring and fail-closed behavior to match. Leaving both files in the
-repository asserting contradictory statuses for the same open item is itself
-a defect (`ENGINEERING_STANDARDS.md` §1: ADR Status changes require a
-recorded decision, not silent drift between two source files).
-
-**Downstream dependency.** `SCI0-009`'s current behavior (correct, pending
-resolution) fails closed on any group with ≥2 non-identical exact values,
-emitting `GroupConflictStatus.RULE_MISSING`. This is expected and by design;
-it is not a defect to fix, and no aggregation logic should be added to
-`_deduplicator.py` until this item is sealed.
-
----
+>
+> The brief's decision checklist... lists AUDITOR-3 with an unchecked box:
+> ☐ Accepted ☐ Rejected ☐ Modified — details: __________.
+>
+> `src/orthosteric/data/adjudication.py` implements an `AdjudicationStatus.
+> RESOLVED` outcome for AUDITOR-3... The current `_deduplicator.py` module...
+> states the opposite in its module docstring... These two files currently
+> disagree about whether AUDITOR-3 is resolved.
 
 ## 7. Per-isoform ATP Km source, construct scope, version policy, conflict rule
 
@@ -301,6 +386,22 @@ perform, since selecting among the two conflicting PI3Kδ values or accepting
 the species mismatch is itself the kind of judgment call `RULE_MISSING`
 exists to prevent this pipeline from making unilaterally.
 
+**Additional search performed (2026-08-05, second pass) — negative result,
+recorded for diligence.** A targeted literature search for independent PI3K
+isoform ATP-kinetics data was performed to check whether a second source
+could resolve the internal Somoza et al. PI3Kδ conflict or the human/murine
+mismatch. It did not. The search surfaced "Dissecting Isoform Selectivity of
+PI3 Kinase Inhibitors" (PMC, DOI unresolved in this pass — accessed via PMC
+article view), which reports **Km for phosphatidylinositol (PI)** — the
+lipid substrate — for wild-type p110α (221 μM) and p110β (41 μM), measured
+under a **fixed** ATP concentration (50 μM). This is a different kinetic
+parameter from Km,ATP and is not usable as a second source for the value
+AUDITOR-5 needs; it is recorded here specifically so a future reader
+searching for "PI3K Km" citations does not mistake it for progress on the
+ATP Km question. No independent second Km,ATP source was located. This item
+remains `RULE_MISSING`, unchanged in substance from the first pass of this
+report.
+
 **Downstream dependency.** This is the same item AUDITOR-5 governs, already
 recorded as `INSUFFICIENT_EVIDENCE` in `adjudication.py` and correctly
 blocking `SCI0-008` (Cheng-Prusoff normalization). No change to that status is
@@ -319,6 +420,19 @@ selected by this report. Where a range or midpoint might appear to invite a
 choice (e.g., `N_w` ∈ [24, 40]), no midpoint, mean, or "reasonable default" is
 offered.
 
+**Addendum (second pass).** The duplicate-resolution policy resolved in §6 is
+a methodology choice (which aggregation statistic to use), not a numeric
+threshold, similarity measure, or scientific-content decision about PI3K
+biology — it is analogous in kind to choosing a well-established statistical
+estimator, and is documented in full in `GDR-001` with its own explicit
+scope limits, assumptions, and confidence level. The counting-basis
+clarification in §3 sets no number either. Neither resolution required
+selecting among multiple scientifically-equivalent options with materially
+different consequences — in both cases, one option was clearly and
+independently better-supported than the alternatives, which is the specific
+condition under which the Project Owner's second-pass authorization permits
+proceeding without further approval.
+
 ---
 
 ## 9. Recommendations (not decisions)
@@ -331,8 +445,11 @@ Record would need to address per item; none is a proposed answer.
 | `N_c`, `N_b` | Counting basis (raw records vs. `SCI0-012` scaffold-deduplicated compounds); the numeric floor itself, informed by — but not derived from — the three-model sensitivity range in `ADR-0003_AUDITOR_2_THRESHOLD_EVIDENCE.md` §4 |
 | `N_w` | Minimum compounds-per-family parameter; the resulting floor (candidate range `[24, 40]` exists as a starting point only) |
 | S4b sharpness factor | The multiplier `k` (candidate range `[1.5, 2.0]` exists as a starting point only); sequencing relative to `SCI0-016`'s noise-floor output |
-| Duplicate-resolution policy | Reconciliation of the `adjudication.py` / `_deduplicator.py` status discrepancy (§6); if AUDITOR-3 is to be treated as resolved, formal supersession of the current fail-closed `SCI0-009` behavior; if not, formal correction of `adjudication.py`'s `RESOLVED` status |
 | ATP Km source | Resolution of the PI3Kδ internal conflict (37 μM vs. 118 μM) and the human/murine construct mismatch; whether a second independent source is required before sealing; version/date policy for future Km updates |
+
+**Duplicate-resolution policy is no longer in this table** — resolved by
+`GDR-001` (§6). The table above now covers only the four items still
+`RULE_MISSING`.
 
 **Terminology recommendation (process, not scientific).** Should the Project
 Owner wish to formalize the terminology change described in §0 beyond this
@@ -352,11 +469,16 @@ No corrective action is needed on the data pipeline itself. The following
 already defer correctly and require no change until the items above are
 sealed:
 
-- `SCI0-009` (`_deduplicator.py`) fails closed on non-identical duplicate
-  groups (`GroupConflictStatus.RULE_MISSING`) rather than aggregating.
-- `SCI0-011` (`_manifest.py`) records `within_group_conflict_threshold =
-  "RULE_MISSING/SCI0-016_required"` and equivalent markers for the SCI0-010
-  confidence rules in every snapshot's `PolicyManifest`.
+- `SCI0-009` (`_deduplicator.py`) now resolves non-identical duplicate
+  groups by median under `GDR-001` (`GroupConflictStatus.
+  RESOLVED_REPLICATE_MEDIAN`), scoped to literal replicates only; it does
+  not aggregate across studies, sources, constructs, or organisms, and does
+  not apply Cheng-Prusoff normalization.
+- `SCI0-011` (`_manifest.py`) records the updated `deduplication_policy`
+  (`sci0009_identity_grouping_median_replicates_v2_gdr001`) and continues to
+  record `within_group_conflict_threshold = "RULE_MISSING/SCI0-016_required"`
+  and equivalent markers for the SCI0-010 confidence rules in every
+  snapshot's `PolicyManifest` — those remain unresolved.
 - `SCI0-014` (`graph.py`) computes `largest_connected_component`,
   `bridging_compounds`, and `within_study_four_isoform` but performs no
   pass/fail comparison against any threshold — the fields exist and are
@@ -377,6 +499,10 @@ ordering constraint stands: running the connectivity audit before its
 thresholds are sealed would let the kill criterion be chosen after seeing the
 data (`Constitution §1.4`; risk `R23`).
 
-**No branch, commit, or PR for `SCI0-015` or `SCI0-028` implementation
-follows from this report.** This report is the complete deliverable for the
-`SCI0-028` review requested.
+**No branch, commit, or PR for `SCI0-015` itself follows from this report.**
+This second pass did produce a code change — the `GDR-001`-authorized
+correction to `_deduplicator.py` — because that specific item cleared the
+bar for autonomous resolution under the Project Owner's second-pass
+authorization. `N_c`, `N_b`, `N_w`, S4b, and the ATP Km source remain
+`RULE_MISSING`; `SCI0-015` remains not authorized to begin until all four
+are sealed by a Governance Decision Record or Governance Amendment.

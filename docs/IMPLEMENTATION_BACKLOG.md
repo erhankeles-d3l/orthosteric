@@ -121,7 +121,7 @@ data/  chembl/  bindingdb/  pubchem/  pdb/  literature/
 | `SCI0-025` | Q15 — empirical S9b precision floor calibration | §3.6.5 |
 | `SCI0-026` | Seal: S10 mutation and null-control sites | Q14 |
 | `SCI0-027` | Seal: second-family selection | Q16; before any Tier 1 modelling |
-| `SCI0-028` | `Blocked — 0/6 items RULE_AVAILABLE` | `docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md` | feature/sci0-028-governance-gap-report | Seal: **`N_c`, `N_b`, `N_w`, S4b sharpness factor**, duplicate-resolution policy, per-isoform ATP Km source | **sealed before `SCI0-015` runs** (§1.4); awaiting Governance Decision Record per item |
+| `SCI0-028` | `Blocked — 4/6 items RULE_MISSING; 1/6 RESOLVED (GDR-001); 1/6 clarified, non-numeric` | `docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md`, `docs/governance/decision-records/GDR-001-duplicate-resolution-policy.md` | feature/gdr-001-auditor3-duplicate-resolution | Seal: **`N_c`, `N_b`, `N_w`, S4b sharpness factor**, duplicate-resolution policy, per-isoform ATP Km source | **sealed before `SCI0-015` runs** (§1.4); duplicate-resolution policy resolved via literature review (GDR-001, 2026-08-05); N_c/N_b counting basis clarified (non-numeric); N_c, N_b, N_w, S4b, ATP Km remain RULE_MISSING |
 | `SCI0-029` | Seal: pre-registered thresholds for all criteria | `sealed/config/`; non-composable loader |
 | `SCI0-030` | Phase commitment — record in `CLAUDE.md` header | §1.6 |
 | `SCI0-031` | `[procedure]` `SCI-0` gate evaluation | §15.4; proceed / redesign / stop |

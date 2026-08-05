@@ -292,21 +292,27 @@ def test_extraction_tier_exposed_as_category_not_scored() -> None:
 
 
 def test_duplicate_agreement_reflects_sci0009_conflict_status() -> None:
+    """As of GDR-001 (2026-08-05), >=2 distinct exact values in a fully
+    specified identity group resolve to RESOLVED_REPLICATE_MEDIAN rather than
+    RULE_MISSING. The disagreement signal this test checks is unchanged:
+    duplicate_agreement must still surface 0.0 (the values genuinely
+    differed), and measurement_consistency must still be 1.0 (resolving by
+    median is not a *logical* contradiction of any censoring bound)."""
     scorer = ConfidenceScorer()
     dedup = Deduplicator()
     records = [_rec(IK_ALPHA, "PI3Kalpha", 7.0), _rec(IK_ALPHA, "PI3Kalpha", 7.5)]
     group = dedup.deduplicate(records)[0].groups[0]
-    assert group.conflict_status == GroupConflictStatus.RULE_MISSING
+    assert group.conflict_status == GroupConflictStatus.RESOLVED_REPLICATE_MEDIAN
 
     conf = scorer.score(records[0], group=group)
     dup = _get(conf, "duplicate_agreement")
     cons = _get(conf, "measurement_consistency")
     assert dup.applicable is True
-    assert dup.value == 0.0  # disagreement surfaced, not hidden
+    assert dup.value == 0.0  # disagreement surfaced, not hidden by resolution
     assert cons.applicable is True
-    assert cons.value == 1.0  # RULE_MISSING is not a *logical* contradiction
-    assert conf.context.conflict_status == "rule_missing"
-    assert "RULE_MISSING" in conf.context.conflict_governance_note
+    assert cons.value == 1.0  # median resolution is not a *logical* contradiction
+    assert conf.context.conflict_status == "resolved_replicate_median"
+    assert "GDR-001" in conf.context.conflict_governance_note
 
 
 def test_duplicate_agreement_positive_when_group_agrees() -> None:
