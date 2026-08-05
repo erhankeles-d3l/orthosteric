@@ -82,10 +82,10 @@ A `Scientific` ADR may not be authored by the model developer alone.
 | `data/` | loading, provenance, censoring, tier gating | feature construction, model logic |
 | `pocket/` | structure handling, ensemble union, rotamer states | featurization, prediction |
 | `features/` | feature construction | I/O, training, prediction |
-| `model/` | prediction | training loops, I/O, evaluation metrics |
-| `train/` | training orchestration | model mathematics, metric definitions |
-| `eval/` | evaluation, calibration, degeneracy battery, seal reading | training, feature construction |
-| `explain/` | Constitution §4.7 discrete-rule interface | model definition, training |
+| `learning/` | Comparative representation learning — `compound + α + β + γ + δ → joint representation`, never `compound → activity` (`ADR-0010`, Phase C SCI-2) | raw structure I/O, feature construction, corpus management, evaluation metrics |
+| `interpretation/` | Mechanistic explanation — interaction attribution, residue importance, counterfactual interactions, comparative fingerprints (`ADR-0010`, Phase C SCI-3; subsumes `explain/`) | model training, feature construction, corpus management, policy decisions |
+| `generation/` | Molecular design — consumes representations + explanations + policy outputs (`ADR-0010`, Phase C SCI-4; stub until SCI-3 complete) | training loops, structure featurization, corpus management, criteria evaluation |
+| `eval/` | Evaluation, calibration, degeneracy battery, seal reading — scores model and interpretation outputs against S-criteria | training, feature construction |
 | `kg/` | knowledge layer (Phase 3) | anything outside Constitution §5.2 schema |
 | `policy/` | Decision Policy Layer — classify predictions against configurable project objectives (`ADR-0008`) | evidence loading, harmonization, featurization, model definition, training, criterion evaluation |
 | `quality/` | Corpus Quality Assessment Layer — interpret a `CorpusProfile` into per-dimension adequacy (`ADR-0009`) | profile computation, raw-record access, decision-policy logic |
@@ -99,14 +99,13 @@ If "Constitution section served" cannot be written, the package's necessity is u
 **Import contracts, enforced mechanically** via `import-linter` or equivalent:
 
 **Layer order (highest → lowest)**, as enforced in `.importlinter`:
-`policy/` → `eval/` → `explain/` → `train/` → `model/` → `features/` →
-`pocket/` → `quality/` → `data/` → `runtime/`. `policy/` sits at the top by
-`ADR-0008` so that no lower layer can import it — mechanically preventing a
-project prioritization threshold from influencing evidence, features,
-training, prediction, or criterion evaluation. `quality/` sits directly
-above `data/` by `ADR-0009`, so `data/` cannot import it — a `CorpusProfile`
-cannot depend on its own interpretation — while `policy/` (above everything)
-can consume it.
+`generation/` → `policy/` → `eval/` → `interpretation/` → `learning/` →
+`features/` → `pocket/` → `quality/` → `data/` → `runtime/` (`ADR-0010`
+Phase C order). `generation/` is the terminal consumer; no layer imports from
+it. `policy/` sits below `generation/` so generative design can consume policy
+decisions. `quality/` sits directly above `data/` (ADR-0009); `data/` cannot
+import it. `generation/` and `policy/` cannot be imported from `eval/` or
+below, enforcing the criterion firewall (ADR-0008).
 
 1. no cross-package imports of `_`-prefixed internal modules
 2. no `src/` import from `notebooks/` or `scratch/`

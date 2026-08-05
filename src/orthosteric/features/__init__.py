@@ -1,1 +1,10 @@
-"""features package — responsibility defined in docs/ENGINEERING_STANDARDS.md §2."""
+"""features package — Structural representation construction (Phase C SCI-1).
+
+Authority: ADR-0010 [Architectural].
+Responsibility (ENG §2): feature construction — interaction fingerprints,
+residue-residue and ligand-residue contact maps, pocket descriptors, structural
+graphs, comparative multi-isoform feature sets, MD-ready representation
+interfaces. Consumes pocket/ representations; produces ML-ready tensors.
+
+Must NOT contain: structure I/O, training loops, prediction, policy decisions.
+"""

@@ -6,11 +6,11 @@ include_external_packages = True
 name = Contract 4 - layer dependency direction (SI17)
 type = layers
 layers =
+    orthosteric.generation
     orthosteric.policy
     orthosteric.eval
-    orthosteric.explain
-    orthosteric.train
-    orthosteric.model
+    orthosteric.interpretation
+    orthosteric.learning
     orthosteric.features
     orthosteric.pocket
     orthosteric.quality
@@ -28,10 +28,10 @@ forbidden_modules =
     scratch
 
 [importlinter:contract:tier2]
-name = Contract 3 - no training path reaches Tier 2 (inert until data.tier2_gate exists)
+name = Contract 3 - no training path reaches Tier 2 (inert until data.tier2_gate or learning.tier2_gate exists)
 type = forbidden
 source_modules =
-    orthosteric.train
+    orthosteric.learning
 forbidden_modules =
     orthosteric.data.tier2_gate
 unmatched_ignore_imports_alerting = none

@@ -354,6 +354,13 @@ RESEARCH_START → SCI-0 → [phase commitment] → SCI-1 → SCI-2
                 ↘ SCI-0.5 (Phase 3, Option B only)
 ```
 
+**Phase C mapping.** SCI-1 (structural feature generation) populates `pocket/`
+and `features/`. SCI-2 (comparative representation learning) populates
+`learning/`. SCI-3 (mechanistic interpretation) populates `interpretation/`.
+SCI-4 (molecular design, formerly cross-family transfer) extends to
+`generation/`. The stage numbering is unaffected; the package names are now
+Phase C names (ADR-0010).
+
 **Stages are not layers.** The state machine above sequences *work*. It is not
 a dataflow diagram, and `SCI-N` labels do not name packages. The runtime
 dataflow is:
@@ -371,18 +378,22 @@ corpus profile (descriptive)           (data/snapshots, GDR-002)
         ↓
 corpus quality assessment (interpretive) (quality/)     ← ADR-0009
         ↓
+structural preprocessing + pocket extraction (pocket/)  ← ADR-0010 SCI-1
+        ↓
+structural representation construction  (features/)     ← ADR-0010 SCI-1
+        ↓
+comparative representation learning     (learning/)     ← ADR-0010 SCI-2
+        ↓
+mechanistic explanation                 (interpretation/) ← ADR-0010 SCI-3
+        ↓
 decision policy                        (policy/)      ← ADR-0008
         ↓
-candidate prioritization / proceed-warning-redesign-stop (downstream consumer)
+molecular design                       (generation/)   ← ADR-0010 SCI-4
 ```
 
-`quality/` interposes between the descriptive profile and the decision
-layer, per `ADR-0009`: `CorpusProfile` remains measurement-only,
-`CorpusQualityAssessment` interprets it into per-dimension adequacy, and
-`policy/`'s `CorpusQualityGatePolicy` consumes only that assessment — never
-raw statistics — to produce the final `PROCEED`/`WARNING`/`REDESIGN`/`STOP`
-recommendation. `data/` cannot import `quality/`, and neither can import
-`policy/`, enforced by `.importlinter`.
+`quality/` interposes between the descriptive profile and the structural
+pipeline, per `ADR-0009`/`ADR-0010`. `data/` cannot import `quality/`; neither
+can import `pocket/` or above — enforced by `.importlinter`.
 
 `policy/` is the highest layer in the enforced import graph, so this arrow
 direction is mechanical: nothing upstream of it can import it, and a
@@ -408,8 +419,13 @@ Each package is created by exactly one state. Creating it elsewhere is a protoco
 | `train/` | `SCI-2` | model mathematics |
 | `eval/` — degeneracy battery, seals | `SCI-2` | training |
 | `explain/` | `SCI-2` if Phase 2 committed, else `SCI-3` | model definition |
-| `policy/` | `ADR-0008` — an architectural layer, not stage-owned; buildable before `SCI-1` because it depends only on the input contract it defines itself | evidence, harmonization, features, model definition, training, criterion evaluation |
-| `quality/` | `ADR-0009` — an architectural layer, not stage-owned; buildable as soon as `SCI0-011`/`GDR-002`'s `CorpusProfile` exists | profile computation, raw-record access, decision-policy logic |
+| `policy/` | `ADR-0008` — an architectural layer, not stage-owned | evidence, harmonization, features, model definition, training, criterion evaluation |
+| `quality/` | `ADR-0009` — an architectural layer, not stage-owned | profile computation, raw-record access, decision-policy logic |
+| `pocket/` | `ADR-0010` SCI-1 — structural preprocessing and pocket extraction | featurization, prediction, model training, interpretation |
+| `features/` | `ADR-0010` SCI-1 — structural representation construction | structure I/O, training loops, prediction, policy decisions |
+| `learning/` | `ADR-0010` SCI-2 — comparative representation learning | raw structure I/O, feature construction, corpus management, evaluation metrics |
+| `interpretation/` | `ADR-0010` SCI-3 — mechanistic explanation (subsumes `explain/`) | model training, feature construction, corpus management, policy decisions |
+| `generation/` | `ADR-0010` SCI-4 — molecular design (stub until SCI-3 complete) | training loops, structure featurization, corpus management, criteria evaluation |
 | `kg/` | `SCI-4` (Phase 3 only) | anything outside Constitution §5.2 |
 
 `eval/` is deliberately split: metrics score the `SCI-1` baselines; the degeneracy battery tests the `SCI-2` model. This is the one authorized exception to one-package-one-state.
