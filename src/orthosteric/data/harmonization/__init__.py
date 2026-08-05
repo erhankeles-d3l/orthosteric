@@ -20,6 +20,12 @@ from orthosteric.data.harmonization._chem_standardizer import (
     StandardizationStatus,
     StandardizedStructure,
 )
+from orthosteric.data.harmonization._confidence import (
+    ConfidenceComponent,
+    ConfidenceScorer,
+    CurationConfidence,
+    EvidenceContext,
+)
 from orthosteric.data.harmonization._deduplicator import (
     CompoundEvidenceMatrix,
     Deduplicator,
@@ -40,9 +46,13 @@ from orthosteric.data.harmonization._identifier_harmonizer import (
 __all__ = [
     "ChemicalStandardizer",
     "CompoundEvidenceMatrix",
+    "ConfidenceComponent",
+    "ConfidenceScorer",
     "ConflictStatus",
+    "CurationConfidence",
     "DeduplicationRecord",
     "Deduplicator",
+    "EvidenceContext",
     "EvidenceGroup",
     "GroupConflictStatus",
     "HarmonizedCompound",
