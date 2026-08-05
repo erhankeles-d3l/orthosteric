@@ -95,7 +95,7 @@ def _prov(
     )
 
 
-def _rec(  # noqa: PLR0913 — test factory, kwargs mirror the real record shape
+def _rec(
     compound_id: str,
     isoform: str | None,
     value: float,

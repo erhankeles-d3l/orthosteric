@@ -72,7 +72,7 @@ def _get(conf: CurationConfidence, name: str) -> ConfidenceComponent:
     return c
 
 
-def _prov(  # noqa: PLR0913 — test factory, kwargs mirror the real record shape
+def _prov(
     *,
     accession: str = "CHEMBL_ASSAY_1",
     isoform: str | None = "PI3Kalpha",
