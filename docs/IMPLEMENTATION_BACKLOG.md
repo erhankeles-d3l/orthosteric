@@ -106,7 +106,7 @@ data/  chembl/  bindingdb/  pubchem/  pdb/  literature/
 | `SCI0-011` | `Done` | — | feature/sci0-011 | immutable snapshot; SHA-256 over records+policy+SW; PDB vs AF tracking; RULE_MISSING manifest |
 | `SCI0-012` | `Done` | — | feature/sci0-012 | Bemis–Murcko scaffold family assignment | audit Q5 |
 | `SCI0-013` | `Done` | — | feature/sci0-013 | **Within-study / within-assay stratum extraction** | §2.3(1) as amended — the evaluation stratum |
-| `SCI0-014` | **Compound × isoform measurement graph construction** | connectivity substrate for R1 |
+| `SCI0-014` | `Done` | — | feature/sci0-014 | **Compound × isoform measurement graph construction** | connectivity substrate for R1 |
 | `SCI0-014b` | `Done` | — | feature/sci0-014b | **Dataset characterization** — descriptive only; never modifies the snapshot; may not inform split, stratum or threshold selection | attached to snapshot hash |
 | `SCI0-015` | **Public comparative evidence audit** — Q1 as amended, all nine sub-questions | **R1 evaluated here**; replaces the old four-isoform census |
 | `SCI0-016` | Q4 audit — **both** noise floors, within-study and cross-study | §2.4 as amended; sets the S4b reference |
@@ -121,7 +121,7 @@ data/  chembl/  bindingdb/  pubchem/  pdb/  literature/
 | `SCI0-025` | Q15 — empirical S9b precision floor calibration | §3.6.5 |
 | `SCI0-026` | Seal: S10 mutation and null-control sites | Q14 |
 | `SCI0-027` | Seal: second-family selection | Q16; before any Tier 1 modelling |
-| `SCI0-028` | Seal: **`N_c`, `N_b`, `N_w`, S4b sharpness factor**, duplicate-resolution policy | **sealed before `SCI0-015` runs** (§1.4) |
+| `SCI0-028` | `Blocked — 0/6 items RULE_AVAILABLE` | `docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md` | feature/sci0-028-governance-gap-report | Seal: **`N_c`, `N_b`, `N_w`, S4b sharpness factor**, duplicate-resolution policy, per-isoform ATP Km source | **sealed before `SCI0-015` runs** (§1.4); awaiting Governance Decision Record per item |
 | `SCI0-029` | Seal: pre-registered thresholds for all criteria | `sealed/config/`; non-composable loader |
 | `SCI0-030` | Phase commitment — record in `CLAUDE.md` header | §1.6 |
 | `SCI0-031` | `[procedure]` `SCI-0` gate evaluation | §15.4; proceed / redesign / stop |

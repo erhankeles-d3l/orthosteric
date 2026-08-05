@@ -6,6 +6,46 @@ Maintained from the first commit, never retrofitted (ENG §8).
 
 ### SCI-0 — Data Acquisition Layer (in progress)
 
+#### SCI0-028 — Governance gap review (Blocked; report only, no code)
+- `docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md`: reviewed all six required
+  seals (`N_c`, `N_b`, `N_w`, S4b sharpness factor, duplicate-resolution policy,
+  per-isoform ATP Km source) against Constitution, ADR-0003, the AUDITOR-2/3/5
+  evidence documents, and `sealed/MANIFEST.md`
+- **Result: 0/6 items RULE_AVAILABLE.** All six classified RULE_MISSING; no
+  numeric threshold, similarity measure, or scientific policy invented
+- Flagged an internal documentation inconsistency: `adjudication.py` marks
+  AUDITOR-3 (duplicate-resolution) `RESOLVED`, while `_deduplicator.py`'s
+  docstring and the AUDITOR brief's own checklist mark it open — recorded as
+  requiring a Governance Decision Record to reconcile, not resolved here
+- `SCI0-015` remains **not authorized to begin** (backlog ordering constraint
+  unsatisfied)
+- Terminology: this report and future authored documents use "Governance
+  Decision Record" / "Governance Amendment" in place of "Independent
+  Scientific Auditor sign-off," per Project Owner direction (2026-08-05).
+  Historical documents are quoted verbatim and not retroactively edited
+- Backlog corrected: `SCI0-014` row was missing its `Done` marker (oversight
+  from the SCI0-014 merge); corrected in this pass
+
+#### SCI0-014b — Dataset characterization (Done)
+- `data/audit.py`: `characterize(records, snapshot_sha256)` — pure descriptive
+  analysis; never modifies records; output attached to snapshot SHA-256
+- `IsoformStats`, `ScaffoldStats`, `ConnectivityStats` (delegated to SCI0-014),
+  `ConfidenceStats`, `PublicationStats`, `MissingnessMatrix`, temporal counts,
+  assay-format and quantity-type distributions
+- Binding invariant: output is read-only; may NOT inform split/stratum/threshold
+  decisions
+- 13 new tests
+
+#### SCI0-014 — Measurement-graph construction (Done)
+- `data/graph.py`: `build_graph_stats_from_records()` — primary SCI0-014 API;
+  union-find connected components over compound co-assay graph
+- `largest_connected_component` (N_c candidate), `bridging_compounds`
+  (N_b candidate), `within_study_four_isoform` (N_w candidate), `StudyCluster`
+  structure per `(study_id, assay_id)`
+- Legacy `build_graph_stats()` wrapper retained for `corpus.py` compatibility
+- All statistics reproducible given the same input
+- 22 new tests
+
 #### SCI0-001 — Backlog refinement (Done)
 - Existing refinement document at `docs/specifications/SCI0-001-refinement-data-acquisition.md`
   adopted as the authoritative decomposition of `SCI0-002`–`SCI0-014b`
@@ -154,6 +194,46 @@ Maintained from the first commit, never retrofitted (ENG §8).
 ## [Unreleased]
 
 ### SCI-0 — Data Acquisition Layer (in progress)
+
+#### SCI0-028 — Governance gap review (Blocked; report only, no code)
+- `docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md`: reviewed all six required
+  seals (`N_c`, `N_b`, `N_w`, S4b sharpness factor, duplicate-resolution policy,
+  per-isoform ATP Km source) against Constitution, ADR-0003, the AUDITOR-2/3/5
+  evidence documents, and `sealed/MANIFEST.md`
+- **Result: 0/6 items RULE_AVAILABLE.** All six classified RULE_MISSING; no
+  numeric threshold, similarity measure, or scientific policy invented
+- Flagged an internal documentation inconsistency: `adjudication.py` marks
+  AUDITOR-3 (duplicate-resolution) `RESOLVED`, while `_deduplicator.py`'s
+  docstring and the AUDITOR brief's own checklist mark it open — recorded as
+  requiring a Governance Decision Record to reconcile, not resolved here
+- `SCI0-015` remains **not authorized to begin** (backlog ordering constraint
+  unsatisfied)
+- Terminology: this report and future authored documents use "Governance
+  Decision Record" / "Governance Amendment" in place of "Independent
+  Scientific Auditor sign-off," per Project Owner direction (2026-08-05).
+  Historical documents are quoted verbatim and not retroactively edited
+- Backlog corrected: `SCI0-014` row was missing its `Done` marker (oversight
+  from the SCI0-014 merge); corrected in this pass
+
+#### SCI0-014b — Dataset characterization (Done)
+- `data/audit.py`: `characterize(records, snapshot_sha256)` — pure descriptive
+  analysis; never modifies records; output attached to snapshot SHA-256
+- `IsoformStats`, `ScaffoldStats`, `ConnectivityStats` (delegated to SCI0-014),
+  `ConfidenceStats`, `PublicationStats`, `MissingnessMatrix`, temporal counts,
+  assay-format and quantity-type distributions
+- Binding invariant: output is read-only; may NOT inform split/stratum/threshold
+  decisions
+- 13 new tests
+
+#### SCI0-014 — Measurement-graph construction (Done)
+- `data/graph.py`: `build_graph_stats_from_records()` — primary SCI0-014 API;
+  union-find connected components over compound co-assay graph
+- `largest_connected_component` (N_c candidate), `bridging_compounds`
+  (N_b candidate), `within_study_four_isoform` (N_w candidate), `StudyCluster`
+  structure per `(study_id, assay_id)`
+- Legacy `build_graph_stats()` wrapper retained for `corpus.py` compatibility
+- All statistics reproducible given the same input
+- 22 new tests
 
 #### SCI0-001 — Backlog refinement (Done)
 - Existing refinement document at `docs/specifications/SCI0-001-refinement-data-acquisition.md`
