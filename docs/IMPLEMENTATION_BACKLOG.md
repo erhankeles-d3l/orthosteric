@@ -107,7 +107,7 @@ data/  chembl/  bindingdb/  pubchem/  pdb/  literature/
 | `SCI0-012` | `Done` | — | feature/sci0-012 | Bemis–Murcko scaffold family assignment | audit Q5 |
 | `SCI0-013` | `Done` | — | feature/sci0-013 | **Within-study / within-assay stratum extraction** | §2.3(1) as amended — the evaluation stratum |
 | `SCI0-014` | **Compound × isoform measurement graph construction** | connectivity substrate for R1 |
-| `SCI0-014b` | **Dataset characterization** — descriptive only; never modifies the snapshot; may not inform split, stratum or threshold selection | attached to snapshot hash |
+| `SCI0-014b` | `Done` | — | feature/sci0-014b | **Dataset characterization** — descriptive only; never modifies the snapshot; may not inform split, stratum or threshold selection | attached to snapshot hash |
 | `SCI0-015` | **Public comparative evidence audit** — Q1 as amended, all nine sub-questions | **R1 evaluated here**; replaces the old four-isoform census |
 | `SCI0-016` | Q4 audit — **both** noise floors, within-study and cross-study | §2.4 as amended; sets the S4b reference |
 | `SCI0-017` | Q3 audit — right-censored fraction and handling | |
