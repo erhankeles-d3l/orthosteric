@@ -38,7 +38,7 @@ select = ["E","F","I","N","UP","B","A","C4","DTZ","PT","RET","SIM","ARG","PL","R
 ignore = ["D203","D213"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "PLR2004", "D103", "D205", "D209"]
+"tests/*" = ["S101", "PLR2004", "D103", "D205", "D209", "PLR0913", "PLR0917"]
 "src/orthosteric/data/harmonization/*.py" = [
     "S110",  # try/except/pass in RDKit metal disconnection
     "N812",  # rdkit version import alias

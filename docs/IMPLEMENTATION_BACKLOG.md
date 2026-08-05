@@ -105,7 +105,7 @@ data/  chembl/  bindingdb/  pubchem/  pdb/  literature/
 | `SCI0-011` | Snapshot builder — content-hashed, immutable; manifest includes **full software provenance** (RDKit, Python, lock hash, git SHA, OS, pipeline version) | §3.3 as amended; ENG §13. RDKit version affects InChIKey, so the toolchain is part of corpus identity |
 | `SCI0-011` | `Done` | — | feature/sci0-011 | immutable snapshot; SHA-256 over records+policy+SW; PDB vs AF tracking; RULE_MISSING manifest |
 | `SCI0-012` | `Done` | — | feature/sci0-012 | Bemis–Murcko scaffold family assignment | audit Q5 |
-| `SCI0-013` | **Within-study / within-assay stratum extraction** | §2.3(1) as amended — the evaluation stratum |
+| `SCI0-013` | `Done` | — | feature/sci0-013 | **Within-study / within-assay stratum extraction** | §2.3(1) as amended — the evaluation stratum |
 | `SCI0-014` | **Compound × isoform measurement graph construction** | connectivity substrate for R1 |
 | `SCI0-014b` | **Dataset characterization** — descriptive only; never modifies the snapshot; may not inform split, stratum or threshold selection | attached to snapshot hash |
 | `SCI0-015` | **Public comparative evidence audit** — Q1 as amended, all nine sub-questions | **R1 evaluated here**; replaces the old four-isoform census |
