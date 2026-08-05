@@ -94,6 +94,22 @@
 **Becomes**
 > | R1 | Insufficient **connected** public evidence for comparative learning | Fatal | Stage 0 §3.1 Q1 connectivity audit | Largest connected component < `N_c` compounds, **or** bridging compounds < `N_b`, **or** within-study four-isoform compounds < `N_w`, **or** < 8 scaffold families in the connected component. All four sealed before the audit runs |
 
+**Revision (2026-08-05, `GDR-002`).** `N_c`, `N_b`, and `N_w` are reclassified
+as corpus-derived engineering parameters (`GDR-002`), computed deterministically
+from the frozen `SCI0-011` snapshot rather than pre-sealed as literature-derived
+floors — no literature source could supply a defensible number for any of the
+three (`docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md` §3–4). Consequently
+R1's kill-switch function for these three disjuncts cannot survive unchanged:
+a condition of the form "measured value < measured value" is vacuous. The
+connectivity-adequacy judgment they used to make automatically is now made at
+the `SCI0-031` gate ("`[procedure]` `SCI-0` gate evaluation... proceed /
+redesign / stop"), by the Project Owner, informed by the frozen `CorpusProfile`
+— an explicit, recorded, qualitative decision rather than a comparison against
+an unfillable placeholder. The fourth disjunct — "< 8 scaffold families" — is
+**unchanged**: it was fixed at this Constitution's original authorship, not
+one of the outstanding `[SEALED AT STAGE 0]` placeholders, and remains a
+pre-sealed numeric floor. See `GDR-002` §4 for the full statement.
+
 ## A11 · Part VIII — R5 mitigation reference
 
 **Was**

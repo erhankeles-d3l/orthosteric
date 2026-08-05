@@ -19,6 +19,37 @@ unsatisfied, so no work on `SCI0-015` is authorized.
 
 ---
 
+## Addendum 2 (2026-08-05) — `N_c`, `N_b`, `N_w` reclassified by `GDR-002`
+
+**This is the third pass over this report.** `GDR-002` (docs/governance/
+decision-records/GDR-002-corpus-derived-engineering-parameters.md) reclassifies
+`N_c`, `N_b`, and `N_w` as **corpus-derived engineering parameters**, computed
+deterministically from an already-frozen `SCI0-011` snapshot rather than
+pre-sealed as literature-derived floors. This directly follows from, and does
+not contradict, this report's own finding in §3 below: no literature source
+could supply a defensible number for any of the three. `GDR-002` acts on that
+finding rather than continuing to search for a number the evidence already
+showed does not exist.
+
+**Revised classification (superseding the table in §2, not deleting it —
+see that section for the historical record of what was tried and why it
+failed):**
+
+| Item | Classification, third pass |
+|---|---|
+| `N_c`, `N_b` | **Reclassified** (`GDR-002`) — corpus-derived; no longer `RULE_MISSING`, never was `RULE_AVAILABLE` in the original sense (no number was ever sealed) |
+| `N_w` | **Reclassified** (`GDR-002`), with a recorded unit ambiguity — see `GDR-002` §3 |
+| S4b sharpness factor | **Relocated** (`GDR-002` §5) to the Decision Policy Layer (`ADR-0008`); remains unset, now as a policy parameter rather than a Constitution-sealed one |
+| Duplicate-resolution policy | `RESOLVED` (`GDR-001`, unchanged by this addendum) |
+| ATP Km source | **Unchanged: `RULE_MISSING`.** `GDR-002` explicitly does not touch this — scientific parameters "continue to require scientific governance and must not become corpus-derived" |
+
+**Effect on `SCI0-015`.** The ordering constraint "`SCI0-028` must be `Done`
+before `SCI0-015` begins" existed specifically to keep `N_c`/`N_b`/`N_w`
+pre-sealed. That reason no longer applies to them (`GDR-002` §6).
+`SCI0-015` is no longer blocked by `SCI0-028`. It remains blocked by the
+separate, standing requirement that real corpus acquisition be explicitly
+authorized, which this addendum does not authorize.
+
 ## 0. Terminology note
 
 Per Project Owner direction (2026-08-05), this report and all documents

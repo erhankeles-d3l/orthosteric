@@ -108,6 +108,7 @@ data/  chembl/  bindingdb/  pubchem/  pdb/  literature/
 | `SCI0-013` | `Done` | — | feature/sci0-013 | **Within-study / within-assay stratum extraction** | §2.3(1) as amended — the evaluation stratum |
 | `SCI0-014` | `Done` | — | feature/sci0-014 | **Compound × isoform measurement graph construction** | connectivity substrate for R1 |
 | `SCI0-014b` | `Done` | — | feature/sci0-014b | **Dataset characterization** — descriptive only; never modifies the snapshot; may not inform split, stratum or threshold selection | attached to snapshot hash |
+| `SCI0-014c` | `Done` | `GDR-002` | feature/gdr-002-corpus-derived-engineering-parameters | **Corpus profile freezing** (`data/snapshots/_profile.py`) — `N_c`, `N_b`, `N_w` computed deterministically from an already-frozen `SCI0-011` snapshot's `SCI0-014`/`SCI0-014b` characteristics; content-hashed, immutable | `GDR-002`; not sealed a priori — corpus-derived |
 | `SCI0-015` | **Public comparative evidence audit** — Q1 as amended, all nine sub-questions | **R1 evaluated here**; replaces the old four-isoform census |
 | `SCI0-016` | Q4 audit — **both** noise floors, within-study and cross-study | §2.4 as amended; sets the S4b reference |
 | `SCI0-017` | Q3 audit — right-censored fraction and handling | |
@@ -121,7 +122,7 @@ data/  chembl/  bindingdb/  pubchem/  pdb/  literature/
 | `SCI0-025` | Q15 — empirical S9b precision floor calibration | §3.6.5 |
 | `SCI0-026` | Seal: S10 mutation and null-control sites | Q14 |
 | `SCI0-027` | Seal: second-family selection | Q16; before any Tier 1 modelling |
-| `SCI0-028` | `Blocked — 4/6 items RULE_MISSING; 1/6 RESOLVED (GDR-001); 1/6 clarified, non-numeric` | `docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md`, `docs/governance/decision-records/GDR-001-duplicate-resolution-policy.md` | feature/gdr-001-auditor3-duplicate-resolution | Seal: **`N_c`, `N_b`, `N_w`, S4b sharpness factor**, duplicate-resolution policy, per-isoform ATP Km source | **sealed before `SCI0-015` runs** (§1.4); duplicate-resolution policy resolved via literature review (GDR-001, 2026-08-05); N_c/N_b counting basis clarified (non-numeric); N_c, N_b, N_w, S4b, ATP Km remain RULE_MISSING |
+| `SCI0-028` | `Revised scope, 2/3 remaining items closed` | `docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md`, `GDR-001`, `GDR-002` | feature/gdr-002-corpus-derived-engineering-parameters | **Verify** `_profile.py` computation is deterministic, reproducible, and provenanced (`N_c`/`N_b`/`N_w` reclassified as corpus-derived, `GDR-002` — no longer sealed here); duplicate-resolution policy resolved (`GDR-001`); S4b relocated to `policy/` (`ADR-0008`, `GDR-002`) | **no longer sealed before `SCI0-015` runs** — reclassification removes that dependency (`GDR-002` §6); per-isoform ATP Km source remains `RULE_MISSING`, does not block `SCI0-015`'s connectivity portions |
 | `SCI0-029` | Seal: pre-registered thresholds for all criteria | `sealed/config/`; non-composable loader |
 | `SCI0-030` | Phase commitment — record in `CLAUDE.md` header | §1.6 |
 | `SCI0-031` | `[procedure]` `SCI-0` gate evaluation | §15.4; proceed / redesign / stop |
@@ -129,6 +130,8 @@ data/  chembl/  bindingdb/  pubchem/  pdb/  literature/
 *`SCI0-023` through `SCI0-029` are `Scientific` ADR category and may not be authored by the model developer alone (ENG §1; Constitution §7.7).*
 
 **Ordering constraint.** `SCI0-028` must be `Done` before `SCI0-015` begins. Running the connectivity audit before its thresholds are sealed would let the kill criterion be chosen after seeing the data — a Constitution §1.4 violation and the exact failure R23 describes.
+
+**Revision (2026-08-05, `GDR-002`).** This constraint applied specifically because `N_c`/`N_b`/`N_w` needed pre-sealing before `SCI0-015` ran. Under `GDR-002`, those three are corpus-derived engineering parameters computed *from* the audit's own output, not pre-sealed floors compared against it — the reason for the ordering constraint no longer applies to them. `SCI0-015` is **no longer blocked by `SCI0-028`**. It remains blocked by the separate, standing requirement that real corpus acquisition be explicitly authorized before it begins, which `GDR-002` does not authorize and is unaffected by it.
 
 ## Decision Policy Layer (`policy/`) · **architectural layer, not a stage**
 
