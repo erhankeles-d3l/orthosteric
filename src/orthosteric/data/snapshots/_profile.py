@@ -1,7 +1,8 @@
 """Corpus profile — frozen, corpus-derived engineering parameters.
 
 Authority: `GDR-002` (docs/governance/decision-records/
-GDR-002-corpus-derived-engineering-parameters.md).
+GDR-002-corpus-derived-engineering-parameters.md); extended by `ADR-0009`
+(structural-coverage extension point, `StructuralCoverageStats`).
 
 `N_c` (largest connected component), `N_b` (bridging-compound count), and
 `N_w` (within-study four-isoform compound count) are corpus-derived
@@ -59,8 +60,8 @@ __all__ = [
     "freeze_corpus_profile",
 ]
 
-CORPUS_PROFILE_SCHEMA_VERSION = "corpus_profile_v1_gdr002"
-PROFILE_ALGORITHM_VERSION = "corpus_profile_algorithm_v1_gdr002"
+CORPUS_PROFILE_SCHEMA_VERSION = "corpus_profile_v3_adr0009"
+PROFILE_ALGORITHM_VERSION = "corpus_profile_algorithm_v3_adr0009"
 """Version of *how* the profile is computed — distinct from the upstream
 policy versions in `PolicyManifest`. Bump this if the connectivity or
 aggregation method changes, even when no upstream policy does."""
@@ -91,10 +92,28 @@ class EngineeringParameters:
         n_b: Bridging-compound count (`GraphStats.bridging_compounds`):
             compounds appearing in >= 2 study panels with >= 2 isoforms
             measured in total. Corpus-derived; not a pre-sealed floor.
-        n_w: Within-study four-isoform compound count (`GraphStats.
-            within_study_four_isoform`) — the Constitution's original unit
-            for `N_w` (compounds, not strata). Preserved for continuity with
-            the already-merged `SCI0-014` field.
+        n_w: Within-study four-isoform compound count as computed by
+            `GraphStats.within_study_four_isoform` (`SCI0-014`). **Known
+            semantic gap, discovered while implementing `ADR-0009`'s
+            `CoverageEvaluator`:** this field counts compounds belonging to
+            a study panel where all four isoforms are collectively
+            represented *somewhere in the panel*, not compounds
+            *individually* measured across all four isoforms. It can
+            therefore be positive even when zero compounds actually satisfy
+            the Constitution's own per-compound `N_w` definition (§2.3(4)'s
+            `S1` requires one compound with all four `pAct` values). Kept
+            for continuity with the already-merged `SCI0-014` field and
+            because `GDR-002` named it explicitly; superseded for adequacy
+            judgments by `n_complete_compounds` below, which is verified
+            correct.
+        n_complete_compounds: Compounds individually measured across all
+            four Tier 1 isoforms within one qualifying stratum
+            (`StratumReport.total_complete_compounds`, `SCI0-013`) — the
+            quantity the Constitution's `N_w` actually specifies, verified
+            correct against direct construction (see
+            `tests/data/snapshots/test_profile.py`). `quality/`'s
+            `CoverageEvaluator` uses this field, not `n_w`, for its
+            degenerate check.
         n_complete_strata: Count of `(study, assay)` panels complete for all
             four Tier 1 isoforms (`StratumReport.usable_strata`) — the unit
             the Project Owner's GDR-002 instruction used for `N_w`. Recorded
@@ -114,6 +133,7 @@ class EngineeringParameters:
     n_c: int
     n_b: int
     n_w: int
+    n_complete_compounds: int
     n_complete_strata: int
     n_connected_components: int
     scaffold_families_in_largest_component: int | None
@@ -126,6 +146,50 @@ class EngineeringParameters:
             "n_connected_components": self.n_connected_components,
             "n_w": self.n_w,
             "scaffold_families_in_largest_component": (self.scaffold_families_in_largest_component),
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class StructuralCoverageStats:
+    """Reserved extension point for SCI0-007-derived structural coverage.
+
+    Authority: `ADR-0009` §4. **No field here is computed by any code in this
+    change set.** Every field defaults to `None`; the dataclass exists so a
+    future `SCI0-018` computation has a documented target to populate, and so
+    `quality/`'s `StructuralCoverageEvaluator` extension point can be
+    demonstrated end-to-end (always returning `NOT_YET_AVAILABLE`) without
+    inventing structural data.
+
+    Attributes:
+        experimental_pdb_coverage: Fraction or count of Tier 1 targets with an
+            admissible experimental PDB structure (SCI0-007 §2.1). Reserved.
+        alphafold_fallback_coverage: Fraction or count of Tier 1 targets
+            relying on the governed AlphaFold fallback rather than an
+            experimental structure (SCI0-007 amendment). Reserved.
+        construct_diversity: Distinct construct descriptors observed across
+            available structures. Reserved.
+        conformational_state_diversity: Distinct conformational states
+            represented (e.g. apo vs. ligand-bound, DFG-in/out where
+            applicable). Reserved.
+        ligand_bound_structural_coverage: Fraction or count of targets with at
+            least one ligand-bound structure, as distinct from apo-only
+            coverage (relevant to Constitution C6 / the induced specificity
+            pocket). Reserved.
+    """
+
+    experimental_pdb_coverage: int | None = None
+    alphafold_fallback_coverage: int | None = None
+    construct_diversity: int | None = None
+    conformational_state_diversity: int | None = None
+    ligand_bound_structural_coverage: int | None = None
+
+    def to_canonical_dict(self) -> dict[str, int | None]:
+        return {
+            "alphafold_fallback_coverage": self.alphafold_fallback_coverage,
+            "conformational_state_diversity": self.conformational_state_diversity,
+            "construct_diversity": self.construct_diversity,
+            "experimental_pdb_coverage": self.experimental_pdb_coverage,
+            "ligand_bound_structural_coverage": self.ligand_bound_structural_coverage,
         }
 
 
@@ -151,6 +215,8 @@ class CorpusProfile:
             (`SoftwareProvenance`), not redefined.
         policy: Full policy-version bundle, reused from `SCI0-011`
             (`PolicyManifest`), not redefined.
+        structural_coverage: Reserved SCI0-007 extension point (`ADR-0009` §4).
+            `None` until `SCI0-018` exists; never fabricated.
         frozen_at_utc: When the profile was frozen. Provenance metadata only
             — excluded from `profile_sha256` (SCI0-011 precedent).
         profile_sha256: Content hash over every field above except
@@ -165,6 +231,7 @@ class CorpusProfile:
     characterization: CharacterizationReport
     software: SoftwareProvenance
     policy: PolicyManifest
+    structural_coverage: StructuralCoverageStats | None
     frozen_at_utc: str
     profile_sha256: str
 
@@ -178,6 +245,11 @@ class CorpusProfile:
             "schema_version": self.schema_version,
             "snapshot_sha256": self.snapshot_sha256,
             "software": self.software.to_canonical_dict(),
+            "structural_coverage": (
+                self.structural_coverage.to_canonical_dict()
+                if self.structural_coverage is not None
+                else None
+            ),
         }
 
 
@@ -250,6 +322,7 @@ def freeze_corpus_profile(  # noqa: PLR0913, PLR0917
     software: SoftwareProvenance,
     policy: PolicyManifest,
     strata_report: StratumReport | None = None,
+    structural_coverage: StructuralCoverageStats | None = None,
 ) -> CorpusProfile:
     """Freeze a corpus profile from already-computed corpus characteristics.
 
@@ -279,6 +352,9 @@ def freeze_corpus_profile(  # noqa: PLR0913, PLR0917
         `n_complete_strata` (GDR-002 §3's strata-based `N_w` reading). `None`
         yields `n_complete_strata=0` with no error — a profile can be frozen
         without it, since it is not required to be the primary `n_w`.
+    structural_coverage:
+        Reserved SCI0-007 extension point (ADR-0009 §4). `None` by default;
+        no code in this module computes it.
 
     Returns:
     -------
@@ -286,11 +362,15 @@ def freeze_corpus_profile(  # noqa: PLR0913, PLR0917
     (other than wall-clock time) produce an identical `profile_sha256`.
     """
     n_complete_strata = strata_report.usable_strata if strata_report is not None else 0
+    n_complete_compounds = (
+        strata_report.total_complete_compounds if strata_report is not None else 0
+    )
 
     engineering_parameters = EngineeringParameters(
         n_c=graph_stats.largest_connected_component,
         n_b=graph_stats.bridging_compounds,
         n_w=graph_stats.within_study_four_isoform,
+        n_complete_compounds=n_complete_compounds,
         n_complete_strata=n_complete_strata,
         n_connected_components=graph_stats.n_connected_components,
         scaffold_families_in_largest_component=None,
@@ -305,6 +385,9 @@ def freeze_corpus_profile(  # noqa: PLR0913, PLR0917
             "schema_version": CORPUS_PROFILE_SCHEMA_VERSION,
             "snapshot_sha256": snapshot_sha256,
             "software": software.to_canonical_dict(),
+            "structural_coverage": (
+                structural_coverage.to_canonical_dict() if structural_coverage is not None else None
+            ),
         }
     )
     profile_sha256 = hashlib.sha256(payload.encode("utf-8")).hexdigest()
@@ -317,6 +400,7 @@ def freeze_corpus_profile(  # noqa: PLR0913, PLR0917
         characterization=characterization,
         software=software,
         policy=policy,
+        structural_coverage=structural_coverage,
         frozen_at_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         profile_sha256=profile_sha256,
     )

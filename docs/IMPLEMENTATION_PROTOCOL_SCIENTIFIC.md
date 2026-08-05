@@ -367,10 +367,22 @@ comparative selectivity learning       (model/, train/)
         ↓
 prediction                             (model/)
         ↓
+corpus profile (descriptive)           (data/snapshots, GDR-002)
+        ↓
+corpus quality assessment (interpretive) (quality/)     ← ADR-0009
+        ↓
 decision policy                        (policy/)      ← ADR-0008
         ↓
-candidate prioritization               (downstream consumer)
+candidate prioritization / proceed-warning-redesign-stop (downstream consumer)
 ```
+
+`quality/` interposes between the descriptive profile and the decision
+layer, per `ADR-0009`: `CorpusProfile` remains measurement-only,
+`CorpusQualityAssessment` interprets it into per-dimension adequacy, and
+`policy/`'s `CorpusQualityGatePolicy` consumes only that assessment — never
+raw statistics — to produce the final `PROCEED`/`WARNING`/`REDESIGN`/`STOP`
+recommendation. `data/` cannot import `quality/`, and neither can import
+`policy/`, enforced by `.importlinter`.
 
 `policy/` is the highest layer in the enforced import graph, so this arrow
 direction is mechanical: nothing upstream of it can import it, and a
@@ -397,6 +409,7 @@ Each package is created by exactly one state. Creating it elsewhere is a protoco
 | `eval/` — degeneracy battery, seals | `SCI-2` | training |
 | `explain/` | `SCI-2` if Phase 2 committed, else `SCI-3` | model definition |
 | `policy/` | `ADR-0008` — an architectural layer, not stage-owned; buildable before `SCI-1` because it depends only on the input contract it defines itself | evidence, harmonization, features, model definition, training, criterion evaluation |
+| `quality/` | `ADR-0009` — an architectural layer, not stage-owned; buildable as soon as `SCI0-011`/`GDR-002`'s `CorpusProfile` exists | profile computation, raw-record access, decision-policy logic |
 | `kg/` | `SCI-4` (Phase 3 only) | anything outside Constitution §5.2 |
 
 `eval/` is deliberately split: metrics score the `SCI-1` baselines; the degeneracy battery tests the `SCI-2` model. This is the one authorized exception to one-package-one-state.

@@ -6,6 +6,75 @@ Maintained from the first commit, never retrofitted (ENG §8).
 
 ### SCI-0 — Data Acquisition Layer (in progress)
 
+#### ADR-0009 / GDR-003 / CQA-001 — Corpus Quality Assessment Layer (`quality/`) (Done)
+- New architectural layer `src/orthosteric/quality/`, authorized by `ADR-0009`
+  [Architectural]. Interposes between the descriptive `CorpusProfile`
+  (`GDR-002`) and the Decision Policy Layer (`policy/`, `ADR-0008`) — three
+  distinct responsibilities, none merged:
+  `CorpusProfile` (descriptive) → `CorpusQualityAssessment` (interpretive,
+  `quality/`) → `CorpusQualityGatePolicy` (decision, `policy/`) →
+  `PROCEED`/`WARNING`/`REDESIGN`/`STOP`
+- **Firewall mechanically verified by probe, both directions:** making
+  `data/` import `quality/`, or `quality/` import `policy/`, breaks the
+  `.importlinter` layers contract and fails CI. `quality/` sits directly
+  above `data/` (so `data/` cannot import it — a profile cannot depend on
+  its own interpretation) and below `policy/` (so `policy/` can consume it)
+- `GDR-003` [Scientific]: every dimension rule is one of exactly two kinds —
+  a **structural/definitional fact** (true or false by the quantity's own
+  definition, e.g. "does at least one four-isoform-complete compound exist")
+  or an **already-governed magnitude cited by reference** (the one instance:
+  R1's "< 8 scaffold families," fixed at the Constitution's original
+  authorship, not invented here). No new magnitude threshold is introduced
+  anywhere in this change
+- 7 dimension evaluators: `ConnectivityEvaluator`, `CoverageEvaluator`,
+  `ScaffoldDiversityEvaluator`, `PublicationConcentrationEvaluator`,
+  `ConfidenceEvaluator`, `MissingnessEvaluator`, `StructuralCoverageEvaluator`
+  (extension-point stub, always `NOT_YET_AVAILABLE` until `SCI0-018` exists)
+- `CorpusQualityAssessor` mirrors `ADR-0008`'s `PolicyEngine` extensibility
+  pattern exactly: register an evaluator, no existing code changes
+  (test-verified with a demonstration dimension)
+- `policy/`'s new `CorpusQualityGatePolicy`: consumes only a
+  `CorpusQualityAssessment`, never raw statistics; applies `GDR-003` §4's
+  categorical aggregation rule (`STOP` if any dimension `STRUCTURALLY_
+  DEGENERATE`; else `REDESIGN` if any `GOVERNED_THRESHOLD_NOT_MET`; else
+  `WARNING` if any `WARNING`/`INSUFFICIENT_DATA`/`NOT_YET_AVAILABLE`; else
+  `PROCEED`) — no weighted score anywhere. Does not implement the `Policy`
+  ABC (`ADR-0008`): the input/output shape is genuinely different from a
+  per-compound prediction decision, and forcing one interface onto both
+  would hide that difference rather than express it
+- **A defect discovered and fixed during implementation:** `GraphStats.
+  within_study_four_isoform` (`SCI0-014`, already merged) counts compounds
+  in a panel where all four isoforms are collectively represented
+  *somewhere*, not compounds *individually* measured across all four — a
+  materially weaker quantity than the Constitution's actual `N_w`.
+  `CorpusProfile.engineering_parameters` gains a corrected field,
+  `n_complete_compounds` (`StratumReport.total_complete_compounds`, verified
+  correct by direct construction). `quality/`'s `CoverageEvaluator` uses the
+  corrected field; `n_w` is retained for continuity, now documented with the
+  discovered gap. `graph.py` itself is not modified — flagged for a future
+  pass, out of scope here
+- **Closes the remaining R1 threshold dependency `GDR-002` left open:** every
+  rule touching `N_c`/`N_b`/`N_w` is a structural zero/non-zero check, never
+  a magnitude comparison. No fixed-threshold dependency on those three
+  quantities remains anywhere in the interpretation pipeline
+- `CorpusProfile` extended (additive, backward-compatible): reserved
+  `structural_coverage: StructuralCoverageStats | None` field (`None` by
+  default; no PDB or AlphaFold record read anywhere in this change);
+  `PROFILE_ALGORITHM_VERSION`/`CORPUS_PROFILE_SCHEMA_VERSION` bumped
+  (`_gdr002` → `_adr0009`, v1 → v3) since the profile's shape changed twice
+  (structural-coverage field, then the `n_complete_compounds` fix)
+- `assessment_content_sha256` and `GateDecision` both exclude their
+  respective timestamps from the content hash, per the `SCI0-011` precedent;
+  full traceability chain verified test-side: Decision → Assessment →
+  Profile → Snapshot
+- `.importlinter`: 10th layer (`quality/`, between `pocket/` and `data/`);
+  ENG §2 package table + layer-order note; `IMPLEMENTATION_PROTOCOL_
+  SCIENTIFIC.md` §16 dataflow diagram extended; backlog: new "Corpus Quality
+  Assessment Layer" section (`CQA-001`, `Done`), no `SCI-N` stage created or
+  renumbered
+- 50 new tests (22 profile incl. 4 regression, 18 dimension, 14 assessment,
+  11 gate-policy — note: some overlap across files); 465 total passing
+
 #### GDR-002 — `N_c`, `N_b`, `N_w` reclassified as corpus-derived engineering parameters (Done)
 - `docs/governance/decision-records/GDR-002-corpus-derived-engineering-parameters.md`:
   `N_c` (largest connected component), `N_b` (bridging compounds), `N_w`

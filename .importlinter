@@ -13,6 +13,7 @@ layers =
     orthosteric.model
     orthosteric.features
     orthosteric.pocket
+    orthosteric.quality
     orthosteric.data
     orthosteric.runtime
 exhaustive = false

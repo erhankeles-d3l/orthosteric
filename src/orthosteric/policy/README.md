@@ -31,6 +31,17 @@ project currently wants to prioritize; the Constitution's S-criteria thresholds
 are fixed before training (§1.4) and sealed by `SCI0-029`. Conflating them
 would open a route to post-hoc threshold selection (risk `R23`).
 
+## Corpus quality gate (`ADR-0009`)
+
+`CorpusQualityGatePolicy` is a small sibling construct alongside the
+prediction-level policies above: it consumes a `CorpusQualityAssessment`
+(`quality/`) — never raw corpus statistics — and applies the `GDR-003` §4
+aggregation rule to produce a `GateDecision` (`PROCEED` / `WARNING` /
+`REDESIGN` / `STOP`). It does not implement the `Policy` ABC, because its
+input/output shape genuinely differs from a per-compound prediction
+decision; see `ADR-0009` §5 for why forcing one interface onto both was
+rejected. `criterion_eligible` remains `False`, matching the firewall above.
+
 ## Public API
 
 | Name | Purpose |

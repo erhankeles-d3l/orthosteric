@@ -133,6 +133,47 @@ data/  chembl/  bindingdb/  pubchem/  pdb/  literature/
 
 **Revision (2026-08-05, `GDR-002`).** This constraint applied specifically because `N_c`/`N_b`/`N_w` needed pre-sealing before `SCI0-015` ran. Under `GDR-002`, those three are corpus-derived engineering parameters computed *from* the audit's own output, not pre-sealed floors compared against it — the reason for the ordering constraint no longer applies to them. `SCI0-015` is **no longer blocked by `SCI0-028`**. It remains blocked by the separate, standing requirement that real corpus acquisition be explicitly authorized before it begins, which `GDR-002` does not authorize and is unaffected by it.
 
+## Corpus Quality Assessment Layer (`quality/`) · **architectural layer, not a stage**
+
+Authorized by `ADR-0009` [Architectural]; dimension rules governed by `GDR-003`
+[Scientific]. Not an `SCI-N` stage. Interposes between the descriptive
+`CorpusProfile` (`GDR-002`) and the Decision Policy Layer (`ADR-0008`):
+
+```
+SCI0-011 Immutable Snapshot -> SCI0-014b Characterization -> CorpusProfile
+   -> CorpusQualityAssessment (quality/) -> CorpusQualityGatePolicy (policy/)
+   -> PROCEED / WARNING / REDESIGN / STOP
+```
+
+| ID | Status | Record | Branch | Objective |
+|---|---|---|---|---|
+| `CQA-001` | `Done` | `ADR-0009`, `GDR-003` | feature/adr-0009-corpus-quality-assessment | `quality/` package: `QualityDimensionEvaluator` ABC, `CorpusQualityAssessor`, 7 dimension evaluators (connectivity, coverage, scaffold diversity, publication concentration, confidence, missingness, structural coverage); `policy/`'s `CorpusQualityGatePolicy` consuming only the assessment |
+
+**Closes the remaining R1 threshold dependency.** `GDR-002` retired R1's
+automatic numeric kill-switch for `N_c`/`N_b`/`N_w` but left open exactly how
+the resulting `SCI0-031` human decision would be informed. `GDR-003` closes
+that: every rule touching `N_c`/`N_b`/`N_w` is a structural zero/non-zero
+check, never a magnitude comparison. No fixed-threshold dependency on those
+three quantities remains anywhere in the interpretation pipeline.
+
+**A defect discovered and fixed during implementation.** `GraphStats.
+within_study_four_isoform` (`SCI0-014`) was found to count compounds in a
+panel where all four isoforms are collectively represented *somewhere*, not
+compounds *individually* measured across all four — a materially weaker
+quantity than the Constitution's actual `N_w`. `CorpusProfile.engineering_
+parameters` gained a corrected field, `n_complete_compounds` (`StratumReport.
+total_complete_compounds`, verified correct by direct construction), which
+`quality/`'s `CoverageEvaluator` uses instead. `n_w` is retained for
+continuity and documented with the discovered gap; `SCI0-014`'s `graph.py`
+itself is not modified in this change (out of scope; flagged for a future
+pass).
+
+**Structural coverage extension point prepared, not implemented** (`ADR-0009`
+§4): `CorpusProfile.structural_coverage` (reserved, `None` by default) and a
+`StructuralCoverageEvaluator` stub (`NOT_YET_AVAILABLE`, always) demonstrate
+the mechanism `SCI0-018` will eventually populate. No PDB or AlphaFold record
+is read anywhere in this change.
+
 ## Decision Policy Layer (`policy/`) · **architectural layer, not a stage**
 
 Authorized by `ADR-0008` [Architectural]. Not an `SCI-N` stage: `SCI-4` is

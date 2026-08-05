@@ -32,6 +32,7 @@ from orthosteric.data.snapshots import (
     CorpusProfile,
     PolicyManifest,
     SoftwareProvenance,
+    StructuralCoverageStats,
     freeze_corpus_profile,
 )
 from orthosteric.data.strata import extract_strata
@@ -192,8 +193,8 @@ def test_different_policy_changes_profile_hash() -> None:
 
 def test_algorithm_version_is_pinned() -> None:
     """A change to the computation method must be a deliberate, visible edit."""
-    assert PROFILE_ALGORITHM_VERSION == "corpus_profile_algorithm_v1_gdr002"
-    assert CORPUS_PROFILE_SCHEMA_VERSION == "corpus_profile_v1_gdr002"
+    assert PROFILE_ALGORITHM_VERSION == "corpus_profile_algorithm_v3_adr0009"
+    assert CORPUS_PROFILE_SCHEMA_VERSION == "corpus_profile_v3_adr0009"
     profile = _profile()
     assert profile.profile_algorithm_version == PROFILE_ALGORITHM_VERSION
     assert profile.schema_version == CORPUS_PROFILE_SCHEMA_VERSION
@@ -306,3 +307,103 @@ def test_characterization_report_embedded_wholesale() -> None:
     assert c.scaffold_stats is not None
     assert c.connectivity is not None
     assert c.publication_stats is not None
+
+
+# ── ADR-0009 §4: structural-coverage extension point ─────────────────────────
+
+
+def test_structural_coverage_defaults_to_none() -> None:
+    """No caller supplied structural_coverage -- must default to None, never
+    fabricated."""
+    profile = _profile()
+    assert profile.structural_coverage is None
+
+
+def test_structural_coverage_can_be_supplied_and_is_embedded_verbatim() -> None:
+    records = _synthetic_records()
+    gs = build_graph_stats_from_records(records)
+    report = characterize(records, snapshot_sha256=SNAPSHOT_SHA)
+    sc = StructuralCoverageStats(experimental_pdb_coverage=2)
+    profile = freeze_corpus_profile(
+        SNAPSHOT_SHA, gs, report, _sw(), _policy(), None, structural_coverage=sc
+    )
+    assert profile.structural_coverage is sc
+    assert profile.structural_coverage.experimental_pdb_coverage == 2
+    assert profile.structural_coverage.alphafold_fallback_coverage is None
+
+
+def test_structural_coverage_changes_profile_hash() -> None:
+    records = _synthetic_records()
+    gs = build_graph_stats_from_records(records)
+    report = characterize(records, snapshot_sha256=SNAPSHOT_SHA)
+    p1 = freeze_corpus_profile(SNAPSHOT_SHA, gs, report, _sw(), _policy(), None)
+    p2 = freeze_corpus_profile(
+        SNAPSHOT_SHA,
+        gs,
+        report,
+        _sw(),
+        _policy(),
+        None,
+        structural_coverage=StructuralCoverageStats(experimental_pdb_coverage=1),
+    )
+    assert p1.profile_sha256 != p2.profile_sha256
+
+
+def test_all_structural_coverage_fields_reserved_none_by_default() -> None:
+    sc = StructuralCoverageStats()
+    d = sc.to_canonical_dict()
+    assert all(v is None for v in d.values())
+    assert set(d.keys()) == {
+        "alphafold_fallback_coverage",
+        "conformational_state_diversity",
+        "construct_diversity",
+        "experimental_pdb_coverage",
+        "ligand_bound_structural_coverage",
+    }
+
+
+# ── ADR-0009: n_complete_compounds correctness (regression for a discovered
+# semantic gap in GraphStats.within_study_four_isoform / n_w) ────────────────
+
+
+def test_n_complete_compounds_correct_when_n_w_is_wrong() -> None:
+    """Regression test for a discovered bug: GraphStats.within_study_four_
+    isoform (n_w) counts compounds in a panel where all four isoforms are
+    collectively represented SOMEWHERE, not compounds individually measured
+    across all four. n_complete_compounds (StratumReport.total_complete_
+    compounds) computes the correct, per-compound semantic and must not
+    reproduce the same error."""
+    # Four different compounds, each measured in exactly one (different)
+    # isoform, all in the same study/assay panel. The panel collectively
+    # covers all four isoforms, but ZERO compounds are individually complete.
+    records = [
+        _rec(f"IK{i}", iso, "S1", "A1")
+        for i, iso in enumerate(("PI3Kalpha", "PI3Kbeta", "PI3Kgamma", "PI3Kdelta"))
+    ]
+    gs = build_graph_stats_from_records(records)
+    report = characterize(records, snapshot_sha256=SNAPSHOT_SHA)
+    strata = extract_strata(records)
+    profile = freeze_corpus_profile(SNAPSHOT_SHA, gs, report, _sw(), _policy(), strata)
+
+    # The known bug: n_w (inherited from graph.py) is wrongly non-zero here.
+    assert profile.engineering_parameters.n_w == 4
+    # The fix: n_complete_compounds correctly reports zero.
+    assert profile.engineering_parameters.n_complete_compounds == 0
+
+
+def test_n_complete_compounds_matches_stratum_report_directly() -> None:
+    records = _synthetic_records()  # IK1, IK2 each complete across all 4
+    gs = build_graph_stats_from_records(records)
+    report = characterize(records, snapshot_sha256=SNAPSHOT_SHA)
+    strata = extract_strata(records)
+    profile = freeze_corpus_profile(SNAPSHOT_SHA, gs, report, _sw(), _policy(), strata)
+    assert profile.engineering_parameters.n_complete_compounds == strata.total_complete_compounds
+    assert profile.engineering_parameters.n_complete_compounds == 2
+
+
+def test_n_complete_compounds_zero_without_strata_report() -> None:
+    records = _synthetic_records()
+    gs = build_graph_stats_from_records(records)
+    report = characterize(records, snapshot_sha256=SNAPSHOT_SHA)
+    profile = freeze_corpus_profile(SNAPSHOT_SHA, gs, report, _sw(), _policy(), strata_report=None)
+    assert profile.engineering_parameters.n_complete_compounds == 0
