@@ -150,7 +150,7 @@ def _get_dedup_policy() -> tuple[str, str]:
     from orthosteric.data.harmonization._deduplicator import Deduplicator  # noqa: PLC0415
 
     # WITHIN_GROUP_CONFLICT_THRESHOLD is RULE_MISSING until SCI0-016 seals it
-    return Deduplicator.POLICY_ID, "RULE_MISSING/SCI0-016_required" 
+    return Deduplicator.POLICY_ID, "RULE_MISSING/SCI0-016_required"
 
 
 def _get_confidence_policy() -> tuple[str, str, str]:
