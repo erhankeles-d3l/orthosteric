@@ -6,6 +6,52 @@ Maintained from the first commit, never retrofitted (ENG §8).
 
 ### SCI-0 — Data Acquisition Layer (in progress)
 
+#### GDR-001 — Duplicate-resolution policy resolved via literature review (Done)
+- `docs/governance/decision-records/GDR-001-duplicate-resolution-policy.md`:
+  resolves AUDITOR-3 (SCI0-028 item 5/6). Under Project Owner authorization
+  (2026-08-05) to resolve scientific-methodology questions via comprehensive
+  literature review where a single, well-supported choice exists
+- **Decision:** within a fully-specified evidence-identity group (compound ×
+  isoform × construct × organism × measurement type × measurement class ×
+  assay × source), ≥2 distinct exact values are combined by **median**
+- Cited evidence: Kramer et al. *JMC* 2012; Landrum & Riniker *JCIM* 2024
+  ("Combining IC50 or Ki Values From Different Sources Is a Source of
+  Significant Noise"); Schiebroek/Landrum/Riniker *JCIM* 2025; Huber, *Robust
+  Statistics*; three independent bioactivity-curation pipelines using median
+  for this exact operation (Rep3Net, an RL/chemical-LM study, Bioactivity-
+  explorer)
+- **Scope, explicit:** literal replicates only (same source + assay); does
+  NOT authorize cross-study/cross-source combination (unaffected: Constitution
+  §2.3(1), SCI0-013's within-study stratum); does NOT resolve AUDITOR-5
+  (ATP Km / Cheng-Prusoff, remains `INSUFFICIENT_EVIDENCE`)
+- **Alternatives considered and rejected:** mean (not robust to documented
+  outlier pattern), most-recent (no literature support; Ki/IC50 is a
+  physical constant, not time-varying), highest-confidence-only (discards
+  corroborating replicate information; confidence's role is cross-group, per
+  SCI0-010, not intra-group)
+- **Accompanying correctness fix:** `_deduplicator.py`'s identity key
+  extended with `construct` and `organism` (fields the schema already
+  carried but the key omitted) — prevents wild-type/mutant or cross-species
+  blending; strictly narrows existing groups
+- `GroupConflictStatus.RESOLVED_REPLICATE_MEDIAN` introduced;
+  `Deduplicator.POLICY_ID` bumped to
+  `sci0009_identity_grouping_median_replicates_v2_gdr001` (propagates a new
+  SCI0-011 snapshot hash for any corpus rebuilt after this change)
+- `_confidence.py`'s `duplicate_agreement` component updated: the
+  disagreement signal still fires for `RESOLVED_REPLICATE_MEDIAN` groups —
+  resolving how to combine differing values doesn't mean they stopped differing
+- `docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md` revised: item 5/6
+  marked `RESOLVED`; N_c/N_b counting-basis clarified as unique-compound
+  (InChIKey) identity, non-numeric, per Amendment A10's own text
+  distinguishing "compounds" from "scaffold families"; additional ATP Km
+  literature search performed (negative result — located a PI3Kα/β Km for
+  the PI lipid substrate, not ATP; explicitly not usable, recorded to
+  prevent future confusion)
+- N_c, N_b, N_w, S4b sharpness factor, and ATP Km source remain
+  `RULE_MISSING`. `SCI0-015` remains not authorized
+- 5 new/updated tests (construct/organism stratification, median resolution,
+  median-vs-censoring contradiction checks); 319 total passing
+
 #### SCI0-028 — Governance gap review (Blocked; report only, no code)
 - `docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md`: reviewed all six required
   seals (`N_c`, `N_b`, `N_w`, S4b sharpness factor, duplicate-resolution policy,
@@ -194,6 +240,52 @@ Maintained from the first commit, never retrofitted (ENG §8).
 ## [Unreleased]
 
 ### SCI-0 — Data Acquisition Layer (in progress)
+
+#### GDR-001 — Duplicate-resolution policy resolved via literature review (Done)
+- `docs/governance/decision-records/GDR-001-duplicate-resolution-policy.md`:
+  resolves AUDITOR-3 (SCI0-028 item 5/6). Under Project Owner authorization
+  (2026-08-05) to resolve scientific-methodology questions via comprehensive
+  literature review where a single, well-supported choice exists
+- **Decision:** within a fully-specified evidence-identity group (compound ×
+  isoform × construct × organism × measurement type × measurement class ×
+  assay × source), ≥2 distinct exact values are combined by **median**
+- Cited evidence: Kramer et al. *JMC* 2012; Landrum & Riniker *JCIM* 2024
+  ("Combining IC50 or Ki Values From Different Sources Is a Source of
+  Significant Noise"); Schiebroek/Landrum/Riniker *JCIM* 2025; Huber, *Robust
+  Statistics*; three independent bioactivity-curation pipelines using median
+  for this exact operation (Rep3Net, an RL/chemical-LM study, Bioactivity-
+  explorer)
+- **Scope, explicit:** literal replicates only (same source + assay); does
+  NOT authorize cross-study/cross-source combination (unaffected: Constitution
+  §2.3(1), SCI0-013's within-study stratum); does NOT resolve AUDITOR-5
+  (ATP Km / Cheng-Prusoff, remains `INSUFFICIENT_EVIDENCE`)
+- **Alternatives considered and rejected:** mean (not robust to documented
+  outlier pattern), most-recent (no literature support; Ki/IC50 is a
+  physical constant, not time-varying), highest-confidence-only (discards
+  corroborating replicate information; confidence's role is cross-group, per
+  SCI0-010, not intra-group)
+- **Accompanying correctness fix:** `_deduplicator.py`'s identity key
+  extended with `construct` and `organism` (fields the schema already
+  carried but the key omitted) — prevents wild-type/mutant or cross-species
+  blending; strictly narrows existing groups
+- `GroupConflictStatus.RESOLVED_REPLICATE_MEDIAN` introduced;
+  `Deduplicator.POLICY_ID` bumped to
+  `sci0009_identity_grouping_median_replicates_v2_gdr001` (propagates a new
+  SCI0-011 snapshot hash for any corpus rebuilt after this change)
+- `_confidence.py`'s `duplicate_agreement` component updated: the
+  disagreement signal still fires for `RESOLVED_REPLICATE_MEDIAN` groups —
+  resolving how to combine differing values doesn't mean they stopped differing
+- `docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md` revised: item 5/6
+  marked `RESOLVED`; N_c/N_b counting-basis clarified as unique-compound
+  (InChIKey) identity, non-numeric, per Amendment A10's own text
+  distinguishing "compounds" from "scaffold families"; additional ATP Km
+  literature search performed (negative result — located a PI3Kα/β Km for
+  the PI lipid substrate, not ATP; explicitly not usable, recorded to
+  prevent future confusion)
+- N_c, N_b, N_w, S4b sharpness factor, and ATP Km source remain
+  `RULE_MISSING`. `SCI0-015` remains not authorized
+- 5 new/updated tests (construct/organism stratification, median resolution,
+  median-vs-censoring contradiction checks); 319 total passing
 
 #### SCI0-028 — Governance gap review (Blocked; report only, no code)
 - `docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md`: reviewed all six required

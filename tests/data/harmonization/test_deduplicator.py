@@ -1,17 +1,20 @@
 """SCI0-009 exit-criterion tests.
 
 Exit criteria (docs/PROJECT_SPECIFICATION.md; docs/IMPLEMENTATION_BACKLOG.md
-`SCI0-009`; Project Owner instructions, 2026-08-05):
+`SCI0-009`; GDR-001 duplicate-resolution-policy, 2026-08-05):
   (1) Different stereoisomers are NEVER merged.
   (2) Same compound + different isoform -> distinct evidence preserved.
   (3) Same compound + different source/study -> distinct evidence preserved.
+  (3b) Same compound + different construct or organism -> distinct evidence
+       preserved (GDR-001 identity-key correction).
   (4) Literal duplicates (identical value+censoring in one identity group)
       are collapsed without loss.
-  (5) Non-identical measurements in one identity group are NEVER silently
-      aggregated: AUDITOR-3 (ADR-0003) is unresolved, so the group is marked
-      RULE_MISSING/GOVERNANCE_DECISION_REQUIRED and all records retained.
-  (6) A zero-tolerance logical contradiction between an exact value and a
-      censoring bound is detected without any invented noise threshold.
+  (5) Non-identical exact measurements in a fully-specified identity group
+      are combined by median (GDR-001), never silently discarding any
+      contributing record.
+  (6) A zero-tolerance logical contradiction between a value (single or
+      median-resolved) and a censoring bound is detected without any
+      invented noise threshold.
   (7) Policy is recorded per group.
   (8) Censored records are retained, never dropped.
   (9) CompoundEvidenceMatrix preserves the compound x isoform structure.
@@ -59,6 +62,8 @@ def _prov(
     isoform: str | None = "PI3Kalpha",
     assay_id: str | None = "A1",
     source_type: SourceType = SourceType.CHEMBL,
+    construct: str | None = None,
+    organism: str | None = "Homo sapiens",
 ) -> ProvenanceRecord:
     return ProvenanceRecord(
         provenance_id=uuid4(),
@@ -77,10 +82,10 @@ def _prov(
         assay=AssayMetadata(
             assay_id=assay_id,
             assay_description="radiometric kinase assay",
-            organism="Homo sapiens",
+            organism=organism,
             target="PI3K",
             isoform=isoform,
-            construct=None,
+            construct=construct,
             atp_concentration=None,
             measurement_type=MeasurementType.IC50,
             measurement_class=MeasurementClass.BIOCHEMICAL,
@@ -103,6 +108,8 @@ def _rec(
     accession: str = "CHEMBL_ASSAY_1",
     assay_id: str | None = "A1",
     censoring: CensoringKind = CensoringKind.EXACT,
+    construct: str | None = None,
+    organism: str | None = "Homo sapiens",
 ) -> EvidenceRecord:
     activity = ActivityRecord(
         activity_id=uuid4(),
@@ -114,7 +121,13 @@ def _rec(
         measurement_class=MeasurementClass.BIOCHEMICAL,
         source_db=SourceDB.CHEMBL,
     )
-    provenance = _prov(accession=accession, isoform=isoform, assay_id=assay_id)
+    provenance = _prov(
+        accession=accession,
+        isoform=isoform,
+        assay_id=assay_id,
+        construct=construct,
+        organism=organism,
+    )
     return EvidenceRecord(compound_id=compound_id, activity=activity, provenance=provenance)
 
 
@@ -191,6 +204,37 @@ def test_same_compound_different_sources_preserved() -> None:
     assert accessions == {"CHEMBL_ASSAY_1", "CHEMBL_ASSAY_2", "CHEMBL_ASSAY_3"}
 
 
+# ── Exit criterion 3b: different construct or organism -> distinct (GDR-001) ──
+
+
+def test_different_construct_not_pooled() -> None:
+    """A wild-type and a mutant construct sharing the same nominal assay_id
+    must never land in the same identity group (GDR-001 correction)."""
+    d = Deduplicator()
+    records = [
+        _rec(IK_ALPHA, "PI3Kalpha", 7.0, construct="p110alpha WT"),
+        _rec(IK_ALPHA, "PI3Kalpha", 4.0, construct="p110alpha H1047R"),
+    ]
+    matrices = d.deduplicate(records)
+    groups = matrices[0].groups_for_isoform("PI3Kalpha")
+    assert len(groups) == 2, "WT and mutant constructs must be separate groups"
+    for g in groups:
+        assert g.conflict_status == GroupConflictStatus.OK
+        assert len(g.records) == 1
+
+
+def test_different_organism_not_pooled() -> None:
+    """Human and murine measurements must never be combined by median."""
+    d = Deduplicator()
+    records = [
+        _rec(IK_ALPHA, "PI3Kdelta", 7.0, organism="Homo sapiens"),
+        _rec(IK_ALPHA, "PI3Kdelta", 6.0, organism="Mus musculus"),
+    ]
+    matrices = d.deduplicate(records)
+    groups = matrices[0].groups_for_isoform("PI3Kdelta")
+    assert len(groups) == 2, "Human and murine records must be separate groups"
+
+
 # ── Exit criterion 4: literal duplicates collapsed without loss ───────────────
 
 
@@ -209,16 +253,13 @@ def test_literal_duplicates_collapsed() -> None:
     assert g.conflict_status == GroupConflictStatus.OK
 
 
-# ── Exit criterion 5: non-identical values are NEVER silently aggregated ──────
+# ── Exit criterion 5: non-identical replicate values resolved by median ───────
 
 
-def test_distinct_values_never_aggregated_marked_rule_missing() -> None:
-    """Exit criterion 5: AUDITOR-3 is unresolved (ADR-0003 status: Proposed).
-
-    Non-identical exact measurements in the same identity group must not be
-    averaged, log-medianed, or otherwise combined. They are surfaced as
-    RULE_MISSING and every record is retained.
-    """
+def test_distinct_values_resolved_by_median() -> None:
+    """GDR-001: non-identical exact measurements in a fully-specified identity
+    group (same compound, isoform, construct, organism, measurement type,
+    assay, and source) are combined by median. No record is dropped."""
     d = Deduplicator()
     records = [
         _rec(IK_ALPHA, "PI3Kalpha", 7.0),
@@ -227,20 +268,35 @@ def test_distinct_values_never_aggregated_marked_rule_missing() -> None:
     ]
     matrices = d.deduplicate(records)
     g = matrices[0].groups_for_isoform("PI3Kalpha")[0]
-    assert g.conflict_status == GroupConflictStatus.RULE_MISSING
-    assert "RULE_MISSING" in g.governance_note
-    assert "AUDITOR-3" in g.governance_note
-    assert len(g.records) == 3, "no record may be dropped while unresolved"
+    assert g.conflict_status == GroupConflictStatus.RESOLVED_REPLICATE_MEDIAN
+    assert g.resolved_value == Decimal("7.2")
+    assert g.aggregation_method == "median"
+    assert "GDR-001" in g.governance_note
+    assert len(g.records) == 3, "no record may be dropped when resolving"
 
 
-def test_two_distinct_close_values_still_rule_missing() -> None:
-    """Even a 'small' spread is not adjudicated here — there is no authorized
-    noise floor (SCI0-016 not yet run) to distinguish noise from conflict."""
+def test_median_of_two_values_is_average_of_middle_pair() -> None:
+    """Even-count median: standard order-statistic behavior, exact Decimal math."""
     d = Deduplicator()
-    records = [_rec(IK_ALPHA, "PI3Kalpha", 7.0), _rec(IK_ALPHA, "PI3Kalpha", 7.1)]
+    records = [_rec(IK_ALPHA, "PI3Kalpha", 7.0), _rec(IK_ALPHA, "PI3Kalpha", 7.4)]
     matrices = d.deduplicate(records)
     g = matrices[0].groups_for_isoform("PI3Kalpha")[0]
-    assert g.conflict_status == GroupConflictStatus.RULE_MISSING
+    assert g.conflict_status == GroupConflictStatus.RESOLVED_REPLICATE_MEDIAN
+    assert g.resolved_value == Decimal("7.2")
+
+
+def test_median_does_not_resolve_cheng_prusoff() -> None:
+    """AUDITOR-5 remains untouched: no Km-based conversion is applied anywhere
+    in this module, regardless of how many replicates are combined."""
+    d = Deduplicator()
+    records = [_rec(IK_ALPHA, "PI3Kalpha", 7.0), _rec(IK_ALPHA, "PI3Kalpha", 7.4)]
+    matrices = d.deduplicate(records)
+    g = matrices[0].groups_for_isoform("PI3Kalpha")[0]
+    # The resolved value is a plain median of the reported values, not a
+    # Cheng-Prusoff-adjusted quantity.
+    assert g.resolved_value == Decimal("7.2")
+    assert "Cheng" not in g.conflict_note
+    assert "Km" not in g.conflict_note
 
 
 # ── Exit criterion 6: zero-tolerance logical contradiction ────────────────────
@@ -282,6 +338,39 @@ def test_all_censored_group() -> None:
     assert len(g.records) == 1
 
 
+def test_multiple_exact_median_contradicts_censored_bound() -> None:
+    """The median of several exact values, not just a single exact value, is
+    checked against a censoring bound for logical contradiction."""
+    d = Deduplicator()
+    records = [
+        _rec(IK_ALPHA, "PI3Kalpha", 7.0, censoring=CensoringKind.EXACT),
+        _rec(IK_ALPHA, "PI3Kalpha", 7.4, censoring=CensoringKind.EXACT),
+        # median of {7.0, 7.4} = 7.2, which exceeds this right-censored bound
+        _rec(IK_ALPHA, "PI3Kalpha", 5.0, censoring=CensoringKind.RIGHT_CENSORED),
+    ]
+    matrices = d.deduplicate(records)
+    g = matrices[0].groups_for_isoform("PI3Kalpha")[0]
+    assert g.conflict_status == GroupConflictStatus.LOGICAL_CONTRADICTION
+    assert len(g.records) == 3
+
+
+def test_multiple_exact_median_consistent_with_censored_bound() -> None:
+    """Median of several exact values that IS consistent with a censored
+    bound resolves to RESOLVED_REPLICATE_MEDIAN, retaining the censored record."""
+    d = Deduplicator()
+    records = [
+        _rec(IK_ALPHA, "PI3Kalpha", 7.0, censoring=CensoringKind.EXACT),
+        _rec(IK_ALPHA, "PI3Kalpha", 7.4, censoring=CensoringKind.EXACT),
+        # median = 7.2, right-censored bound of 8.0 is not contradicted
+        _rec(IK_ALPHA, "PI3Kalpha", 8.0, censoring=CensoringKind.RIGHT_CENSORED),
+    ]
+    matrices = d.deduplicate(records)
+    g = matrices[0].groups_for_isoform("PI3Kalpha")[0]
+    assert g.conflict_status == GroupConflictStatus.RESOLVED_REPLICATE_MEDIAN
+    assert g.resolved_value == Decimal("7.2")
+    assert len(g.records) == 3
+
+
 # ── Exit criterion 7: policy recorded ─────────────────────────────────────────
 
 
@@ -294,13 +383,14 @@ def test_policy_recorded_on_every_group() -> None:
         assert group.policy != ""
 
 
-def test_no_aggregation_field_invented() -> None:
-    """This module must not expose a computed aggregate value anywhere —
-    doing so would imply a resolved aggregation policy that does not exist."""
+def test_resolved_value_absent_for_ok_groups() -> None:
+    """A group with a single distinct observation carries no resolved_value —
+    there was nothing to combine."""
     d = Deduplicator()
     g = d.deduplicate([_rec(IK_ALPHA, "PI3Kalpha", 7.0)])[0].groups[0]
-    assert not hasattr(g, "aggregated")
-    assert not hasattr(g, "value")
+    assert g.conflict_status == GroupConflictStatus.OK
+    assert g.resolved_value is None
+    assert g.aggregation_method == ""
 
 
 # ── Exit criterion 9: compound x isoform matrix structure ────────────────────
@@ -325,15 +415,16 @@ def test_empty_input_returns_empty() -> None:
     assert d.deduplicate([]) == []
 
 
-def test_unresolved_groups_helper() -> None:
+def test_unresolved_groups_helper_empty_after_gdr001() -> None:
+    """RULE_MISSING is no longer produced; the replicate case now resolves."""
     d = Deduplicator()
     records = [
         _rec(IK_ALPHA, "PI3Kalpha", 7.0),
-        _rec(IK_ALPHA, "PI3Kalpha", 7.5),  # RULE_MISSING group
+        _rec(IK_ALPHA, "PI3Kalpha", 7.5),  # now RESOLVED_REPLICATE_MEDIAN
         _rec(IK_ALPHA, "PI3Kbeta", 5.0),  # OK group
     ]
     matrices = d.deduplicate(records)
     m = matrices[0]
-    unresolved = m.unresolved_groups()
-    assert len(unresolved) == 1
-    assert unresolved[0].isoform == "PI3Kalpha"
+    assert m.unresolved_groups() == []
+    alpha_group = m.groups_for_isoform("PI3Kalpha")[0]
+    assert alpha_group.conflict_status == GroupConflictStatus.RESOLVED_REPLICATE_MEDIAN
