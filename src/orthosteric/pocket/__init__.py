@@ -31,6 +31,18 @@ from orthosteric.pocket._pocket_geometry import (
     PocketGeometry,
     compute_pocket_geometry,
 )
+from orthosteric.pocket._residue_mapping import (
+    ALIGNMENT_ALGORITHM_RULE_MISSING_NOTE,
+    CORRESPONDENCE_TABLE_VERSION,
+    TIER1_ISOFORMS,
+    AnchorPosition,
+    CorrespondenceAssignment,
+    CorrespondenceStatus,
+    ResidueCorrespondenceTable,
+    annotate_pocket_residue_set,
+    build_correspondence_table,
+    make_anchor_assignments,
+)
 from orthosteric.pocket._rotamer_state import (
     CHI_ATOM_NAMES,
     ROTAMER_ALGORITHM_VERSION,
@@ -67,7 +79,9 @@ from orthosteric.pocket._structure_record import (
 )
 
 __all__ = [
+    "ALIGNMENT_ALGORITHM_RULE_MISSING_NOTE",
     "CHI_ATOM_NAMES",
+    "CORRESPONDENCE_TABLE_VERSION",
     "GEOMETRY_ALGORITHM_VERSION",
     "GOVERNED_DISTANCE_CUTOFF_ANGSTROM",
     "GOVERNED_MIN_STRUCTURES_FOR_STABILITY",
@@ -77,13 +91,17 @@ __all__ = [
     "ROTAMER_CLASSIFICATION_RULE_MISSING_NOTE",
     "SASA_ALGORITHM_VERSION",
     "TIEN_2013_MAX_ASA",
+    "TIER1_ISOFORMS",
     "VOLUME_RULE_MISSING_NOTE",
+    "AnchorPosition",
     "AtomCoordinate",
     "ChainRecord",
     "ChiAngle",
     "ConformationalState",
     "ConstructClass",
     "ConstructDescriptor",
+    "CorrespondenceAssignment",
+    "CorrespondenceStatus",
     "DataTier",
     "GeometryConfig",
     "LigandRecord",
@@ -94,6 +112,7 @@ __all__ = [
     "PocketResidueSet",
     "PocketRotamerStates",
     "PocketSASA",
+    "ResidueCorrespondenceTable",
     "ResidueRecord",
     "ResidueRotamerState",
     "ResidueSASA",
@@ -104,9 +123,12 @@ __all__ = [
     "StructureRecord",
     "StructureSource",
     "SubRegion",
+    "annotate_pocket_residue_set",
+    "build_correspondence_table",
     "compute_pocket_geometry",
     "compute_pocket_rotamer_states",
     "compute_pocket_sasa",
     "default_pocket_definition_policy",
+    "make_anchor_assignments",
     "make_record_id",
 ]
