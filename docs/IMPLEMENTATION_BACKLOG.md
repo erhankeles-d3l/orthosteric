@@ -103,6 +103,7 @@ data/  chembl/  bindingdb/  pubchem/  pdb/  literature/
 | `SCI0-009` | Harmonization: duplicate and conflict resolution; **different stereoisomers never merged**; policy recorded | requires `SCI0-008b` — deduplication without canonical structures is unsound |
 | `SCI0-010` | Harmonization: curation-confidence assignment — **additive and inspectable; no learned model** | audit Q9; a learned scorer would breach SI3 and make the corpus depend on a model trained on it |
 | `SCI0-011` | Snapshot builder — content-hashed, immutable; manifest includes **full software provenance** (RDKit, Python, lock hash, git SHA, OS, pipeline version) | §3.3 as amended; ENG §13. RDKit version affects InChIKey, so the toolchain is part of corpus identity |
+| `SCI0-011` | `Done` | — | feature/sci0-011 | immutable snapshot; SHA-256 over records+policy+SW; PDB vs AF tracking; RULE_MISSING manifest |
 | `SCI0-012` | Bemis–Murcko scaffold family assignment | audit Q5 |
 | `SCI0-013` | **Within-study / within-assay stratum extraction** | §2.3(1) as amended — the evaluation stratum |
 | `SCI0-014` | **Compound × isoform measurement graph construction** | connectivity substrate for R1 |
