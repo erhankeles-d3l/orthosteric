@@ -42,8 +42,17 @@ from orthosteric.data.harmonization._identifier_harmonizer import (
     SourceRef,
     StructureConflict,
 )
+from orthosteric.data.harmonization._scaffold import (
+    SCAFFOLD_RULE_VERSION,
+    ScaffoldAssigner,
+    ScaffoldFamilyType,
+    ScaffoldRecord,
+    ScaffoldStatus,
+    scaffold_family_report,
+)
 
 __all__ = [
+    "SCAFFOLD_RULE_VERSION",
     "ChemicalStandardizer",
     "CompoundEvidenceMatrix",
     "ConfidenceComponent",
@@ -57,8 +66,13 @@ __all__ = [
     "GroupConflictStatus",
     "HarmonizedCompound",
     "IdentifierHarmonizer",
+    "ScaffoldAssigner",
+    "ScaffoldFamilyType",
+    "ScaffoldRecord",
+    "ScaffoldStatus",
     "SourceRef",
     "StandardizationStatus",
     "StandardizedStructure",
     "StructureConflict",
+    "scaffold_family_report",
 ]

@@ -90,3 +90,7 @@ show_missing = true
 [[tool.mypy.overrides]]
 module = "tests.data.sources.structural.*"
 disable_error_code = ["comparison-overlap", "unused-ignore"]
+
+[[tool.mypy.overrides]]
+module = "orthosteric.data.harmonization._scaffold"
+disable_error_code = ["unreachable"]
