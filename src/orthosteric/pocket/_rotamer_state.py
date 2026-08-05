@@ -49,6 +49,7 @@ try:
     from Bio.PDB.vectors import (  # type: ignore[import-untyped]
         calc_dihedral as _biopython_calc_dihedral,
     )
+
     _BIOPYTHON_AVAILABLE = True
 except (ImportError, AttributeError):
     _BIOPYTHON_AVAILABLE = False
