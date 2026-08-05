@@ -10,6 +10,7 @@ requires-python = "==3.12.*"
 license = { file = "LICENSE" }
 dependencies = [
     "rdkit>=2024.3",  # SCI0-008b; RDKit version affects InChIKey (SCI0-011)
+    "biopython>=1.84",  # SCI1-002; structural preprocessing (pocket geometry, rotamer, SASA)
 ]
 
 [project.optional-dependencies]
@@ -38,7 +39,10 @@ select = ["E","F","I","N","UP","B","A","C4","DTZ","PT","RET","SIM","ARG","PL","R
 ignore = ["D203","D213"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "PLR2004", "D103", "D205", "D209", "PLR0913", "PLR0917"]
+"tests/*" = ["S101", "PLR2004", "D103", "D205", "D209", "PLR0913", "PLR0917", "RUF002", "ANN401"]
+"src/orthosteric/pocket/_pocket_geometry.py" = ["RUF002", "ANN401"]
+"src/orthosteric/pocket/_rotamer_state.py" = ["RUF002", "RUF003", "ANN401"]
+"src/orthosteric/pocket/_solvent_accessibility.py" = ["ANN401"]
 "src/orthosteric/data/harmonization/*.py" = [
     "S110",  # try/except/pass in RDKit metal disconnection
     "N812",  # rdkit version import alias
@@ -75,7 +79,27 @@ warn_unreachable = true
 disallow_any_explicit = false
 files = ["src", "tests"]
 
+[[tool.mypy.overrides]]
+# BioPython 1.87 ships no PEP 561 stubs; suppress per-module rather than sprinkling type:ignore
+module = ["Bio.*"]
+ignore_missing_imports = true
+follow_untyped_imports = false
+
+[[tool.mypy.overrides]]
+# Pocket modules using BioPython: suppress untyped-call and no-any-generics
+module = [
+    "orthosteric.pocket._pocket_geometry",
+    "orthosteric.pocket._rotamer_state",
+    "orthosteric.pocket._solvent_accessibility",
+]
+disallow_untyped_calls = false
+ignore_errors = false
+warn_unused_ignores = false
+
 [tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::RuntimeWarning:Bio.PDB.vectors",
+]
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "-q --strict-markers"

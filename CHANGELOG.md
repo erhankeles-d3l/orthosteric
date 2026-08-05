@@ -4,6 +4,31 @@ Maintained from the first commit, never retrofitted (ENG §8).
 
 ## [Unreleased]
 
+### Added — SCI1-002: Pocket Geometry, Rotamer State, and Solvent Accessibility
+
+**Files added:**
+- `src/orthosteric/pocket/_pocket_geometry.py` — `PocketGeometry`, `AtomCoordinate`, `GeometryConfig`, `compute_pocket_geometry()`
+- `src/orthosteric/pocket/_rotamer_state.py` — `PocketRotamerStates`, `ResidueRotamerState`, `ChiAngle`, `RotamerAvailability`, `compute_pocket_rotamer_states()`
+- `src/orthosteric/pocket/_solvent_accessibility.py` — `PocketSASA`, `ResidueSASA`, `SASAConfig`, `SASAAvailability`, `compute_pocket_sasa()`
+
+**Files modified:**
+- `src/orthosteric/pocket/__init__.py` — exports all SCI1-002 symbols
+- `pyproject.toml` — added `biopython>=1.84`, per-file mypy/ruff overrides for untyped BioPython
+
+**Dependency added:** `biopython>=1.84` (SCI1-002 structural preprocessing)
+
+**Tests added:** `tests/pocket/test_sci1002_structural_geometry.py` (26 tests, exit criteria G1–G9, R1–R8, S1–S8)
+
+**Scientific rules:**
+- `GOVERNED_PROBE_RADIUS_ANGSTROM = 1.4` — Lee & Richards 1971 (RULE_AVAILABLE)
+- `TIEN_2013_MAX_ASA` — Tien et al. 2013 relative SASA normalization (RULE_AVAILABLE)
+- `CHI_ATOM_NAMES` — Dunbrack 1993 chi-angle atom definitions (RULE_AVAILABLE)
+- Pocket volume: `RULE_MISSING/GOVERNANCE_DECISION_REQUIRED` — `volume_angstrom3` always `None`
+- Rotamer classification: `RULE_MISSING/GOVERNANCE_DECISION_REQUIRED` — `rotamer_label` always `None`
+
+---
+
+
 ### SCI-0 — Data Acquisition Layer (in progress)
 
 #### ADR-0010 / SCI1-000..SCI1-001 — Phase C: Comparative Structural Learning Platform Architecture + SCI-1 Milestone 2 (Done)
