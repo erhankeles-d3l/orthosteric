@@ -6,6 +6,67 @@ Maintained from the first commit, never retrofitted (ENG §8).
 
 ### SCI-0 — Data Acquisition Layer (in progress)
 
+#### GDR-002 — `N_c`, `N_b`, `N_w` reclassified as corpus-derived engineering parameters (Done)
+- `docs/governance/decision-records/GDR-002-corpus-derived-engineering-parameters.md`:
+  `N_c` (largest connected component), `N_b` (bridging compounds), `N_w`
+  (within-study four-isoform compounds) are corpus-derived engineering
+  parameters, not literature-derived scientific thresholds — computed
+  deterministically from an already-frozen `SCI0-011` snapshot; never
+  optimized during model development, never fitted to model performance,
+  never estimated from the literature
+- **Two governance categories made explicit:** corpus-derived engineering
+  parameters (`N_c`, `N_b`, `N_w`, corpus/graph/scaffold/publication
+  statistics) vs. scientific parameters (ATP Km, Cheng–Prusoff, biochemical
+  conversion rules) — the latter explicitly **not** touched by this record;
+  AUDITOR-5 unchanged
+- `data/snapshots/_profile.py`: `freeze_corpus_profile()` — pure function over
+  already-computed `GraphStats` (SCI0-014) and `CharacterizationReport`
+  (SCI0-014b); no raw-record parameter exists on the function, so it cannot
+  be run against partially curated data by construction
+- `CorpusProfile` — frozen, content-hashed (`profile_sha256`), references the
+  `SCI0-011` snapshot by SHA-256 (foreign key; `SnapshotManifestV2` itself not
+  reopened). Embeds `SoftwareProvenance` and `PolicyManifest` reused from
+  `SCI0-011` (not redefined), plus `profile_algorithm_version` (versions the
+  *computation method* independent of upstream policy versions)
+- Freeze timestamp excluded from `profile_sha256`, per the `SCI0-011`
+  precedent — identical inputs yield an identical hash regardless of when
+  frozen
+- **Two definitional gaps flagged, not silently resolved:** (1) `N_w`
+  compound-count (Constitution's original unit, `GraphStats.
+  within_study_four_isoform`) vs. strata-count (Project Owner's phrasing,
+  `StratumReport.usable_strata`) — both frozen under distinct names
+  (`n_w`, `n_complete_strata`); (2) scaffold-family diversity *within the
+  largest connected component* — not computed by any existing module;
+  recorded as `None`, never substituted with `SCI0-014b`'s corpus-global count
+- **R1 (Constitution Part VIII, Amendment A10) consequence stated explicitly:**
+  a condition of "measured value < measured value" is vacuous, so R1's
+  kill-switch function for `N_c`/`N_b`/`N_w` cannot survive. Replaced by an
+  informed human decision at the existing `SCI0-031` gate ("proceed / redesign
+  / stop"), informed by the frozen `CorpusProfile`. The "< 8 scaffold
+  families" disjunct is **unchanged** — fixed at the Constitution's original
+  authorship, not one of the outstanding placeholders
+- **S4b relocated, not reclassified:** remains a methodological/model-design
+  parameter per the Project Owner's explicit instruction; moves to the
+  Decision Policy Layer (`ADR-0008`, `policy/`), versioned, fixed per
+  experiment, revisable only via a future Governance Decision Record. Not
+  implemented as a policy class yet — no `SCI0-016` noise floor exists for it
+  to operate against
+- `CONSTITUTION_AMENDMENT_SET_v4.7.md` Amendments A1 (S4b) and A10 (R1):
+  dated revision notes appended beneath the original "Was/Becomes" text
+  (preserved verbatim, not rewritten)
+- `docs/IMPLEMENTATION_BACKLOG.md`: `SCI0-028` scope revised to verification
+  (determinism/reproducibility) rather than sealing; ordering constraint
+  against `SCI0-015` revised — no longer applies to `N_c`/`N_b`/`N_w`;
+  new `SCI0-014c` row for corpus-profile freezing
+- `docs/governance/SCI0-028-GOVERNANCE-GAP-REPORT.md`: third-pass addendum;
+  historical classification tables preserved, not deleted
+- `sealed/MANIFEST.md`: `SCI0-028`'s expected-artefacts row revised — ATP Km
+  source is now the only remaining item
+- **`SCI0-015` no longer blocked by `SCI0-028`** (the specific reason for that
+  ordering constraint no longer applies). Real corpus acquisition remains
+  separately unauthorized
+- 18 new tests; 415 total passing
+
 #### ADR-0008 / DPL-001 — Decision Policy Layer (`policy/`) (Done)
 - New architectural layer `src/orthosteric/policy/`, authorized by `ADR-0008`
   [Architectural]. Operates exclusively on model outputs; never modifies

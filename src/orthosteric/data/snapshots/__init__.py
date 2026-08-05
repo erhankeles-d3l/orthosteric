@@ -10,6 +10,7 @@ Snapshot           :class:`CorpusSnapshot`
 Manifest           :class:`SnapshotManifest`
 Software provenance:class:`SoftwareProvenance`
 Policy manifest    :class:`PolicyManifest`
+Corpus profile      :class:`CorpusProfile`, :func:`freeze_corpus_profile` (GDR-002)
 """
 
 from orthosteric.data.snapshots._builder import (
@@ -21,11 +22,23 @@ from orthosteric.data.snapshots._manifest import (
     PolicyManifest,
     SoftwareProvenance,
 )
+from orthosteric.data.snapshots._profile import (
+    CORPUS_PROFILE_SCHEMA_VERSION,
+    PROFILE_ALGORITHM_VERSION,
+    CorpusProfile,
+    EngineeringParameters,
+    freeze_corpus_profile,
+)
 
 __all__ = [
+    "CORPUS_PROFILE_SCHEMA_VERSION",
+    "PROFILE_ALGORITHM_VERSION",
+    "CorpusProfile",
     "CorpusSnapshotV2",
+    "EngineeringParameters",
     "PolicyManifest",
     "SnapshotBuilder",
     "SnapshotManifestV2",
     "SoftwareProvenance",
+    "freeze_corpus_profile",
 ]

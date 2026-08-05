@@ -20,5 +20,5 @@ are `Scientific` category and require the Independent Scientific Auditor
 | `SCI0-024` | S9 reference rule set |
 | `SCI0-026` | S10 mutation and null-control sites |
 | `SCI0-027` | Second-family selection |
-| `SCI0-028` | `N_c`, `N_b`, `N_w`, S4b sharpness factor, duplicate-resolution policy, per-isoform ATP Km source |
+| `SCI0-028` | Per-isoform ATP Km source *(only remaining item; `N_c`/`N_b`/`N_w` reclassified as corpus-derived — see `GDR-002` — and are no longer sealed here; S4b relocated to `policy/` per `GDR-002`; duplicate-resolution policy resolved by `GDR-001`)* |
 | `SCI0-029` | Pre-registered thresholds for all criteria (`sealed/config/`) |
