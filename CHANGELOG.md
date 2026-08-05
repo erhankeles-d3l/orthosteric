@@ -4,6 +4,34 @@ Maintained from the first commit, never retrofitted (ENG §8).
 
 ## [Unreleased]
 
+### Added — SCI1-003: Cross-Isoform Residue Correspondence Data Model
+
+**Files added:**
+- `src/orthosteric/pocket/_residue_mapping.py` — `ResidueCorrespondenceTable`,
+  `CorrespondenceAssignment`, `CorrespondenceStatus`, `AnchorPosition`,
+  `TIER1_ISOFORMS`, `build_correspondence_table()`, `make_anchor_assignments()`,
+  `annotate_pocket_residue_set()`
+
+**Scientific rules:**
+- `AnchorPosition.ALPHA_859 / TRP780 / MET772` — three Constitution §0.3/§2.1
+  named positions (RULE_AVAILABLE — explicitly stated in the charter)
+- Reference isoform always PI3Kalpha (RULE_AVAILABLE — §2.1 numbering convention)
+- Structural alignment algorithm: `RULE_MISSING/GOVERNANCE_DECISION_REQUIRED` —
+  `alignment_algorithm = "RULE_MISSING"` by default; `alignment_governance_note`
+  is non-empty until a GDR seals the algorithm
+- `CorrespondenceStatus`: MAPPED / PROVISIONAL / MANUALLY_VERIFIED / UNMAPPED / ANCHOR
+  (RULE_AVAILABLE — vocabulary derived from Constitution §2.1's "manually verified"
+  requirement)
+
+**Tests added:** `tests/pocket/test_sci1003_residue_mapping.py` (19 tests, M1–M14)
+
+**Constraint:** `annotate_pocket_residue_set()` does NOT mutate the frozen
+`PocketResidueSet`; it returns a list of `(residue_id, canonical_position,
+status)` triples. The alignment computation itself is deferred — no structural
+superimposition algorithm is executed without a sealed GDR.
+
+---
+
 ### Added — SCI1-002: Pocket Geometry, Rotamer State, and Solvent Accessibility
 
 **Files added:**

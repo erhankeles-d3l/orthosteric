@@ -43,6 +43,7 @@ ignore = ["D203","D213"]
 "src/orthosteric/pocket/_pocket_geometry.py" = ["RUF002", "ANN401"]
 "src/orthosteric/pocket/_rotamer_state.py" = ["RUF002", "RUF003", "ANN401"]
 "src/orthosteric/pocket/_solvent_accessibility.py" = ["ANN401"]
+"src/orthosteric/pocket/_residue_mapping.py" = ["RUF001", "RUF002"]
 "src/orthosteric/data/harmonization/*.py" = [
     "S110",  # try/except/pass in RDKit metal disconnection
     "N812",  # rdkit version import alias
