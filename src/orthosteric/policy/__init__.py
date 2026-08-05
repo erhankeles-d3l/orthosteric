@@ -27,6 +27,11 @@ from orthosteric.policy._config import (
     SelectivityTier,
     SelectivityTierTable,
 )
+from orthosteric.policy._corpus_gate import (
+    CorpusQualityGatePolicy,
+    GateDecision,
+    GateStatus,
+)
 from orthosteric.policy._engine import (
     DECISION_SCHEMA_VERSION,
     DecisionProvenance,
@@ -56,8 +61,11 @@ __all__ = [
     "DEFAULT_SELECTIVITY_TIERS",
     "BindingClass",
     "ConfidencePolicy",
+    "CorpusQualityGatePolicy",
     "DecisionProvenance",
     "DecisionRecord",
+    "GateDecision",
+    "GateStatus",
     "IsoformPrediction",
     "NormalizationStatus",
     "Policy",

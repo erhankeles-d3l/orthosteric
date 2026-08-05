@@ -88,6 +88,7 @@ A `Scientific` ADR may not be authored by the model developer alone.
 | `explain/` | Constitution §4.7 discrete-rule interface | model definition, training |
 | `kg/` | knowledge layer (Phase 3) | anything outside Constitution §5.2 schema |
 | `policy/` | Decision Policy Layer — classify predictions against configurable project objectives (`ADR-0008`) | evidence loading, harmonization, featurization, model definition, training, criterion evaluation |
+| `quality/` | Corpus Quality Assessment Layer — interpret a `CorpusProfile` into per-dimension adequacy (`ADR-0009`) | profile computation, raw-record access, decision-policy logic |
 
 A module performing two of these belongs in neither and must be split.
 
@@ -99,10 +100,13 @@ If "Constitution section served" cannot be written, the package's necessity is u
 
 **Layer order (highest → lowest)**, as enforced in `.importlinter`:
 `policy/` → `eval/` → `explain/` → `train/` → `model/` → `features/` →
-`pocket/` → `data/` → `runtime/`. `policy/` sits at the top by `ADR-0008` so
-that no lower layer can import it — mechanically preventing a project
-prioritization threshold from influencing evidence, features, training,
-prediction, or criterion evaluation.
+`pocket/` → `quality/` → `data/` → `runtime/`. `policy/` sits at the top by
+`ADR-0008` so that no lower layer can import it — mechanically preventing a
+project prioritization threshold from influencing evidence, features,
+training, prediction, or criterion evaluation. `quality/` sits directly
+above `data/` by `ADR-0009`, so `data/` cannot import it — a `CorpusProfile`
+cannot depend on its own interpretation — while `policy/` (above everything)
+can consume it.
 
 1. no cross-package imports of `_`-prefixed internal modules
 2. no `src/` import from `notebooks/` or `scratch/`

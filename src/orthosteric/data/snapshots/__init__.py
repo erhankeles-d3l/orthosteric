@@ -27,6 +27,7 @@ from orthosteric.data.snapshots._profile import (
     PROFILE_ALGORITHM_VERSION,
     CorpusProfile,
     EngineeringParameters,
+    StructuralCoverageStats,
     freeze_corpus_profile,
 )
 
@@ -40,5 +41,6 @@ __all__ = [
     "SnapshotBuilder",
     "SnapshotManifestV2",
     "SoftwareProvenance",
+    "StructuralCoverageStats",
     "freeze_corpus_profile",
 ]
