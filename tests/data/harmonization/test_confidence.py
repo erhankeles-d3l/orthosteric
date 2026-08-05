@@ -28,7 +28,12 @@ from orthosteric.data.harmonization._chem_standardizer import (
     StandardizationStatus,
     StandardizedStructure,
 )
-from orthosteric.data.harmonization._confidence import POLICY_VERSION, ConfidenceScorer
+from orthosteric.data.harmonization._confidence import (
+    POLICY_VERSION,
+    ConfidenceComponent,
+    ConfidenceScorer,
+    CurationConfidence,
+)
 from orthosteric.data.harmonization._deduplicator import (
     Deduplicator,
     EvidenceRecord,
@@ -58,6 +63,13 @@ from orthosteric.data.provenance.models import (
 
 FIXED_TS = datetime(2026, 7, 30, 12, 0, 0, tzinfo=UTC)
 IK_ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0"
+
+
+def _get(conf: CurationConfidence, name: str) -> ConfidenceComponent:
+    """`component()` narrowed to non-None for typed test assertions."""
+    c = conf.component(name)
+    assert c is not None, f"missing component {name!r}"
+    return c
 
 
 def _prov(  # noqa: PLR0913 — test factory, kwargs mirror the real record shape
@@ -182,7 +194,7 @@ def test_bibliographic_identification_scored_when_publication_present() -> None:
     scorer = ConfidenceScorer()
     prov = _prov(publication=FULL_PUBLICATION)
     conf = scorer.score(_rec(IK_ALPHA, "PI3Kalpha", 7.0, provenance=prov))
-    c = conf.component("bibliographic_identification")
+    c = _get(conf, "bibliographic_identification")
     assert c.applicable is True
     assert c.value == 1.0
 
@@ -191,7 +203,7 @@ def test_bibliographic_identification_zero_when_no_doi_or_pmid() -> None:
     scorer = ConfidenceScorer()
     prov = _prov(publication=BARE_PUBLICATION)
     conf = scorer.score(_rec(IK_ALPHA, "PI3Kalpha", 7.0, provenance=prov))
-    c = conf.component("bibliographic_identification")
+    c = _get(conf, "bibliographic_identification")
     assert c.applicable is True
     assert c.value == 0.0
 
@@ -203,7 +215,7 @@ def test_metadata_completeness_counts_populated_fields() -> None:
         atp_concentration=Quantity(value=Decimal("10"), unit=Unit.MICROMOLAR),
     )
     conf = scorer.score(_rec(IK_ALPHA, "PI3Kalpha", 7.0, provenance=prov))
-    c = conf.component("metadata_completeness")
+    c = _get(conf, "metadata_completeness")
     assert c.applicable is True
     # assay_id, assay_description, organism, isoform, construct, atp_concentration all populated
     assert c.value == 1.0
@@ -219,7 +231,7 @@ def test_span_verification_scored_for_literature_records() -> None:
     )
     prov = _prov(source_type=SourceType.LITERATURE, span_anchor=verified)
     conf = scorer.score(_rec(IK_ALPHA, "PI3Kalpha", 7.0, provenance=prov))
-    c = conf.component("span_verification")
+    c = _get(conf, "span_verification")
     assert c.applicable is True
     assert c.value == 1.0
 
@@ -231,7 +243,7 @@ def test_span_verification_zero_when_unverified() -> None:
     )
     prov = _prov(source_type=SourceType.LITERATURE, span_anchor=unverified)
     conf = scorer.score(_rec(IK_ALPHA, "PI3Kalpha", 7.0, provenance=prov))
-    c = conf.component("span_verification")
+    c = _get(conf, "span_verification")
     assert c.applicable is True
     assert c.value == 0.0
 
@@ -242,7 +254,7 @@ def test_span_verification_zero_when_unverified() -> None:
 def test_assay_quality_is_rule_missing() -> None:
     scorer = ConfidenceScorer()
     conf = scorer.score(_rec(IK_ALPHA, "PI3Kalpha", 7.0))
-    c = conf.component("assay_quality")
+    c = _get(conf, "assay_quality")
     assert c.applicable is False
     assert c.value is None
     assert "RULE_MISSING" in c.governance_note
@@ -263,7 +275,7 @@ def test_extraction_tier_exposed_as_category_not_scored() -> None:
         span_anchor=anchor,
     )
     conf = scorer.score(_rec(IK_ALPHA, "PI3Kalpha", 7.0, provenance=prov))
-    c = conf.component("literature_extraction_tier")
+    c = _get(conf, "literature_extraction_tier")
     assert c.applicable is True
     assert c.value is None, "no authorized ordinal-to-numeric mapping exists"
     assert "manuscript_table" in c.basis
@@ -287,8 +299,8 @@ def test_duplicate_agreement_reflects_sci0009_conflict_status() -> None:
     assert group.conflict_status == GroupConflictStatus.RULE_MISSING
 
     conf = scorer.score(records[0], group=group)
-    dup = conf.component("duplicate_agreement")
-    cons = conf.component("measurement_consistency")
+    dup = _get(conf, "duplicate_agreement")
+    cons = _get(conf, "measurement_consistency")
     assert dup.applicable is True
     assert dup.value == 0.0  # disagreement surfaced, not hidden
     assert cons.applicable is True
@@ -308,7 +320,7 @@ def test_duplicate_agreement_positive_when_group_agrees() -> None:
     assert group.conflict_status == GroupConflictStatus.OK
 
     conf = scorer.score(records[0], group=group)
-    dup = conf.component("duplicate_agreement")
+    dup = _get(conf, "duplicate_agreement")
     assert dup.applicable is True
     assert dup.value == 1.0
 
@@ -324,15 +336,15 @@ def test_measurement_consistency_zero_on_logical_contradiction() -> None:
     assert group.conflict_status == GroupConflictStatus.LOGICAL_CONTRADICTION
 
     conf = scorer.score(records[0], group=group)
-    assert conf.component("measurement_consistency").value == 0.0
-    assert conf.component("duplicate_agreement").value == 0.0
+    assert _get(conf, "measurement_consistency").value == 0.0
+    assert _get(conf, "duplicate_agreement").value == 0.0
 
 
 def test_no_group_supplied_leaves_conflict_components_inapplicable() -> None:
     scorer = ConfidenceScorer()
     conf = scorer.score(_rec(IK_ALPHA, "PI3Kalpha", 7.0), group=None)
-    assert conf.component("duplicate_agreement").applicable is False
-    assert conf.component("measurement_consistency").applicable is False
+    assert _get(conf, "duplicate_agreement").applicable is False
+    assert _get(conf, "measurement_consistency").applicable is False
     assert conf.context.conflict_status is None
 
 
@@ -352,7 +364,7 @@ def test_context_preserves_evidence_characteristics() -> None:
         content_hash="deadbeef",
         stereochemistry_preserved=True,
         salt_stripped=False,
-        steps_applied=["sanitize", "canonicalize"],
+        steps_applied=("sanitize", "canonicalize"),
     )
     rec = _rec(IK_ALPHA, "PI3Kdelta", 7.0, censoring=CensoringKind.RIGHT_CENSORED)
     conf = scorer.score(rec, standardized_structure=structure, structural_admissibility="PDB")
