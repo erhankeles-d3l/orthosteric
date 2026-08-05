@@ -354,6 +354,34 @@ RESEARCH_START → SCI-0 → [phase commitment] → SCI-1 → SCI-2
                 ↘ SCI-0.5 (Phase 3, Option B only)
 ```
 
+**Stages are not layers.** The state machine above sequences *work*. It is not
+a dataflow diagram, and `SCI-N` labels do not name packages. The runtime
+dataflow is:
+
+```
+evidence acquisition + harmonization   (data/)
+        ↓
+feature generation                     (features/, pocket/)
+        ↓
+comparative selectivity learning       (model/, train/)
+        ↓
+prediction                             (model/)
+        ↓
+decision policy                        (policy/)      ← ADR-0008
+        ↓
+candidate prioritization               (downstream consumer)
+```
+
+`policy/` is the highest layer in the enforced import graph, so this arrow
+direction is mechanical: nothing upstream of it can import it, and a
+prioritization threshold therefore cannot reach evidence, features, training,
+prediction, or criterion evaluation.
+
+Note that `SCI-3` is *Knowledge extraction and first Tier 2 query* and `SCI-4`
+is *Cross-family transfer* (Constitution §9.6, criterion S7). Neither is
+"prediction" or "decision policy"; the stage numbering and the dataflow above
+are independent axes.
+
 ### Package ownership (P8)
 
 Each package is created by exactly one state. Creating it elsewhere is a protocol violation.
@@ -368,6 +396,7 @@ Each package is created by exactly one state. Creating it elsewhere is a protoco
 | `train/` | `SCI-2` | model mathematics |
 | `eval/` — degeneracy battery, seals | `SCI-2` | training |
 | `explain/` | `SCI-2` if Phase 2 committed, else `SCI-3` | model definition |
+| `policy/` | `ADR-0008` — an architectural layer, not stage-owned; buildable before `SCI-1` because it depends only on the input contract it defines itself | evidence, harmonization, features, model definition, training, criterion evaluation |
 | `kg/` | `SCI-4` (Phase 3 only) | anything outside Constitution §5.2 |
 
 `eval/` is deliberately split: metrics score the `SCI-1` baselines; the degeneracy battery tests the `SCI-2` model. This is the one authorized exception to one-package-one-state.

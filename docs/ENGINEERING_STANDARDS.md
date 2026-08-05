@@ -87,6 +87,7 @@ A `Scientific` ADR may not be authored by the model developer alone.
 | `eval/` | evaluation, calibration, degeneracy battery, seal reading | training, feature construction |
 | `explain/` | Constitution §4.7 discrete-rule interface | model definition, training |
 | `kg/` | knowledge layer (Phase 3) | anything outside Constitution §5.2 schema |
+| `policy/` | Decision Policy Layer — classify predictions against configurable project objectives (`ADR-0008`) | evidence loading, harmonization, featurization, model definition, training, criterion evaluation |
 
 A module performing two of these belongs in neither and must be split.
 
@@ -95,6 +96,13 @@ A module performing two of these belongs in neither and must be split.
 If "Constitution section served" cannot be written, the package's necessity is unclear.
 
 **Import contracts, enforced mechanically** via `import-linter` or equivalent:
+
+**Layer order (highest → lowest)**, as enforced in `.importlinter`:
+`policy/` → `eval/` → `explain/` → `train/` → `model/` → `features/` →
+`pocket/` → `data/` → `runtime/`. `policy/` sits at the top by `ADR-0008` so
+that no lower layer can import it — mechanically preventing a project
+prioritization threshold from influencing evidence, features, training,
+prediction, or criterion evaluation.
 
 1. no cross-package imports of `_`-prefixed internal modules
 2. no `src/` import from `notebooks/` or `scratch/`
