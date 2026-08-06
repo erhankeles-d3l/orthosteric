@@ -1,0 +1,72 @@
+{
+  "LY294002": {
+    "docking_scores": {
+      "PI3Kalpha": -9.04,
+      "PI3Kbeta": -7.134,
+      "PI3Kgamma": -8.393,
+      "PI3Kdelta": -8.437
+    },
+    "delta_dock": {
+      "alpha_vs_beta": 1.9059999999999988,
+      "alpha_vs_gamma": 0.6469999999999985,
+      "alpha_vs_delta": 0.6029999999999998
+    },
+    "classification": "intermediate/ambiguous (computational)"
+  },
+  "Quercetin": {
+    "docking_scores": {
+      "PI3Kalpha": -8.765,
+      "PI3Kbeta": -6.733,
+      "PI3Kgamma": -8.769,
+      "PI3Kdelta": -8.303
+    },
+    "delta_dock": {
+      "alpha_vs_beta": 2.032000000000001,
+      "alpha_vs_gamma": -0.0039999999999995595,
+      "alpha_vs_delta": 0.46199999999999974
+    },
+    "classification": "intermediate/ambiguous (computational)"
+  },
+  "Staurosporine_core": {
+    "docking_scores": {
+      "PI3Kalpha": -8.873,
+      "PI3Kbeta": -8.491,
+      "PI3Kgamma": -11.258,
+      "PI3Kdelta": -9.261
+    },
+    "delta_dock": {
+      "alpha_vs_beta": 0.3819999999999997,
+      "alpha_vs_gamma": -2.385,
+      "alpha_vs_delta": -0.3879999999999999
+    },
+    "classification": "other-isoform-selective (computational)"
+  },
+  "Simple_pyrimidine": {
+    "docking_scores": {
+      "PI3Kalpha": -7.164,
+      "PI3Kbeta": -6.002,
+      "PI3Kgamma": -7.405,
+      "PI3Kdelta": -7.694
+    },
+    "delta_dock": {
+      "alpha_vs_beta": 1.162,
+      "alpha_vs_gamma": -0.24100000000000055,
+      "alpha_vs_delta": -0.5300000000000002
+    },
+    "classification": "intermediate/ambiguous (computational)"
+  },
+  "Morpholino_quinazoline": {
+    "docking_scores": {
+      "PI3Kalpha": -6.994,
+      "PI3Kbeta": -5.447,
+      "PI3Kgamma": -7.501,
+      "PI3Kdelta": -6.458
+    },
+    "delta_dock": {
+      "alpha_vs_beta": 1.5469999999999997,
+      "alpha_vs_gamma": -0.5070000000000006,
+      "alpha_vs_delta": 0.5359999999999996
+    },
+    "classification": "intermediate/ambiguous (computational)"
+  }
+}
