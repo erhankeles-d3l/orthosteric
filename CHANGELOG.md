@@ -2,6 +2,52 @@
 
 Maintained from the first commit, never retrofitted (ENG §8).
 
+## [Unreleased — corpus-lifecycle]
+
+### Added — Corpus lifecycle infrastructure (2026-08-06)
+
+**New modules:**
+
+- `src/orthosteric/data/corpus_lifecycle.py`
+  - `CorpusDataMode` enum: SYNTHETIC_FIXTURE / DEVELOPMENT_REAL / SCIENTIFIC_CORPUS
+  - `CorpusLifecycleStage` enum: stages from CURRENT_CORPUS through MODEL_GENERATION_REGISTERED
+  - `CurrentCorpus` class: mutable updateable layer before freezing. NEVER trainable.
+    `add_records()`, `update_source_version()`, `validate_data_mode()`, `freeze()`.
+  - `DataModeViolation`: raised when synthetic fixtures are used for scientific training.
+
+- `src/orthosteric/data/snapshots/_diff.py`
+  - `SnapshotDiff`: deterministic, content-hashed diff between two corpus snapshots.
+    Records added/removed/changed, source-version changes, policy/software changes,
+    parent-lineage validity. Answers "what changed between Model Generation N and N+1?"
+  - `compute_snapshot_diff(a, b)`: deterministic computation (same pair → same SHA).
+
+- `src/orthosteric/data/snapshots/_registry.py`
+  - `CorpusSnapshotRegistry`: in-memory registry tracking snapshots, their data mode,
+    lifecycle stage, and bound model generation IDs.
+  - `CorpusSnapshotRegistryEntry`: frozen metadata per snapshot.
+  - `RegistryError`: raised for integrity violations.
+
+- `src/orthosteric/policy/_lifecycle_pipeline.py`
+  - `CorpusLifecyclePipeline`: chains CorpusProfile → CorpusQualityAssessment →
+    GateDecision → `LifecyclePipelineResult`. Lives in policy/ (only layer that sees
+    both quality/ and data/).
+  - `LifecycleEligibility`: ELIGIBLE / INELIGIBLE_GATE_STOP / INELIGIBLE_GATE_REDESIGN /
+    INELIGIBLE_DATA_MODE / PENDING.
+  - `LifecyclePipelineResult`: content-hashed result with `eligible_for_training` bool.
+  - `register_model_generation()`: raises DataModeViolation if ineligible; binds
+    a ModelGenerationRecord to a specific snapshot SHA with all GDR-governed algorithm IDs.
+
+**Lifecycle invariants enforced:**
+- SYNTHETIC_FIXTURE: skips QA entirely, INELIGIBLE_DATA_MODE before gate runs.
+- DEVELOPMENT_REAL: runs QA but INELIGIBLE_DATA_MODE regardless of gate outcome.
+- SCIENTIFIC_CORPUS + gate PROCEED/WARNING: ELIGIBLE for training.
+- Training is NEVER on CurrentCorpus; only on a frozen CorpusSnapshotV2.
+- Parent lineage: V2.parent_snapshot_sha256 = V1.snapshot_sha256.
+
+**Tests:** `tests/data/test_corpus_lifecycle.py` — 24 tests, L1-L14. 820 total passing.
+
+---
+
 ## [Unreleased — GDR-005..GDR-009]
 
 ### Added — GDR-005 through GDR-009: SCI-2 methodological governance (2026-08-06)

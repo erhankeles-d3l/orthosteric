@@ -86,6 +86,10 @@ ignore = ["D203","D213"]
     "E702",
 ]
 "src/orthosteric/eval/_productive_binding.py" = ["PLR0912", "PLR0913", "PLR0917"]
+"src/orthosteric/policy/_lifecycle_pipeline.py" = ["PLR0913", "PLR0917", "RET504", "ANN401"]
+"src/orthosteric/data/corpus_lifecycle.py" = ["ANN401"]
+"src/orthosteric/data/snapshots/_diff.py" = ["ANN401"]
+"tests/data/test_corpus_lifecycle.py" = ["ANN001", "ANN202", "PLC0415", "E501"]
 "src/orthosteric/learning/_interfaces.py" = ["S105"]  # DegeneracyTestStatus.PASS is not a password
 "src/orthosteric/eval/_uncertainty.py" = ["PLR0913", "PLR0917"]
 "src/orthosteric/features/_pipeline.py" = [
