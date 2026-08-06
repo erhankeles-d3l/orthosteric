@@ -222,7 +222,7 @@ fully tested.
 | `SCI1-003` | **Done** | — | `pocket/` residue mapping: `_residue_mapping` (cross-isoform correspondence data model, Constitution §2.1) |
 | `SCI1-004` | **Done** | — | `features/` interaction fingerprints: `_interaction_fingerprint` (8 evidence classes, RULE_MISSING-by-default thresholds, canonical-position alignment) |
 | `SCI1-005` | **Done** | — | `features/` contact maps + graph: `_contact_map`, `_structural_graph` |
-| `SCI1-006` | Pending | — | `features/` descriptors + comparative set: `_pocket_descriptor`, `_comparative_feature` |
+| `SCI1-006` | **Done** | — | `features/` descriptors + comparative set: `_pocket_descriptor`, `_comparative_feature` |
 | `SCI1-007` | Pending | — | `features/` MD interface stubs: `_md_interface` |
 | `SCI1-008` | Pending | — | `features/` governed config: `FeatureConfig`, versioned |
 
