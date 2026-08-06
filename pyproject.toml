@@ -68,6 +68,22 @@ ignore = ["D203","D213"]
 ]
 "scripts/refresh_corpus.py" = ["D103", "S607"]
 "tests/data/sources/*.py" = ["PLC0415"]  # monkeypatch requires local import
+"src/orthosteric/features/_contact_map.py" = [
+    "ANN401",    # BioPython atoms typed as Any (no stubs)
+    "PLR0913",   # Many-arg private functions
+    "PLR0917",
+    "ARG001",
+    "RUF003",
+    "E702",
+]
+"src/orthosteric/features/_structural_graph.py" = [
+    "ANN401",
+    "PLR0913",
+    "PLR0917",
+    "ARG001",
+    "RUF003",
+    "E702",
+]
 "src/orthosteric/features/_interaction_fingerprint.py" = [
     "ANN401",    # BioPython atoms typed as Any (no stubs)
     "PLR0913",   # Many-arg private detection functions
@@ -140,5 +156,6 @@ disable_error_code = ["unreachable"]
 module = "tests.features.*"
 disallow_untyped_calls = false
 warn_return_any = false
+warn_unused_ignores = false
 ignore_errors = false
 disallow_any_generics = false
