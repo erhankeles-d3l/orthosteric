@@ -226,7 +226,7 @@ fully tested.
 | `SCI1-007` | **Done** | — | `features/` MD interface stubs: `_md_interface` |
 | `SCI1-008` | **Done** | — | `features/` governed config: `FeatureConfig`, versioned |
 
-## SCI-2 — Comparative Representation Learning · **Phase C, provisional**
+## SCI-2 — Comparative Representation Learning · **Phase C, Core+Extension committed (GDR-004)**
 
 Populates `learning/`. Constitution §4.1–§4.7.
 
@@ -288,13 +288,21 @@ Derived from Constitution §2.1, §4.6, §9.3. Creates `pocket/`, `features/`, `
 
 *No `model/` or `train/` code may exist until `SCI1-022` is `Done` (SI3).*
 
-## SCI-2 — Learning · **provisional**
+## SCI-2 — Learning · **Core+Extension committed (GDR-004)**
 
 Creates `model/`, `train/`, `eval/` (degeneracy battery, seals); `explain/` if Phase 2 committed.
 
 | ID | Objective |
 |---|---|
-| `SCI2-001` | **Done** | — | Specification doc + interface schema + 10 GGRs identified; SCI-2 implementation BLOCKED pending phase commitment and Stage 0 completion |
+| `SCI2-001` | **Done** | — | Specification doc + interface schema + 10 GGRs identified |
+| GDR-004 | **Done** | — | Phase commitment = Core+Extension; GGR-002 through GGR-010 classified |
+| GDR-005 | **Pending** | — | AD algorithm (GGR-004) — required before SCI2-002 training code |
+| GDR-006 | **Pending** | — | AlphaFold model-level treatment (GGR-005) |
+| GDR-007 | **Pending** | — | Uncertainty representation (GGR-007) |
+| GDR-008 | **Pending** | — | Censored likelihood form (GGR-008) |
+| GDR-009 | **Pending** | — | Loss function specific form + pAct_alpha/Delta weighting (GGR-003) |
+| GGR-002a | **Pending** | — | MMP switch set — CORPUS_REQUIRED (real data) |
+| GGR-002b | **Pending** | — | S4b sharpness multiplier — CORPUS_REQUIRED (real data) |
 
 Skeleton, to be specified at `SCI2-001`: model interface and configuration · comparative encoder · direct log-ratio prediction head (§4.2(1)) · symmetric objective (§4.2(2)) · training loop and checkpointing · per-target applicability domain (§4.2(4)) · degeneracy battery per §4.3 (pocket shuffle, ligand-only ablation, Δ-prediction, MMP switch, scaffold holdout, apo-ablation) · scrambled-label control and S10 in-silico mutation if Phase 2 · generation freeze (§15.1) · `[procedure]` gate evaluation for S2, S3, S4, S6.
 
