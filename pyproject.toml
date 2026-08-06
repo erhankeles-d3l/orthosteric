@@ -84,6 +84,8 @@ ignore = ["D203","D213"]
     "RUF003",
     "E702",
 ]
+"src/orthosteric/eval/_productive_binding.py" = ["PLR0912", "PLR0913", "PLR0917"]
+"src/orthosteric/eval/_uncertainty.py" = ["PLR0913", "PLR0917"]
 "src/orthosteric/features/_pipeline.py" = [
     "ANN401",    # BioPython bio_structure typed as Any
     "PLR0913",   # 8-arg compute_features by design
