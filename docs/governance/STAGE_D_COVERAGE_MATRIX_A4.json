@@ -1,0 +1,39 @@
+{
+  "snapshot_sha256": "05748f6627ead8f4177ee9deec51b1214920f4b8b86230da850dba9d429cc277",
+  "n_modeling_compounds": 1267,
+  "per_isoform": {
+    "PI3Kalpha": {
+      "matched_corpus": 25,
+      "overlap_modeling_set": 11
+    },
+    "PI3Kbeta": {
+      "matched_corpus": 0,
+      "overlap_modeling_set": 0
+    },
+    "PI3Kgamma": {
+      "matched_corpus": 68,
+      "overlap_modeling_set": 28
+    },
+    "PI3Kdelta": {
+      "matched_corpus": 14,
+      "overlap_modeling_set": 2
+    }
+  },
+  "exactly_n_isoform_overlap": {
+    "0": 1228,
+    "1": 37,
+    "2": 2
+  },
+  "pairwise_usable_comparisons": {
+    "PI3Kalpha-PI3Kbeta": 0,
+    "PI3Kalpha-PI3Kgamma": 1,
+    "PI3Kalpha-PI3Kdelta": 1,
+    "PI3Kbeta-PI3Kgamma": 0,
+    "PI3Kbeta-PI3Kdelta": 0,
+    "PI3Kgamma-PI3Kdelta": 0
+  },
+  "n_any_isoform_overlap": 39,
+  "n_scaffold_families_supported": 37,
+  "alphafold_fallback_outcome": "C",
+  "alphafold_fallback_rationale": "GDR-006 governs treatment of AlphaFold features once they exist; it does not provide compound-specific evidence. AlphaFold gives one ligand-agnostic receptor per isoform; deriving compound-level evidence requires docking, which is RULE_MISSING (ungoverned) per docs/governance/STAGE_D_STRUCTURAL_EVIDENCE_STATE.md."
+}

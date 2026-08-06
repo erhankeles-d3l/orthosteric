@@ -48,18 +48,35 @@ INDEPENDENT's target semantics (absolute isoform activities) but
 COMPARATIVE's shared latent space, isolating the shared-representation
 effect on its own.
 
-Structural evidence extension boundary (not implemented; Phase 6)
+Structural evidence extension boundary (Phase 6, partially implemented)
 ---------------------------------------------------------------------
 `fit()`/`predict()` accept an optional `structural_features` mapping
-(compound_id/smiles -> feature vector). When None (the only case
-exercised today), the model is ligand-only and MUST be reported as
-"Model Generation 1 -- ligand-only comparative baseline", never as using
-structural evidence. When provided in a future session, features are
-concatenated to the encoder's ligand representation before the head sees
-them -- the encoder and head code do not change. No structural evidence
-is fabricated, imputed, or synthesized here; UNAVAILABLE is never
-converted to a zero vector by this module (the caller must supply real
-per-compound arrays or omit the compound).
+(compound_id/smiles -> feature vector) and a `structural_mode`
+(`StructuralFeatureMode`) governing how missing entries are handled:
+
+  SKIP_MISSING (default; the only mode tested/used before this session):
+    a compound absent from `structural_features` is DROPPED from that
+    fit/predict call. Correct and honest, but at low coverage (verified
+    empirically: 28/1,267 = 2.2% for PIK3Kgamma PDB evidence, see
+    docs/STRUCTURAL_EVIDENCE_PI3KG_REPORT.md) it collapses the effective
+    training set and cannot support a meaningful experiment.
+
+  INDICATOR_ZERO_FILL: a compound absent from `structural_features`
+    contributes a zero-filled structural block PLUS an explicit
+    presence-indicator feature (1.0 if the structural data was real,
+    0.0 if zero-filled) appended to the representation. The model can
+    therefore learn to treat the two cases differently -- the zero fill
+    is never presented as if it were a real measurement, because the
+    indicator bit makes "no evidence" a first-class, distinguishable
+    signal rather than an indistinguishable zero. All examples remain in
+    the fit; none are dropped.
+
+When `structural_features` is None (the only case exercised before this
+session), the model is ligand-only and MUST be reported as "Model
+Generation 1 -- ligand-only comparative baseline", never as using
+structural evidence. UNAVAILABLE is never converted to a fabricated
+non-zero value under either mode; only the *handling* of a documented,
+explicit zero differs between modes.
 
 Generative extension boundary (not implemented; Phase 7)
 --------------------------------------------------------------
@@ -91,6 +108,7 @@ __all__ = [
     "PLSHead",
     "RegressionHead",
     "SelectivityScorer",
+    "StructuralFeatureMode",
 ]
 
 MODEL_V1_POLICY_ID = "model_generation_1_v1_encoder_head_objective"
@@ -119,6 +137,21 @@ class ComparativeObjective(StrEnum):
     #: One joint model whose targets are the full S1 vector at once,
     #: with genuine shared-parameter/latent coupling across outputs.
     COMPARATIVE = "comparative"
+
+
+class StructuralFeatureMode(StrEnum):
+    """How `structural_features` handles compounds with no structural
+    evidence. ENGINEERING CHOICE, documented in the module docstring.
+    """
+
+    #: Drop any compound absent from structural_features. Default;
+    #: unchanged behaviour from before this session.
+    SKIP_MISSING = "skip_missing"
+
+    #: Zero-fill the structural block for an absent compound and append
+    #: an explicit 1.0/0.0 presence-indicator feature so the model can
+    #: distinguish "no evidence" from a genuine zero-valued measurement.
+    INDICATOR_ZERO_FILL = "indicator_zero_fill"
 
 
 class MoleculeEncoder(Protocol):
@@ -209,6 +242,7 @@ class ComparativeSelectivityModelV1:
     encoder: MoleculeEncoder
     objective: ComparativeObjective
     head_factory: Any  # Callable[[], RegressionHead]
+    structural_mode: StructuralFeatureMode = field(default=StructuralFeatureMode.SKIP_MISSING)
     _heads: dict[str, RegressionHead] = field(default_factory=dict, repr=False)
     _fitted: bool = field(default=False, repr=False)
     policy: str = field(default=MODEL_V1_POLICY_ID)
@@ -218,6 +252,13 @@ class ComparativeSelectivityModelV1:
         examples_or_smiles: Sequence[ComparativeExample | str],
         structural_features: Mapping[str, NDArray[np.float64]] | None,
     ) -> tuple[NDArray[np.float64], list[int]]:
+        struct_dim = 0
+        if (
+            structural_features
+            and self.structural_mode is StructuralFeatureMode.INDICATOR_ZERO_FILL
+        ):
+            struct_dim = len(next(iter(structural_features.values())))
+
         rows: list[NDArray[np.float64]] = []
         keep_idx: list[int] = []
         for i, item in enumerate(examples_or_smiles):
@@ -230,9 +271,18 @@ class ComparativeSelectivityModelV1:
             if structural_features is not None:
                 key: str = item.compound_id if isinstance(item, ComparativeExample) else smi
                 extra = structural_features.get(key)
-                if extra is None:
-                    continue  # never fabricate; skip rather than zero-fill
-                enc = np.concatenate([enc, extra])
+                if self.structural_mode is StructuralFeatureMode.INDICATOR_ZERO_FILL:
+                    if extra is None:
+                        # Never fabricated as a real measurement: the
+                        # presence bit (final element, 0.0) explicitly
+                        # marks this block as zero-filled, not observed.
+                        enc = np.concatenate([enc, np.zeros(struct_dim), [0.0]])
+                    else:
+                        enc = np.concatenate([enc, extra, [1.0]])
+                else:  # SKIP_MISSING (default; unchanged prior behaviour)
+                    if extra is None:
+                        continue  # never fabricate; skip rather than zero-fill
+                    enc = np.concatenate([enc, extra])
             rows.append(enc)
             keep_idx.append(i)
         if not rows:

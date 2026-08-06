@@ -24,6 +24,7 @@ from orthosteric.learning._model_v1 import (
     ComparativeSelectivityModelV1,
     MorganEncoder,
     PLSHead,
+    StructuralFeatureMode,
 )
 
 
@@ -265,3 +266,92 @@ def test_three_objectives_all_swappable_independently_of_encoder_and_head() -> N
         model.fit(_examples())
         preds = model.predict("CCO")
         assert "PI3Kbeta" in preds  # every objective predicts beta somehow
+
+
+# ── StructuralFeatureMode.INDICATOR_ZERO_FILL ────────────────────────────────
+#
+# Exercised for the first time this session (Stage D all-isoforms structural
+# evidence matching found only 39/1,267 modeling-set compounds with ANY real
+# PDB co-crystal evidence across alpha/gamma/delta combined -- still below
+# the 50-compound documented floor for a trustworthy split, so this mode is
+# NOT used to run an actual structural-augmented training experiment this
+# session; see docs/STRUCTURAL_EVIDENCE_ALL_ISOFORMS_REPORT.md). These tests
+# verify the mode itself is correct and available for when coverage improves.
+
+
+def test_default_structural_mode_is_skip_missing() -> None:
+    model = ComparativeSelectivityModelV1(
+        encoder=MorganEncoder(),
+        objective=ComparativeObjective.INDEPENDENT,
+        head_factory=lambda: PLSHead(n_components=1),
+    )
+    assert model.structural_mode is StructuralFeatureMode.SKIP_MISSING
+
+
+def test_indicator_zero_fill_keeps_all_examples_none_dropped() -> None:
+    """The entire point of this mode: unlike SKIP_MISSING, no example is
+    dropped for lacking structural evidence."""
+    model = ComparativeSelectivityModelV1(
+        encoder=MorganEncoder(),
+        objective=ComparativeObjective.INDEPENDENT,
+        head_factory=lambda: PLSHead(n_components=1),
+        structural_mode=StructuralFeatureMode.INDICATOR_ZERO_FILL,
+    )
+    examples = _examples()
+    partial = {examples[0].compound_id: np.array([9.0, 1.0])}  # only IK0 has real data
+    _x, keep_idx = model._features(examples, partial)
+    assert len(keep_idx) == len(examples)  # nothing dropped
+
+
+def test_indicator_zero_fill_presence_bit_distinguishes_real_from_filled() -> None:
+    model = ComparativeSelectivityModelV1(
+        encoder=MorganEncoder(),
+        objective=ComparativeObjective.INDEPENDENT,
+        head_factory=lambda: PLSHead(n_components=1),
+        structural_mode=StructuralFeatureMode.INDICATOR_ZERO_FILL,
+    )
+    examples = _examples()
+    partial = {examples[0].compound_id: np.array([9.0, 1.0])}
+    x, _keep_idx = model._features(examples, partial)
+    # last column is the presence bit
+    assert x[0, -1] == 1.0  # IK0 has real structural data
+    assert x[1, -1] == 0.0  # IK1 does not
+    # the zero-filled structural block (excluding encoder dims and presence
+    # bit) is exactly zero, never a fabricated non-zero value
+    struct_dim = 2
+    zero_filled_block = x[1, -(struct_dim + 1) : -1]
+    assert np.all(zero_filled_block == 0.0)
+    real_block = x[0, -(struct_dim + 1) : -1]
+    assert np.allclose(real_block, [9.0, 1.0])
+
+
+def test_indicator_zero_fill_fits_and_predicts_without_error() -> None:
+    model = ComparativeSelectivityModelV1(
+        encoder=MorganEncoder(),
+        objective=ComparativeObjective.COMPARATIVE,
+        head_factory=lambda: PLSHead(n_components=2),
+        structural_mode=StructuralFeatureMode.INDICATOR_ZERO_FILL,
+    )
+    examples = _examples()
+    partial = {examples[0].compound_id: np.array([9.0, 1.0])}
+    model.fit(examples, structural_features=partial)
+    preds = model.predict(examples[0].smiles, structural_features=partial)
+    assert "PI3Kbeta" in preds
+    preds_missing = model.predict("CCCCCC", structural_features=partial)
+    assert preds_missing == {} or "PI3Kbeta" in preds_missing  # never raises
+
+
+def test_skip_missing_mode_unchanged_from_before_this_session() -> None:
+    """Regression guard: adding structural_mode must not alter
+    SKIP_MISSING's behaviour (the only mode tested/used previously)."""
+    model = ComparativeSelectivityModelV1(
+        encoder=MorganEncoder(),
+        objective=ComparativeObjective.INDEPENDENT,
+        head_factory=lambda: PLSHead(n_components=1),
+        structural_mode=StructuralFeatureMode.SKIP_MISSING,
+    )
+    examples = _examples()
+    partial = {examples[0].compound_id: np.array([9.0])}
+    _x, keep_idx = model._features(examples, partial)
+    assert len(keep_idx) == 1  # only IK0 retained, exactly as before
+    assert keep_idx == [0]

@@ -65,6 +65,7 @@ def match_corpus_to_pi3kg_complexes(
     ligand_evidence: list[LigandPdbEvidence],
     activity_snapshot_sha: str,
     retrieval_date: str,
+    isoform: str = "PI3Kgamma",
 ) -> list[StructuralEvidenceRecord]:
     """Produce one StructuralEvidenceRecord per unique corpus compound.
 
@@ -73,6 +74,15 @@ def match_corpus_to_pi3kg_complexes(
     multiple structures gets multiple records, all real). Every other
     compound in the corpus gets an explicit UNAVAILABLE record -- never
     silently omitted.
+
+    `isoform` defaults to "PI3Kgamma" for backward compatibility with the
+    original single-isoform caller; the matching LOGIC (InChIKey/skeleton
+    lookup against `ligand_evidence`) was never isoform-specific -- only
+    the reported `isoform` label on each record is a parameter, and each
+    call site is responsible for supplying ligand_evidence fetched for the
+    correct UniProt target (P42336 alpha / P42338 beta / P42337 gamma /
+    O00329 delta). This function does not verify that correspondence
+    itself.
     """
     corpus_iks = {
         r["inchikey"] for r in corpus_records if r.get("inchikey") and not r.get("exclusion_reason")
@@ -98,7 +108,7 @@ def match_corpus_to_pi3kg_complexes(
                 StructuralEvidenceRecord(
                     compound_id=matched_ik,
                     inchikey=matched_ik,
-                    isoform="PI3Kgamma",
+                    isoform=isoform,
                     evidence_class=EvidenceClass.EXPERIMENTAL_COMPLEX,
                     receptor_pdb_id=pdb_id,
                     ligand_pdb_id=lig.ccd_code,
@@ -118,13 +128,13 @@ def match_corpus_to_pi3kg_complexes(
             StructuralEvidenceRecord.unavailable(
                 compound_id=ik,
                 inchikey=ik,
-                isoform="PI3Kgamma",
+                isoform=isoform,
                 activity_snapshot_sha=activity_snapshot_sha,
                 source_type="rcsb_pdb_no_match",
                 retrieval_date=retrieval_date,
                 reason=(
-                    "no co-crystallized ligand among 102 distinct PIK3Kgamma "
-                    "PDB ligands (107 entries) shares this compound's InChIKey"
+                    f"no co-crystallized ligand among {len(ligand_evidence)} distinct "
+                    f"{isoform} PDB ligands shares this compound's InChIKey"
                 ),
             )
         )
