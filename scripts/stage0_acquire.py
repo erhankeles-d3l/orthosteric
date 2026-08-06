@@ -22,11 +22,11 @@ INTER_TARGET_SLEEP = 15.0
 MAX_RETRIES = 5
 
 TARGETS = {
-    # PIK3CA: PENDING_API_VERIFICATION (ADR-0011) — not included
-    "CHEMBL3145": {"gene": "PIK3CB", "tier": "tier1", "types": ["IC50"]},  # confirmed ChEMBL 37
-    "CHEMBL3267": {"gene": "PIK3CG", "tier": "tier1", "types": ["IC50"]},  # confirmed ChEMBL 37
-    # PIK3CD: PENDING_API_VERIFICATION (ADR-0011) — not included
-    # MTOR CHEMBL2842: tier2; ID unverified in ChEMBL 37 — not included until ADR-0011 follow-up
+    "CHEMBL4005": {"gene": "PIK3CA", "tier": "tier1", "types": ["IC50"]},  # ADR-0012
+    "CHEMBL3145": {"gene": "PIK3CB", "tier": "tier1", "types": ["IC50"]},  # ADR-0011
+    "CHEMBL3267": {"gene": "PIK3CG", "tier": "tier1", "types": ["IC50"]},  # ADR-0011
+    "CHEMBL3130": {"gene": "PIK3CD", "tier": "tier1", "types": ["IC50"]},  # ADR-0012
+    # MTOR (Tier 2, GGR-010): ID unverified in ChEMBL 37 - not included.
 }
 
 

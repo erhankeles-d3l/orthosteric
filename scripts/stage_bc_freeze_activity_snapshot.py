@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Stage B+C — harmonize raw ChEMBL records and freeze Activity Snapshot A0.
+"""Stage B+C — harmonize raw ChEMBL records and freeze Activity Snapshot A1.
 
 Reads raw JSON pages from data/raw/chembl/, runs the existing harmonization
 pipeline, and produces an immutable Activity Snapshot using the SCI0-011
@@ -9,15 +9,18 @@ Governance notes
 ----------------
 - Activity-first sampling: records come from the acquisition defined in
   stage0_acquire.py and ADR-0011. No structural selection bias is introduced.
-- Two isoforms available: PIK3CB (CHEMBL3145) and PIK3CG (CHEMBL3267).
-  PIK3CA and PIK3CD are PENDING_API_VERIFICATION (ADR-0011).
+- All four Class I isoforms present: PIK3CA (CHEMBL4005), PIK3CB (CHEMBL3145),
+  PIK3CG (CHEMBL3267), PIK3CD (CHEMBL3130).
+- Lineage: parent_snapshot_sha256 = None. Snapshot A0 was VOIDED by ADR-0013
+  (in-place mutation of a frozen snapshot); the lineage does not begin at A0.
+- Snapshot identity is environment-dependent pending GDR-010 (DRAFT).
 - Data mode: SCIENTIFIC_CORPUS throughout.
 - Snapshot is immutable after freeze(); subsequent acquisitions produce a new
   snapshot with parent_sha pointing to this one.
 
 Outputs
 -------
-data/snapshots/activity_snapshot_A0/
+data/snapshots/activity_snapshot_A1/
     manifest.json          — SnapshotManifestV2 (content-hashed)
     records.json.gz        — all records (accepted + excluded)
     characterization.json  — per-target/study/compound summary
@@ -28,26 +31,36 @@ from __future__ import annotations
 import gzip
 import json
 import pathlib
+import platform
+import subprocess
 import sys
-import time
 from collections import Counter, defaultdict
-from decimal import Decimal
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent / "src"))
+
+from rdkit import __version__ as rdkit_ver
 
 from orthosteric.data.corpus_lifecycle import CorpusDataMode, CurrentCorpus
 from orthosteric.data.harmonization._chem_standardizer import (
     ChemicalStandardizer,
     StandardizationStatus,
 )
-from orthosteric.data.harmonization._identifier_harmonizer import IdentifierHarmonizer
+from orthosteric.data.harmonization._scaffold import ScaffoldAssigner
 from orthosteric.data.snapshots._builder import SnapshotBuilder
 from orthosteric.data.snapshots._manifest import PolicyManifest, SoftwareProvenance
-from orthosteric.data.sources._chembl import _parse_activity
 from orthosteric.data.sources._base import Admissibility
+from orthosteric.data.sources._chembl import _parse_activity
+from orthosteric.data.sources.structural._isoform_map import PI3K_GENE_MAP
+
+#: Authoritative gene-symbol -> canonical isoform designation, derived from
+#: PI3K_GENE_MAP (SCI0-007) so this script cannot drift from the single source
+#: of truth.  The `isoform` field MUST carry the canonical designation
+#: ("PI3Kalpha"), not the gene symbol ("PIK3CA"), because graph.py, strata.py
+#: and _residue_mapping.py all key on it.
+GENE_TO_ISOFORM: dict[str, str] = {gene: iso.value for iso, gene in PI3K_GENE_MAP.items()}
 
 RAW_DIR = pathlib.Path("data/raw/chembl")
-SNAP_DIR = pathlib.Path("data/snapshots/activity_snapshot_A0")
+SNAP_DIR = pathlib.Path("data/snapshots/activity_snapshot_A3")
 SNAP_DIR.mkdir(parents=True, exist_ok=True)
 
 # ── Provenance ─────────────────────────────────────────────────────────────────
@@ -56,27 +69,24 @@ CHEMBL_VERSION = "ChEMBL_37"
 RETRIEVAL_TS = "2026-08-06T12:00:00Z"  # approximate; actual timestamps in raw pages
 
 TARGETS = {
+    "CHEMBL4005": "PIK3CA",  # confirmed ChEMBL 37 (ADR-0012)
     "CHEMBL3145": "PIK3CB",  # confirmed ChEMBL 37 (ADR-0011)
     "CHEMBL3267": "PIK3CG",  # confirmed ChEMBL 37 (ADR-0011)
+    "CHEMBL3130": "PIK3CD",  # confirmed ChEMBL 37 (ADR-0012)
 }
 
 
 def _software() -> SoftwareProvenance:
-    import subprocess, platform, sys as _sys
-
     try:
         sha = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
         dirty = bool(subprocess.check_output(["git", "status", "--porcelain"], text=True).strip())
     except Exception:
         sha, dirty = "unknown", False
 
-    from rdkit import __version__ as rdkit_ver  # type: ignore[import]
-    import orthosteric
-
     return SoftwareProvenance(
-        python_version=_sys.version.split()[0],
+        python_version=sys.version.split()[0],
         rdkit_version=rdkit_ver,
-        orthosteric_version=getattr(orthosteric, "__version__", "0.1.0"),
+        orthosteric_version="0.1.0",
         git_sha=sha,
         git_dirty=dirty,
         os_platform=platform.system(),
@@ -104,6 +114,7 @@ def _policy() -> PolicyManifest:
 
 # ── Load raw pages ─────────────────────────────────────────────────────────────
 
+
 def load_raw_records() -> list[dict]:
     """Load all raw activity records from downloaded JSON pages."""
     all_recs = []
@@ -121,6 +132,7 @@ def load_raw_records() -> list[dict]:
 
 # ── Parse + harmonize ─────────────────────────────────────────────────────────
 
+
 def harmonize_records(raw_activities: list[dict]) -> list[dict]:
     """Parse raw ChEMBL activities into harmonized snapshot dicts.
 
@@ -129,6 +141,7 @@ def harmonize_records(raw_activities: list[dict]) -> list[dict]:
     marked with exclusion_reason, not discarded.
     """
     cs = ChemicalStandardizer()
+    sa = ScaffoldAssigner()  # SCI0-012 Bemis-Murcko
     records = []
     stats = Counter()
 
@@ -147,7 +160,7 @@ def harmonize_records(raw_activities: list[dict]) -> list[dict]:
             "retrieval_timestamp": raw.retrieval_timestamp,
             "target_chembl_id": tid,
             "gene": gene,
-            "isoform": gene,  # required by graph/strata/profile pipelines
+            "isoform": GENE_TO_ISOFORM[gene],  # canonical designation (SCI0-007)
             "compound_id": raw.compound_id,  # molecule_chembl_id
             "parent_molecule_chembl_id": act.get("parent_molecule_chembl_id"),
             "smiles_raw": raw.smiles,
@@ -158,6 +171,12 @@ def harmonize_records(raw_activities: list[dict]) -> list[dict]:
             "pchembl_value": act.get("pchembl_value"),
             "assay_id": raw.assay_id,
             "assay_type": raw.assay_type,
+            "record_type": "activity",  # SnapshotBuilder sort key
+            # study_id: the within-study grouping unit.  A ChEMBL *document*
+            # is the study: within-document assay panels share protocol and
+            # ATP concentration, which is what Constitution 2.3 requires for
+            # a comparable selectivity ratio.
+            "study_id": act.get("document_chembl_id"),
             "document_chembl_id": act.get("document_chembl_id"),
             "document_year": act.get("document_year"),
             "atp_concentration_um": raw.atp_concentration_um,
@@ -183,14 +202,27 @@ def harmonize_records(raw_activities: list[dict]) -> list[dict]:
                 base["canonical_smiles"] = std.canonical_smiles
                 base["inchikey"] = std.inchikey
                 stats["standardized_ok"] += 1
+                # SCI0-012 Bemis-Murcko scaffold family (required by graph.py,
+                # audit.py; drives scaffold-aware splitting per GDR-009).
+                sc = sa.assign(std.inchikey, std.canonical_smiles)
+                base["scaffold_family_id"] = sc.scaffold_family_id
+                base["scaffold_status"] = str(sc.status)
+                base["scaffold_smiles"] = sc.scaffold_smiles
+                stats[f"scaffold_{sc.status}"] += 1
             else:
                 base["canonical_smiles"] = None
                 base["inchikey"] = None
+                base["scaffold_family_id"] = None
+                base["scaffold_status"] = None
+                base["scaffold_smiles"] = None
                 base["exclusion_reason"] = f"STANDARDIZATION_FAILED:{std.status}"
                 stats["standardization_failed"] += 1
         else:
             base["canonical_smiles"] = None
             base["inchikey"] = None
+            base["scaffold_family_id"] = None
+            base["scaffold_status"] = None
+            base["scaffold_smiles"] = None
             base["exclusion_reason"] = "NO_STRUCTURE"
             stats["no_structure"] += 1
 
@@ -199,7 +231,7 @@ def harmonize_records(raw_activities: list[dict]) -> list[dict]:
         if relation in {">", ">="}:
             base["censoring"] = "right"  # inactive / right-censored
         elif relation in {"<", "<="}:
-            base["censoring"] = "left"   # very potent / left-censored
+            base["censoring"] = "left"  # very potent / left-censored
         else:
             base["censoring"] = "exact"
 
@@ -212,12 +244,13 @@ def harmonize_records(raw_activities: list[dict]) -> list[dict]:
 
 # ── Characterization ───────────────────────────────────────────────────────────
 
+
 def characterize(records: list[dict]) -> dict:
     """Produce a characterization summary for governance assessment."""
     accepted = [r for r in records if not r.get("exclusion_reason")]
 
     # Per-isoform
-    per_gene = Counter(r.get("gene") for r in accepted)
+    per_gene = Counter(r.get("isoform") for r in accepted)
 
     # Within-study (same document_chembl_id, same compound, two isoforms)
     # Group accepted by (document_chembl_id, compound_id)
@@ -225,26 +258,31 @@ def characterize(records: list[dict]) -> dict:
     for r in accepted:
         doc = r.get("document_chembl_id", "")
         cmpd = r.get("compound_id", "")
-        gene = r.get("gene", "")
-        if doc and cmpd and gene:
-            doc_compound[(doc, cmpd)].add(gene)
+        iso = r.get("isoform", "")
+        if doc and cmpd and iso:
+            doc_compound[(doc, cmpd)].add(iso)
 
-    within_study_both = sum(1 for genes in doc_compound.values() if len(genes) == 2)
-    within_study_beta_only = sum(1 for genes in doc_compound.values() if genes == {"PIK3CB"})
-    within_study_gamma_only = sum(1 for genes in doc_compound.values() if genes == {"PIK3CG"})
+    n_iso_hist = Counter(len(genes) for genes in doc_compound.values())
+    within_study_all4 = n_iso_hist.get(4, 0)
+    within_study_ge2 = sum(v for k, v in n_iso_hist.items() if k >= 2)
 
-    # Replicates: same compound_id × assay_id, multiple records in same doc
+    # Replicates: same compound_id x assay_id, multiple records in same doc
     replicate_groups = defaultdict(list)
     for r in accepted:
-        key = (r.get("document_chembl_id",""), r.get("compound_id",""), r.get("assay_id",""), r.get("gene",""))
+        key = (
+            r.get("document_chembl_id", ""),
+            r.get("compound_id", ""),
+            r.get("assay_id", ""),
+            r.get("isoform", ""),
+        )
         replicate_groups[key].append(r.get("activity_value"))
     rep_group_count = sum(1 for v in replicate_groups.values() if len(v) > 1)
 
     # Documents
-    docs = Counter(r.get("document_chembl_id","") for r in accepted if r.get("document_chembl_id"))
+    docs = Counter(r.get("document_chembl_id", "") for r in accepted if r.get("document_chembl_id"))
 
     # Compounds
-    compounds = Counter(r.get("inchikey","") for r in accepted if r.get("inchikey"))
+    compounds = Counter(r.get("inchikey", "") for r in accepted if r.get("inchikey"))
 
     # Censoring
     censoring = Counter(r.get("censoring", "exact") for r in accepted)
@@ -256,9 +294,9 @@ def characterize(records: list[dict]) -> dict:
         "per_isoform": dict(per_gene),
         "unique_inchikeys": len(compounds),
         "unique_documents": len(docs),
-        "within_study_both_isoforms": within_study_both,
-        "within_study_beta_only": within_study_beta_only,
-        "within_study_gamma_only": within_study_gamma_only,
+        "within_study_all4_isoforms": within_study_all4,
+        "within_study_ge2_isoforms": within_study_ge2,
+        "within_study_isoform_count_histogram": dict(sorted(n_iso_hist.items())),
         "replicate_groups": rep_group_count,
         "censoring_distribution": dict(censoring),
         "top_10_documents_by_records": docs.most_common(10),
@@ -267,8 +305,9 @@ def characterize(records: list[dict]) -> dict:
 
 # ── Main ────────────────────────────────────────────────────────────────────────
 
+
 def main() -> None:
-    print("=== Stage B+C: Activity Snapshot A0 ===\n")
+    print("=== Stage B+C: Activity Snapshot A3 ===\n")
 
     # Load
     raw = load_raw_records()
@@ -282,14 +321,21 @@ def main() -> None:
     char = characterize(records)
 
     # Freeze
-    print("\nFreezing Activity Snapshot A0...")
+    print("\nFreezing Activity Snapshot A3...")
     cc = CurrentCorpus(data_mode=CorpusDataMode.SCIENTIFIC_CORPUS)
     cc.add_records(records)
     cc.update_source_version("chembl", CHEMBL_VERSION)
-    cc.update_source_version("chembl_targets", "CHEMBL3145_CHEMBL3267_v1")
+    cc.update_source_version("chembl_targets", "_".join(sorted(TARGETS)))
+
+    # Lineage: A2 descends from A1.  A1's `isoform` field carried gene symbols
+    # ("PIK3CA") rather than the canonical designation ("PI3Kalpha") required by
+    # graph.py / strata.py / _residue_mapping.py, which produced
+    # compounds_all4_isoforms = 0.  A2 corrects the vocabulary.
+    # A1 is NOT mutated — correction proceeds by re-freeze, per ADR-0013.
+    parent_sha = "e6acd7a37a40f7d167ce11220cb2661deafab380cda95aef7c2e59e55d673583"
 
     builder = SnapshotBuilder(software=_software(), policy=_policy())
-    snapshot = cc.freeze(builder)
+    snapshot = cc.freeze(builder, parent_snapshot_sha256=parent_sha)
 
     sha = snapshot.manifest.snapshot_sha256
     print(f"\nSnapshot SHA-256: {sha}")
@@ -314,16 +360,18 @@ def main() -> None:
     char["snapshot_id"] = snapshot.manifest.snapshot_id
     char["chembl_version"] = CHEMBL_VERSION
     char["targets_acquired"] = list(TARGETS.keys())
-    char["targets_pending_verification"] = ["PIK3CA(PENDING)", "PIK3CD(PENDING)"]
+    char["voided_predecessor"] = "SNAP-2b8f5ce6f236 (A0) - VOID per ADR-0013"
     (SNAP_DIR / "characterization.json").write_text(json.dumps(char, indent=2))
 
     print("\n=== Characterization ===")
-    print(json.dumps({k: v for k, v in char.items() if k != "top_10_documents_by_records"}, indent=2))
+    print(
+        json.dumps({k: v for k, v in char.items() if k != "top_10_documents_by_records"}, indent=2)
+    )
     print("\nTop 10 documents by record count:")
     for doc, cnt in char.get("top_10_documents_by_records", []):
         print(f"  {doc}: {cnt}")
 
-    print(f"\n=== Snapshot A0 frozen ===")
+    print("\n=== Snapshot A1 frozen ===")
     print(f"Output directory: {SNAP_DIR.resolve()}")
     print(f"SHA-256: {sha}")
 

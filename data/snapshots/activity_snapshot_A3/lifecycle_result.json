@@ -1,0 +1,39 @@
+{
+  "snapshot_sha256": "5e5e54cb5590da829aaccbd7e121d4197d38f1de9923799b8eec8a0296b171da",
+  "parent_snapshot_sha256": "e6acd7a37a40f7d167ce11220cb2661deafab380cda95aef7c2e59e55d673583",
+  "eligibility": "ineligible_gate_stop",
+  "gate_status": "stop",
+  "gate_rationale": "STRUCTURALLY_DEGENERATE in ['coverage']: the corpus cannot support the comparative learning task as currently assembled.",
+  "eligible_for_training": false,
+  "lifecycle_stage": "gate_decided_stop",
+  "dimension_summary": {
+    "connectivity": "non_degenerate_unquantified",
+    "coverage": "structurally_degenerate",
+    "missingness": "non_degenerate_unquantified",
+    "publication_concentration": "non_degenerate_unquantified",
+    "scaffold_diversity": "governed_threshold_met",
+    "structural_coverage": "not_yet_available",
+    "confidence": "insufficient_data"
+  },
+  "result_sha256": "172d1753f070abf45fd36fca25131f21a4689458ed99a83967acb6bcc6bdfeac",
+  "engineering_params": {
+    "n_c": 8376,
+    "n_b": 6821,
+    "n_w": 0,
+    "n_complete_compounds": 0,
+    "n_complete_strata": 0
+  },
+  "graph_stats": {
+    "total_compounds": 16235,
+    "per_isoform": {
+      "PI3Kalpha": 8059,
+      "PI3Kbeta": 3641,
+      "PI3Kdelta": 10421,
+      "PI3Kgamma": 6896
+    },
+    "compounds_all4": 2500,
+    "within_study_four_isoform": 0,
+    "largest_cc": 8376,
+    "n_components": 310
+  }
+}

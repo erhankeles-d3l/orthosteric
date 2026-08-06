@@ -1,0 +1,139 @@
+"""StructuralEvidenceRecord — first-class immutable record for
+compound × isoform structural evidence.
+
+Governance
+----------
+Evidence hierarchy (Stage D, §7 of acquisition instructions):
+  Level 1 — EXPERIMENTAL_COMPLEX: exact compound, exact isoform, observed pose.
+  Level 2 — ANALOGUE_REFERENCE:   chemically related compound; reference only.
+  Level 3 — EXPERIMENTAL_RECEPTOR: no complex; experimental receptor available for docking.
+  Level 4 — LITERATURE_BINDING_MODE: binding-mode evidence from literature.
+  Level 5 — ALPHAFOLD_RECEPTOR:   no experimental receptor; AlphaFold fallback (GDR-006).
+  Level 6 — UNAVAILABLE:          no defensible evidence.
+
+CRITICAL DISTINCTIONS (§18 of acquisition instructions)
+--------------------------------------------------------
+  UNAVAILABLE ≠ ABSENT
+  no structure   ≠ no binding
+  no PDB         ≠ negative
+  no docking     ≠ experimental absence of interaction
+  unmeasured     ≠ inactivity
+
+Every record carries is_experimental, is_alphafold, is_docked flags to
+make these distinctions machine-checkable.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from dataclasses import dataclass
+from enum import StrEnum
+from typing import Any
+
+
+class EvidenceClass(StrEnum):
+    EXPERIMENTAL_COMPLEX = "experimental_complex"
+    ANALOGUE_REFERENCE = "analogue_reference"
+    EXPERIMENTAL_RECEPTOR = "experimental_receptor"
+    LITERATURE_BINDING_MODE = "literature_binding_mode"
+    ALPHAFOLD_RECEPTOR = "alphafold_receptor"
+    UNAVAILABLE = "unavailable"
+    UNRESOLVED = "unresolved"
+
+
+class PoseStatus(StrEnum):
+    OBSERVED = "observed"
+    DOCKED = "docked"
+    MULTIPLE = "multiple"
+    ABSENT = "absent"
+    UNAVAILABLE = "unavailable"
+
+
+@dataclass(frozen=True)
+class StructuralEvidenceRecord:
+    compound_id: str
+    inchikey: str | None
+    isoform: str
+    evidence_class: EvidenceClass
+    receptor_pdb_id: str | None = None
+    receptor_chain: str | None = None
+    ligand_pdb_id: str | None = None
+    reference_compound_id: str | None = None
+    is_experimental: bool = False
+    is_alphafold: bool = False
+    is_docked: bool = False
+    pose_status: PoseStatus = PoseStatus.UNAVAILABLE
+    pose_id: str | None = None
+    source_type: str = ""
+    source_identifier: str = ""
+    retrieval_date: str = ""
+    algorithm_version: str = "0.1.0"
+    activity_snapshot_sha: str = ""
+    missingness_note: str = (
+        "UNAVAILABLE does not imply inactive. Absence of structural evidence != absence of binding."
+    )
+
+    def content_sha256(self) -> str:
+        payload = {
+            "compound_id": self.compound_id,
+            "inchikey": self.inchikey,
+            "isoform": self.isoform,
+            "evidence_class": str(self.evidence_class),
+            "receptor_pdb_id": self.receptor_pdb_id,
+            "ligand_pdb_id": self.ligand_pdb_id,
+            "is_experimental": self.is_experimental,
+            "is_alphafold": self.is_alphafold,
+            "is_docked": self.is_docked,
+            "pose_status": str(self.pose_status),
+        }
+        return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "compound_id": self.compound_id,
+            "inchikey": self.inchikey,
+            "isoform": self.isoform,
+            "evidence_class": str(self.evidence_class),
+            "receptor_pdb_id": self.receptor_pdb_id,
+            "receptor_chain": self.receptor_chain,
+            "ligand_pdb_id": self.ligand_pdb_id,
+            "reference_compound_id": self.reference_compound_id,
+            "is_experimental": self.is_experimental,
+            "is_alphafold": self.is_alphafold,
+            "is_docked": self.is_docked,
+            "pose_status": str(self.pose_status),
+            "source_type": self.source_type,
+            "source_identifier": self.source_identifier,
+            "retrieval_date": self.retrieval_date,
+            "algorithm_version": self.algorithm_version,
+            "activity_snapshot_sha": self.activity_snapshot_sha,
+            "content_sha256": self.content_sha256(),
+        }
+
+    @classmethod
+    def unavailable(  # noqa: PLR0913 - keyword-only provenance factory
+        cls,
+        compound_id: str,
+        inchikey: str | None,
+        isoform: str,
+        *,
+        activity_snapshot_sha: str = "",
+        source_type: str = "not_searched",
+        retrieval_date: str = "",
+        reason: str = "",
+    ) -> StructuralEvidenceRecord:
+        return cls(
+            compound_id=compound_id,
+            inchikey=inchikey,
+            isoform=isoform,
+            evidence_class=EvidenceClass.UNAVAILABLE,
+            is_experimental=False,
+            is_alphafold=False,
+            is_docked=False,
+            pose_status=PoseStatus.UNAVAILABLE,
+            source_type=source_type,
+            source_identifier=reason,
+            retrieval_date=retrieval_date,
+            activity_snapshot_sha=activity_snapshot_sha,
+        )

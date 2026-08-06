@@ -59,8 +59,8 @@
       274
     ]
   ],
-  "snapshot_sha256": "2b8f5ce6f236344b6e7d5ca67729a7fae77d3cb47a9fca2f9e36d4f3a9599493",
-  "snapshot_id": "SNAP-2b8f5ce6f236",
+  "snapshot_sha256": "a0160ec9ab46e3b7f211bd4299d0008bfae7788c2f12484609ac352b444ef02b",
+  "snapshot_id": "SNAP-a0160ec9ab46",
   "chembl_version": "ChEMBL_37",
   "targets_acquired": [
     "CHEMBL3145",
