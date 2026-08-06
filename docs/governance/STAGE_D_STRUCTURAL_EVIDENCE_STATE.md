@@ -1,6 +1,9 @@
 # Stage D — Structural Evidence Discovery State Report
 
-**Date:** 2026-08-06  
+**Date:** 2026-08-06 (updated — see docs/STRUCTURAL_EVIDENCE_PI3KG_REPORT.md
+for the completed compound-level matching increment: 68 real corpus
+compounds matched to PIK3Kgamma PDB co-crystals; 28 overlap with the
+modeling set, below the viable threshold for a training experiment)  
 **Activity Snapshot:** A0 (SHA: 2b8f5ce6f236344b6e7d5ca67729a7fae77d3cb47a9fca2f9e36d4f3a9599493)
 
 ## Status: PARTIAL
