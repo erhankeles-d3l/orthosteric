@@ -47,6 +47,7 @@ ignore = ["D203","D213"]
 "src/orthosteric/pocket/_solvent_accessibility.py" = ["ANN401"]
 "src/orthosteric/eval/_target_construction.py" = ["D205"]
 "src/orthosteric/learning/_baseline_models.py" = ["D205"]
+"src/orthosteric/learning/_model_v1.py" = ["D205"]
 "src/orthosteric/pocket/_residue_mapping.py" = ["RUF001", "RUF002"]
 "src/orthosteric/data/harmonization/*.py" = [
     "S110",  # try/except/pass in RDKit metal disconnection

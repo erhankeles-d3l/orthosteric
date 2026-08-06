@@ -1,0 +1,59 @@
+{
+  "snapshot_sha256": "05748f6627ead8f4177ee9deec51b1214920f4b8b86230da850dba9d429cc277",
+  "seed": 42,
+  "train_n": 822,
+  "val_n": 191,
+  "test_n": 254,
+  "scaffold_overlap": 0,
+  "component_grid": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32
+  ],
+  "component_selection_procedure": "grid search over {1,2,4,8,16,32} (capped by min(n_train-1, n_features)); fit on train, scored on validation only; independent family selects per-axis k via that axis's validation RMSE; comparative family selects one k via mean validation RMSE across all three axes; test set never used for selection",
+  "results": {
+    "independent": {
+      "alpha_vs_beta": {
+        "n_components": 2,
+        "rmse": 0.6883169697404095,
+        "sign_accuracy": 0.5669291338582677
+      },
+      "alpha_vs_gamma": {
+        "n_components": 2,
+        "rmse": 0.6889504245819082,
+        "sign_accuracy": 0.6929133858267716
+      },
+      "alpha_vs_delta": {
+        "n_components": 2,
+        "rmse": 0.6682732697612457,
+        "sign_accuracy": 0.7047244094488189
+      }
+    },
+    "comparative": {
+      "alpha_vs_beta": {
+        "n_components": 8,
+        "rmse": 0.6748151149844521,
+        "sign_accuracy": 0.5748031496062992
+      },
+      "alpha_vs_gamma": {
+        "n_components": 8,
+        "rmse": 0.683731381645946,
+        "sign_accuracy": 0.6653543307086615
+      },
+      "alpha_vs_delta": {
+        "n_components": 8,
+        "rmse": 0.6316124611369553,
+        "sign_accuracy": 0.7834645669291339
+      }
+    }
+  },
+  "verdict": "WIN",
+  "per_axis_verdict": {
+    "beta": "comparative better",
+    "gamma": "comparative better",
+    "delta": "comparative better"
+  }
+}
