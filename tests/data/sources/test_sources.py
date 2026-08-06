@@ -31,7 +31,10 @@ from orthosteric.data.tier2_gate import assert_tier1
 
 
 def test_tier1_chembl_targets_are_tier1() -> None:
-    for cid in ("CHEMBL4523", "CHEMBL5319", "CHEMBL5541", "CHEMBL3629"):
+    # CHEMBL3145 (PIK3CB) and CHEMBL3267 (PIK3CG) are the confirmed
+    # ChEMBL 37 IDs (ADR-0011).  PIK3CA and PIK3CD IDs are
+    # PENDING_API_VERIFICATION and therefore not yet in the tier map.
+    for cid in ("CHEMBL3145", "CHEMBL3267"):
         assert admissibility_for_chembl_target(cid) == Admissibility.TIER1_PRIMARY
 
 
@@ -222,7 +225,7 @@ def test_chembl_missing_smiles_is_inadmissible() -> None:
         "value": "50.0",
         "units": "nM",
     }
-    rec = _parse_activity(act, "CHEMBL4523", "ChEMBL_34", "2026-08-02T00:00:00Z")
+    rec = _parse_activity(act, "CHEMBL3145", "ChEMBL_37", "2026-08-02T00:00:00Z")
     assert rec.admissibility == Admissibility.INADMISSIBLE
     assert rec.inadmissibility_reason == "NO_STRUCTURE"
 
@@ -236,6 +239,6 @@ def test_raw_payload_preserved() -> None:
         "units": "nM",
         "custom_field": "preserved",
     }
-    rec = _parse_activity(payload, "CHEMBL4523", "ChEMBL_34", "2026-08-02T00:00:00Z")
+    rec = _parse_activity(payload, "CHEMBL3145", "ChEMBL_37", "2026-08-02T00:00:00Z")
     assert rec.raw_payload["custom_field"] == "preserved"
     assert rec.raw_payload["custom_field"] == "preserved"  # raw payload preserved intact

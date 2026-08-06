@@ -1,0 +1,46 @@
+{
+  "source": "ChEMBL",
+  "source_version": "ChEMBL_37",
+  "retrieval_timestamp_utc": "2026-08-06T11:32:05Z",
+  "targets": [
+    {
+      "chembl_id": "CHEMBL4523",
+      "gene": "PIK3CA",
+      "tier": "tier1",
+      "types": {
+        "IC50": "PARTIAL:200/3931"
+      },
+      "total_records": 0,
+      "errors": [
+        "CHEMBL4523/IC50: page 1 failed",
+        "CHEMBL4523/IC50: partial (200/3931)"
+      ]
+    },
+    {
+      "chembl_id": "CHEMBL5319",
+      "gene": "PIK3CB",
+      "tier": "tier1",
+      "types": {
+        "IC50": "PARTIAL:1000/1721"
+      },
+      "total_records": 0,
+      "errors": [
+        "CHEMBL5319/IC50: page 5 failed",
+        "CHEMBL5319/IC50: partial (1000/1721)"
+      ]
+    },
+    {
+      "chembl_id": "CHEMBL2842",
+      "gene": "MTOR",
+      "tier": "tier2",
+      "types": {
+        "IC50": null
+      },
+      "total_records": 0,
+      "errors": [
+        "CHEMBL2842/IC50: probe failed"
+      ]
+    }
+  ],
+  "total_complete_records": 0
+}

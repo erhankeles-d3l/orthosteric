@@ -2,6 +2,7 @@
 
 Objective: SCI0-006.
 Constitution §0.1 / §0.4.
+Authority: ADR-0003 §2; ADR-0011 (ChEMBL 37 target-ID correction).
 
 This module is the single source of truth for tier assignment at ingestion.
 Every connector calls ``admissibility_for_target()`` before emitting a record.
@@ -12,9 +13,12 @@ Tier 3 / everything else — out of scope; records are INADMISSIBLE
 
 Source identifiers covered
 --------------------------
-ChEMBL   — primary; IDs verified from ChEMBL 34 target search.
+ChEMBL   — IDs verified against ChEMBL 37 by UniProt-accession lookup (ADR-0011).
+            Previous ChEMBL 34 IDs were WRONG in ChEMBL 37 and have been removed.
+            PIK3CA and PIK3CD ChEMBL 37 IDs are PENDING_API_VERIFICATION — not
+            included here until confirmed.  See ADR-0011 for the verification command.
 Gene     — canonical gene symbol; used for BindingDB and PubChem matching.
-UniProt  — used where source returns UniProt ACs.
+UniProt  — used where source returns UniProt ACs.  Version-independent.
 
 Any target not in this map is INADMISSIBLE.  The map may only be extended
 through a governance amendment (Constitution §0.1 / ADR-0003 §2).
@@ -28,10 +32,12 @@ from orthosteric.data.sources._base import Admissibility
 
 _TIER1_CHEMBL: frozenset[str] = frozenset(
     {
-        "CHEMBL4523",  # PIK3CA  (p110α)
-        "CHEMBL5319",  # PIK3CB  (p110β)
-        "CHEMBL5541",  # PIK3CG  (p110γ)
-        "CHEMBL3629",  # PIK3CD  (p110δ)
+        # PIK3CA (p110α): CHEMBL 37 ID PENDING_API_VERIFICATION — not included.
+        #   See ADR-0011 for verification command.
+        "CHEMBL3145",  # PIK3CB  (p110β) — confirmed ChEMBL 37: UniProt P42338 lookup (ADR-0011)
+        "CHEMBL3267",  # PIK3CG  (p110γ) — confirmed ChEMBL 37: UniProt P48736 lookup (ADR-0011)
+        # PIK3CD (p110δ): CHEMBL 37 ID PENDING_API_VERIFICATION — not included.
+        #   See ADR-0011 for verification command.
     }
 )
 

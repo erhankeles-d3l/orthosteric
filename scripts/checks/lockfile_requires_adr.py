@@ -18,7 +18,7 @@ ADR = re.compile(r"ADR-\d{4}")
 def main() -> int:
     """Check the working commit for a lock change and an ADR reference."""
     changed = subprocess.run(
-        ["git", "diff", "--name-only", "HEAD~1", "HEAD"],  # noqa: S607
+        ["git", "diff", "--name-only", "HEAD~1", "HEAD"],
         cwd=ROOT,
         capture_output=True,
         text=True,
@@ -28,7 +28,7 @@ def main() -> int:
         print("lockfile-requires-adr: OK (no lock change)")
         return 0
     msg = subprocess.run(
-        ["git", "log", "-1", "--format=%B"],  # noqa: S607
+        ["git", "log", "-1", "--format=%B"],
         cwd=ROOT,
         capture_output=True,
         text=True,

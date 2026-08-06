@@ -17,8 +17,8 @@ SEALED = ROOT / "sealed"
 
 
 def _first_commit_epoch(path: str) -> int | None:
-    out = subprocess.run(  # noqa: S603
-        ["git", "log", "--reverse", "--format=%ct", "--", path],  # noqa: S607
+    out = subprocess.run(
+        ["git", "log", "--reverse", "--format=%ct", "--", path],
         cwd=ROOT,
         capture_output=True,
         text=True,
