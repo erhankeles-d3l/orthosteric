@@ -20,28 +20,38 @@ Edges: a compound node is connected to an isoform node if the compound has
   This is a bipartite compound × isoform graph in the graph-theoretic sense,
   but for connected-component purposes we project onto the compound layer:
   two compound nodes are in the same component if they co-appear in the same
-  (study_id, assay_id) panel — i.e. they can be compared without cross-study
-  confounding.
+  panel — i.e. they can be compared without cross-study confounding.
+
+Panel definition (GDR-011, accepted, Option D)
+-------------------------------------------------
+A panel is `orthosteric.data.comparability.panel_key(record)` —
+`(study_id, protocol)`, where `protocol` is the `(bao_format, assay_type)`
+signature.  This REPLACES the previous `(study_id, assay_id)` definition,
+which GDR-011 found structurally incapable of ever producing a
+four-isoform panel on ChEMBL data (every ChEMBL assay covers exactly one
+target).  Records lacking `bao_format`/`assay_type` fall back to
+`(study_id, assay_id)` for backward compatibility with generic-algorithm
+tests that predate GDR-011.
 
 Connected components
 --------------------
-Two compounds are in the same component if they share a (study_id, assay_id)
-context.  Implemented via union-find (path-compressed) for reproducibility and
+Two compounds are in the same component if they share a panel.
+Implemented via union-find (path-compressed) for reproducibility and
 O(n α(n)) complexity.
 
 Bridging compounds
 ------------------
-A compound is a bridging compound if it appears in ≥ 2 distinct
-(study_id, assay_id) panels AND has measurements in ≥ 2 isoforms in at
-least one of those panels.  Bridging compounds link study clusters and are
-the mechanism by which cross-study comparison is possible.
+A compound is a bridging compound if it appears in ≥ 2 distinct panels AND
+has measurements in ≥ 2 isoforms in at least one of those panels.  Bridging
+compounds link study clusters and are the mechanism by which cross-study
+comparison is possible.
 
 Study-cluster structure
 -----------------------
-A study cluster is the set of compounds co-assayed in the same
-(study_id, assay_id) pair.  The cluster structure records: number of clusters,
-size of the largest cluster, median cluster size, and the number of clusters
-covering all four Tier 1 isoforms.
+A study cluster is the set of compounds co-assayed in the same panel.  The
+cluster structure records: number of clusters, size of the largest cluster,
+median cluster size, and the number of clusters covering all four Tier 1
+isoforms.
 
 Primary interface
 -----------------
@@ -61,6 +71,8 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Any
 
+from orthosteric.data.comparability import resolve_panel_key
+
 _TIER1_ISOFORMS: frozenset[str] = frozenset(
     {
         "PI3Kalpha",
@@ -76,7 +88,15 @@ _TIER1_ISOFORMS: frozenset[str] = frozenset(
 
 @dataclass
 class StudyCluster:
-    """Descriptive statistics for one (study_id, assay_id) cluster."""
+    """Descriptive statistics for one within-study panel (GDR-011 Option D).
+
+    `assay_id` retains its name for backward compatibility but, per
+    GDR-011 (accepted), now holds the `(bao_format, assay_type)` protocol
+    signature for records that carry those fields — not the raw ChEMBL
+    assay identifier.  Records without those fields (generic-algorithm
+    test fixtures predating GDR-011) still populate this with the literal
+    assay_id, via `comparability.panel_key()`'s fallback.
+    """
 
     study_id: str
     assay_id: str
@@ -111,7 +131,7 @@ class GraphStats:
     within_study_four_isoform:
         N_w candidate — unique compounds in studies covering all 4 isoforms.
     n_study_clusters:
-        Number of distinct (study_id, assay_id) panels.
+        Number of distinct panels (GDR-011 Option D: study x protocol).
     largest_study_cluster:
         Compound count of the largest study cluster.
     median_study_cluster_size:
@@ -120,6 +140,13 @@ class GraphStats:
         Study clusters covering all 4 Tier 1 isoforms.
     scaffold_families:
         Unique scaffold_family_ids across accepted compounds.
+    legacy_fallback_records:
+        Count of accepted records whose panel key fell back to the
+        rejected LEGACY_FALLBACK tier (GDR-011) — i.e. bao_format and
+        assay_type were both absent.  Not scientific comparability
+        evidence; reported for audit only.  Expected to be 0 on real
+        ChEMBL data (bao_format/assay_type are 100% populated in Activity
+        Snapshot A3).
     per_isoform_compounds:
         {isoform_name: compound_count}.
     study_clusters:
@@ -139,6 +166,7 @@ class GraphStats:
     median_study_cluster_size: float = 0.0
     n_four_isoform_clusters: int = 0
     scaffold_families: int = 0
+    legacy_fallback_records: int = 0
     study_clusters: list[StudyCluster] = field(default_factory=list)
 
     # Legacy aliases (keep backwards-compatible with existing tests)
@@ -173,6 +201,7 @@ def _index_records(
     dict[tuple[str, str], set[str]],
     dict[tuple[str, str], set[str]],
     set[str],
+    int,
 ]:
     """Build index structures from accepted records."""
     compound_isoforms: dict[str, set[str]] = defaultdict(set)
@@ -180,13 +209,16 @@ def _index_records(
     panel_compounds: dict[tuple[str, str], set[str]] = defaultdict(set)
     panel_isoforms: dict[tuple[str, str], set[str]] = defaultdict(set)
     scaffold_ids: set[str] = set()
+    legacy_fallback_records = 0
 
     for rec in accepted:
         ik = str(rec["inchikey"])
         iso = str(rec["isoform"])
-        study = str(rec.get("study_id", rec.get("assay_id", "UNKNOWN_STUDY")))
-        assay = str(rec.get("assay_id", "UNKNOWN_ASSAY"))
-        panel = (study, assay)
+        # Panel definition: GDR-011 (accepted, Option D) — see module docstring.
+        resolved = resolve_panel_key(rec)
+        panel = resolved.key
+        if not resolved.is_scientific_evidence:
+            legacy_fallback_records += 1
 
         compound_isoforms[ik].add(iso)
         compound_panels[ik].add(panel)
@@ -197,7 +229,14 @@ def _index_records(
         if fid and fid != "ACYCLIC":
             scaffold_ids.add(str(fid))
 
-    return compound_isoforms, compound_panels, panel_compounds, panel_isoforms, scaffold_ids
+    return (
+        compound_isoforms,
+        compound_panels,
+        panel_compounds,
+        panel_isoforms,
+        scaffold_ids,
+        legacy_fallback_records,
+    )
 
 
 # ── Primary API (SCI0-014) ────────────────────────────────────────────────────
@@ -251,6 +290,7 @@ def _compute_stats(
         panel_compounds,
         panel_isoforms,
         scaffold_ids,
+        legacy_fallback_records,
     ) = _index_records(accepted)
 
     all_compounds = list(compound_isoforms)
@@ -291,7 +331,7 @@ def _compute_stats(
 
     # ── Bridging compounds ────────────────────────────────────────────────────
     # A compound bridges study clusters if it appears in ≥ 2 distinct
-    # (study_id, assay_id) panels.  It links those clusters, enabling
+    # panels (GDR-011 Option D).  It links those clusters, enabling
     # cross-study offset estimation even if each panel is single-isoform.
     # Additionally it must have ≥ 2 isoforms measured IN TOTAL across all panels
     # (so a compound seen twice in the same isoform across different studies is
@@ -350,6 +390,7 @@ def _compute_stats(
         median_study_cluster_size=median_cs,
         n_four_isoform_clusters=n_four_iso,
         scaffold_families=len(scaffold_ids),
+        legacy_fallback_records=legacy_fallback_records,
         study_clusters=clusters,
     )
 

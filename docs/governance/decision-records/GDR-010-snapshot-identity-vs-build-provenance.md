@@ -1,13 +1,14 @@
-# Governance Decision Record GDR-010 (DRAFT — NOT ACCEPTED) — Snapshot Identity vs Build Provenance
+# Governance Decision Record GDR-010 — Snapshot Identity vs Build Provenance
 
 **Category:** Scientific-infrastructure (definition of snapshot identity; touches
 SCI0-011 snapshot semantics and therefore corpus/model lineage).
-**Status:** **DRAFT — awaiting Project Owner decision. NOT accepted. NOT implemented.**
+**Status:** **ACCEPTED — Option A. Implemented.**
 **Date raised:** 2026-08-06.
+**Date accepted:** 2026-08-06 (Project Owner decision).
 **Raised by:** Computational pipeline during Phase 1 audit.
 **Affects:** SCI0-011 `SnapshotManifestV2`, ADR-0009, GDR-002 (precedent), all
 snapshot lineage and Model Generation binding.
-**Blocking:** Stage 0 sealing; stable Activity Snapshot identity.
+**Blocking:** Stage 0 sealing; stable Activity Snapshot identity. RESOLVED.
 
 ---
 
@@ -170,3 +171,79 @@ Until this is decided:
 ## 7. Review trigger
 
 Project Owner decision required before Stage 0 sealing or Model Generation 1.
+
+---
+
+## 8. ACCEPTANCE ADDENDUM (2026-08-06)
+
+**Decision: Option A, approved as follows (verbatim from the Project Owner):**
+
+> Snapshot scientific identity shall be `content_sha256 =
+> SHA256(records + scientific policy)`. Build/environment provenance shall
+> be separately represented as `build_provenance_sha256` and must not
+> alter scientific snapshot identity. Retrieval timestamps are provenance,
+> not identity-defining content. Existing A0 remains void; A1–A3 must be
+> migrated/re-frozen under the approved identity model rather than mutated.
+
+### 8.1 Implementation
+
+`src/orthosteric/data/snapshots/_builder.py`:
+
+```
+content_sha256 = SHA256( stable_json(content_view(sorted_records))
+                        + stable_json(policy.to_canonical_dict()) )
+
+build_provenance_sha256 = SHA256( stable_json(software.to_canonical_dict()) )
+
+snapshot_sha256 := content_sha256   # scientific identity
+snapshot_id = "SNAP-" + content_sha256[:12]
+```
+
+`content_view()` strips `retrieval_timestamp` from each record before
+hashing (`_PROVENANCE_ONLY_RECORD_FIELDS`); the field remains stored, just
+not identity-defining. `SnapshotManifestV2` carries a new
+`build_provenance_sha256` field, reportable but never identity-defining.
+
+### 8.2 Empirical verification (post-implementation)
+
+Re-running the §3 reproducibility experiment against the new code
+(`analysis/gdr010_reproducibility.py`, `analysis/validate_a4.py`) confirms:
+
+| Perturbation | `snapshot_sha256` | `build_provenance_sha256` |
+|---|---|---|
+| git_sha, git_dirty, python_version, os_platform, os_version, rdkit_version, orthosteric_version, lockfile_hash | unchanged | changed |
+| `retrieval_timestamp` inside records | unchanged | n/a |
+| genuine record edit (activity_value) | changed | n/a |
+| policy edit | changed | n/a |
+
+### 8.3 Migration
+
+A0 remains VOID (ADR-0013). A1, A2, A3 are retained on disk, unmutated, as
+the historical record of how the corpus reached its current isoform
+vocabulary and scaffold assignment — they were frozen under the pre-GDR-010
+single-hash scheme and are not retroactively rehashed.
+
+The migration to the approved identity model is Activity Snapshot **A4**:
+built from A3's exact harmonization output plus the GDR-011 fields
+(§ GDR-011 below), frozen under the new `SnapshotBuilder`, with
+`parent_snapshot_sha256` = A3's `snapshot_sha256` as recorded in A3's own
+manifest (i.e. under the scheme in effect when A3 was frozen — lineage
+records history as it happened, not as it would look under the current
+scheme).
+
+### 8.4 Tests
+
+`tests/data/snapshots/test_snapshot_builder.py`: 9 parametrized environment-
+invariance tests, 3 `build_provenance_sha256` sensitivity tests, 1
+reproducibility test, 1 `retrieval_timestamp`-invariance test. The
+pre-existing test that asserted the now-rejected behaviour
+(`rdkit_version` change → different `snapshot_sha256`) was rewritten to
+assert the approved behaviour.
+
+### 8.5 Residual, unresolved observation (not decided here)
+
+`CorpusProfile.profile_sha256` (GDR-002) still includes `SoftwareProvenance`
+in its own hash, independently of this decision — GDR-010's scope was
+snapshot identity, not profile identity. This tension is noted but not
+resolved by this GDR; a future GDR may need to extend the Option A split to
+`_profile.py` if profile identity is found to have the same problem.

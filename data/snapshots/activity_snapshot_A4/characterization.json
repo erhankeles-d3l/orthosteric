@@ -1,0 +1,89 @@
+{
+  "total_records": 39508,
+  "accepted_records": 39002,
+  "excluded_records": 506,
+  "per_isoform": {
+    "PI3Kalpha": 9848,
+    "PI3Kbeta": 4818,
+    "PI3Kgamma": 9330,
+    "PI3Kdelta": 15006
+  },
+  "unique_inchikeys": 16235,
+  "unique_documents": 712,
+  "unique_scaffold_families": 6331,
+  "c1_panels": 873,
+  "c1_four_isoform_panels": 260,
+  "c1_complete_compounds": 2427,
+  "legacy_fallback_records": 0,
+  "legacy_fallback_pct": 0.0,
+  "atp_status_counts": {
+    "unknown": 25449,
+    "known": 11464,
+    "ambiguous": 2089
+  },
+  "atp_status_pct": {
+    "unknown": 65.25,
+    "known": 29.39,
+    "ambiguous": 5.36
+  },
+  "replicate_groups": 782,
+  "censoring_distribution": {
+    "exact": 25135,
+    "right": 4712,
+    "left": 9155
+  },
+  "top_10_documents_by_records": [
+    [
+      "CHEMBL5729533",
+      2068
+    ],
+    [
+      "CHEMBL5725325",
+      1203
+    ],
+    [
+      "CHEMBL5726624",
+      824
+    ],
+    [
+      "CHEMBL1240340",
+      818
+    ],
+    [
+      "CHEMBL5727418",
+      816
+    ],
+    [
+      "CHEMBL5725838",
+      680
+    ],
+    [
+      "CHEMBL3886547",
+      656
+    ],
+    [
+      "CHEMBL5727800",
+      607
+    ],
+    [
+      "CHEMBL3638592",
+      596
+    ],
+    [
+      "CHEMBL5725589",
+      594
+    ]
+  ],
+  "snapshot_sha256": "05748f6627ead8f4177ee9deec51b1214920f4b8b86230da850dba9d429cc277",
+  "build_provenance_sha256": "a325a38f1255bc4ebc14706e1da85e12a3cd915f28df28bdaa556f3167eaebd3",
+  "parent_snapshot_sha256": "5e5e54cb5590da829aaccbd7e121d4197d38f1de9923799b8eec8a0296b171da",
+  "snapshot_id": "SNAP-05748f6627ea",
+  "chembl_version": "ChEMBL_37",
+  "targets_acquired": [
+    "CHEMBL4005",
+    "CHEMBL3145",
+    "CHEMBL3267",
+    "CHEMBL3130"
+  ],
+  "voided_predecessor": "SNAP-2b8f5ce6f236 (A0) - VOID per ADR-0013"
+}

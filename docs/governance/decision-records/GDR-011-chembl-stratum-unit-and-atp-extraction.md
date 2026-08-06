@@ -1,15 +1,20 @@
-# Governance Decision Record GDR-011 (DRAFT — NOT ACCEPTED) — ChEMBL Stratum Unit and ATP-Concentration Extraction
+# Governance Decision Record GDR-011 — ChEMBL Stratum Unit and ATP-Concentration Extraction
 
 **Category:** Scientific — definition of the within-study evaluation stratum
 (Constitution §2.3(1)) and of assay-comparability admissibility (§2.3(2)).
-**Status:** **DRAFT — awaiting Project Owner decision. NOT accepted. NOT implemented.**
+**Status:** **ACCEPTED — Issue 1: Option D. Issue 2: ATP as non-mandatory covariate. Implemented.**
 **Date raised:** 2026-08-06.
+**Date accepted:** 2026-08-06 (Project Owner decision).
 **Raised by:** Computational pipeline during Stage H QA of Activity Snapshot A3.
-**Affects:** SCI0-013 (`strata.py`), `quality/_dimensions.py` `CoverageEvaluator`,
-Constitution §2.3(1) and §2.3(2), engineering parameter `n_complete_compounds`.
-**Blocking:** Stage 0 sealing; corpus quality gate; Model Generation 1.
+**Affects:** SCI0-013 (`strata.py`), SCI0-014 (`graph.py`), new
+`orthosteric.data.comparability`, new
+`orthosteric.data.harmonization._atp_extraction`, `quality/_dimensions.py`
+`CoverageEvaluator`, Constitution §2.3(1) and §2.3(2), engineering parameter
+`n_complete_compounds`.
+**Blocking:** Stage 0 sealing; corpus quality gate; Model Generation 1. RESOLVED.
 **Evidence snapshot:** Activity Snapshot A3, `SNAP-5e5e54cb5590`
 (`5e5e54cb5590da829aaccbd7e121d4197d38f1de9923799b8eec8a0296b171da`).
+**Implementation snapshot:** Activity Snapshot A4, `SNAP-05748f6627ea`.
 
 ---
 
@@ -206,3 +211,103 @@ honest outcome given the above.
 
 Project Owner decision required before Stage 0 sealing. Issue 2 should be
 decided before or together with Issue 1 Option B.
+
+---
+
+## ACCEPTANCE ADDENDUM (2026-08-06)
+
+**Decision (verbatim from the Project Owner):**
+
+> GDR-011 Issue 1: Approve Option D. The primary within-study comparability
+> unit shall be `(study_id, bao_format, assay_type)`, i.e. C1. Retain a
+> hierarchical ATP-confirmed subset as a flagged/secondary stratum rather
+> than making it the primary comparability requirement. The previous
+> `(study_id, assay_id)` definition is rejected because it is structurally
+> incapable of producing four-isoform panels in ChEMBL.
+>
+> GDR-011 Issue 2: Approve ATP as a non-mandatory covariate/stratifier.
+> Preserve ATP status as `KNOWN` or `UNKNOWN`; never treat two unknown ATP
+> conditions as equivalent. Do not discard records solely because ATP is
+> unknown. Regex-derived ATP concentrations remain provisional until the
+> multi-value extraction ambiguity has been governed. In particular, do not
+> silently apply a first-match rule to the 2,089 ambiguous descriptions.
+
+Status is tracked as three values, not two: `KNOWN` / `AMBIGUOUS` / `UNKNOWN`
+— `AMBIGUOUS` is not folded into either `KNOWN` (no first-match rule) or a
+bare `UNKNOWN` (candidates are retained for future adjudication), matching
+the decision's explicit "do not silently apply a first-match rule."
+
+### Implementation
+
+**Comparability (Issue 1):** `src/orthosteric/data/comparability.py`.
+`resolve_panel_key(record)` returns `(key, tier)`; `tier` is
+`PanelKeyTier.C1_PRIMARY` when `bao_format`/`assay_type` are present, else
+`PanelKeyTier.LEGACY_FALLBACK` (preserved only for pre-GDR-011
+generic-algorithm test fixtures; never scientific evidence —
+`is_scientific_evidence` is `False`). `panel_key()` is the tier-blind bare
+key used by the union-find/stratum grouping mechanics in `graph.py` and
+`strata.py`; both were rewired onto it. `atp_confirmed_panel_key()`
+implements the secondary, flagged ATP-confirmed stratum (Option D
+"hierarchical"): it returns `None` whenever the panel itself is
+`LEGACY_FALLBACK`, or `atp_status` is not `"known"` — including
+`AMBIGUOUS` — so the secondary stratum is strictly narrower than
+`C1_PRIMARY`, never broader, and never fabricates a match between two
+`UNKNOWN`/`AMBIGUOUS` records.
+
+`graph.py`'s `GraphStats` gained `legacy_fallback_records` (audit-only
+counter). `strata.py`'s `WithinStudyStratum` gained `panel_tier`;
+`StratumReport.c1_primary_strata()` filters to scientific-evidence strata.
+A conservative rule was added: if ANY record contributing to a panel
+resolves to `LEGACY_FALLBACK` (by coincidental key collision), the whole
+panel is downgraded to `LEGACY_FALLBACK` — ambiguity never upgrades to
+`C1_PRIMARY`.
+
+**ATP (Issue 2):** `src/orthosteric/data/harmonization/_atp_extraction.py`.
+`extract_atp_status(description)` returns `AtpStatus.KNOWN` (exactly one
+numeric candidate), `AMBIGUOUS` (≥2 distinct numeric candidates — order of
+appearance in the text is irrelevant; verified by
+`test_ambiguous_candidates_order_independent`), or `UNKNOWN` (no numeric
+candidate, including radiolabel references such as `[gamma-33P]ATP` and
+Km-referenced text with no number). `AtpExtractionResult.concentration_um`
+is populated only for `KNOWN`; `candidate_values_um` retains every
+candidate for `AMBIGUOUS`, for future adjudication.
+
+**Harmonization pipeline:** `scripts/stage_bc_freeze_activity_snapshot.py`
+now reads `bao_format` directly from the raw ChEMBL payload (previously
+unparsed) and calls `extract_atp_status()` on `assay_description` for
+every record, before any admissibility filtering, so the field is present
+and auditable regardless of exclusion status.
+
+### Empirical result on Activity Snapshot A4
+
+| Metric | Value |
+|---|---:|
+| C1_PRIMARY panels | 873 |
+| LEGACY_FALLBACK records | 0 (all real ChEMBL records carry bao_format/assay_type) |
+| C1_PRIMARY complete four-isoform (panel, compound) pairs | 2,992 (`StratumReport`) |
+| ATP `KNOWN` | 11,464 (29.4%) |
+| ATP `AMBIGUOUS` | 2,089 (5.4%) — unchanged from the pre-acceptance evidence; none resolved |
+| ATP `UNKNOWN` | 25,449 (65.3%) |
+
+Stage 0 gate on A4 (`CorpusQualityGatePolicy`, unmodified):
+`coverage: non_degenerate_unquantified`, `missingness:
+non_degenerate_unquantified`, `connectivity: non_degenerate_unquantified`,
+`scaffold_diversity: governed_threshold_met`. Overall gate: **WARNING**
+(non-fatal: `confidence`, `structural_coverage` — both pre-existing,
+unrelated to this GDR). `eligible_for_training = True`.
+
+### Tests
+
+`tests/data/test_comparability.py` (17), `tests/data/harmonization/test_atp_extraction.py`
+(17), `tests/data/test_strata.py` (+5 for `panel_tier`/`c1_primary_strata()`,
+including the coincidental-collision downgrade case). All pre-existing
+`graph.py`/`strata.py` tests pass unchanged via the `LEGACY_FALLBACK`
+fallback.
+
+### What was explicitly NOT done
+
+No MMP transformation rule, switch-inclusion threshold, or S4b sharpness
+multiplier was frozen — GGR-002a and GGR-002b remain `GDR_REQUIRED` (see
+`data/snapshots/activity_snapshot_A4/ggr_reassessment.json`). This GDR
+resolves what a comparable panel and an ATP condition *are*; it does not
+resolve what counts as a valid MMP or a governed noise-floor multiplier.

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from orthosteric.data.comparability import PanelKeyTier
 from orthosteric.data.strata import (
     StratumEntry,
     extract_strata,
@@ -205,3 +206,88 @@ def test_publication_link_preserved() -> None:
     report = extract_strata(records)
     for entry in report.strata[0].entries:
         assert entry.publication_id == "doi:10.1234/test"
+
+
+# ── GDR-011 (accepted) Option D: panel_tier and C1-primary filtering ────────
+
+
+def _rec_c1(
+    ik: str,
+    isoform: str,
+    value: float | None,
+    study_id: str = "S1",
+    bao_format: str = "BAO_0000357",
+    assay_type: str = "B",
+) -> dict[str, Any]:
+    """Fixture WITH bao_format/assay_type -- resolves to C1_PRIMARY."""
+    return {
+        "inchikey": ik,
+        "isoform": isoform,
+        "study_id": study_id,
+        "bao_format": bao_format,
+        "assay_type": assay_type,
+        "activity_value": value,
+        "censoring": "exact",
+        "exclusion_reason": None,
+        "source_record_id": f"{ik}_{isoform}_{study_id}",
+        "publication_id": "doi:10.1/test",
+    }
+
+
+def test_fixture_without_protocol_fields_is_legacy_fallback() -> None:
+    """Pre-GDR-011 fixtures (only study_id/assay_id) resolve to
+    LEGACY_FALLBACK -- explicit, not silently treated as C1."""
+    records = [_rec(IK_A, "PI3Kalpha", 8.0)]
+    report = extract_strata(records)
+    assert report.strata[0].panel_tier is PanelKeyTier.LEGACY_FALLBACK
+    assert report.c1_primary_strata() == []
+
+
+def test_fixture_with_protocol_fields_is_c1_primary() -> None:
+    records = [
+        _rec_c1(IK_A, "PI3Kalpha", 8.0),
+        _rec_c1(IK_A, "PI3Kbeta", 5.0),
+        _rec_c1(IK_A, "PI3Kgamma", 4.5),
+        _rec_c1(IK_A, "PI3Kdelta", 6.0),
+    ]
+    report = extract_strata(records)
+    assert report.strata[0].panel_tier is PanelKeyTier.C1_PRIMARY
+    assert len(report.c1_primary_strata()) == 1
+    assert report.c1_primary_strata()[0].stratum_size == 1
+
+
+def test_two_chembl_assays_same_protocol_are_one_c1_stratum() -> None:
+    """The point of Option D: distinct ChEMBL assay_ids sharing
+    (study_id, bao_format, assay_type) merge into ONE C1_PRIMARY stratum,
+    which is exactly what makes a four-isoform panel possible on ChEMBL."""
+    records = [
+        {**_rec_c1(IK_A, "PI3Kalpha", 8.0), "assay_id": "CHEMBL_ASSAY_ALPHA"},
+        {**_rec_c1(IK_A, "PI3Kbeta", 5.0), "assay_id": "CHEMBL_ASSAY_BETA"},
+        {**_rec_c1(IK_A, "PI3Kgamma", 4.5), "assay_id": "CHEMBL_ASSAY_GAMMA"},
+        {**_rec_c1(IK_A, "PI3Kdelta", 6.0), "assay_id": "CHEMBL_ASSAY_DELTA"},
+    ]
+    report = extract_strata(records)
+    assert report.total_strata == 1  # one protocol stratum, four ChEMBL assays
+    assert report.strata[0].stratum_size == 1
+    assert report.strata[0].panel_tier is PanelKeyTier.C1_PRIMARY
+
+
+def test_mixed_tier_contributors_downgrade_stratum_to_legacy_fallback() -> None:
+    """Conservative rule: if any contributing record lacks protocol fields,
+    the whole (coincidentally colliding) stratum is LEGACY_FALLBACK, never
+    silently upgraded to C1_PRIMARY."""
+    c1_rec = _rec_c1(IK_A, "PI3Kalpha", 8.0, bao_format="X", assay_type="Y")
+    legacy_rec = {
+        "inchikey": IK_B,
+        "isoform": "PI3Kbeta",
+        "study_id": "S1",
+        "assay_id": "X::Y",  # coincidental collision with the C1 protocol string
+        "activity_value": 5.0,
+        "censoring": "exact",
+        "exclusion_reason": None,
+        "source_record_id": "collision",
+    }
+    report = extract_strata([c1_rec, legacy_rec])
+    assert report.total_strata == 1
+    assert report.strata[0].panel_tier is PanelKeyTier.LEGACY_FALLBACK
+    assert report.c1_primary_strata() == []

@@ -1,0 +1,22 @@
+{
+  "snapshot_sha256": "05748f6627ead8f4177ee9deec51b1214920f4b8b86230da850dba9d429cc277",
+  "c1_primary_panels": 789,
+  "legacy_fallback_records": 0,
+  "c1_complete_four_isoform_pairs": 1738,
+  "ggr002a": {
+    "status": "GDR_REQUIRED",
+    "same_scaffold_complete_pairs": 6469,
+    "sign_flip_candidates": 2578,
+    "studies_involved": 82
+  },
+  "ggr002b": {
+    "status": "GDR_REQUIRED",
+    "c1_replicate_groups": 852,
+    "median_sigma": 0.26046171103347393,
+    "atp_confirmed_replicate_groups": 136
+  },
+  "ggr010": {
+    "status": "CORPUS_INSUFFICIENT",
+    "mtor_records": 0
+  }
+}
