@@ -91,6 +91,7 @@ def test_selectivity_target_is_frozen() -> None:
         lr_vs_delta=1.0,
         ci_half=0.3,
         compound_id="CMP001",
+        smiles=None,
         assay_atp_mm=1.0,
         within_study=True,
     )

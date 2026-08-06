@@ -11,6 +11,7 @@ license = { file = "LICENSE" }
 dependencies = [
     "rdkit>=2024.3",  # SCI0-008b; RDKit version affects InChIKey (SCI0-011)
     "biopython>=1.84",  # SCI1-002; structural preprocessing (pocket geometry, rotamer, SASA)
+    "scikit-learn>=1.5",   # SCI1-020; proteochemometric baseline (PCM)
 ]
 
 [project.optional-dependencies]
@@ -111,6 +112,18 @@ strict = true
 warn_unreachable = true
 disallow_any_explicit = false
 files = ["src", "tests"]
+
+[[tool.mypy.overrides]]
+module = "sklearn.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "orthosteric.eval._baselines"
+warn_unreachable = false
+
+[[tool.mypy.overrides]]
+module = "orthosteric.eval._splitting"
+warn_unreachable = false
 
 [[tool.mypy.overrides]]
 # BioPython 1.87 ships no PEP 561 stubs; suppress per-module rather than sprinkling type:ignore

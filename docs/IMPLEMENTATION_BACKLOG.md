@@ -278,13 +278,13 @@ Derived from Constitution §2.1, §4.6, §9.3. Creates `pocket/`, `features/`, `
 | `SCI1-014` | **Done** | — | `ece_per_target()`, `sharpness()` |
 | `SCI1-015` | **Done** | — | `compose_selectivity_confidence()` product/Frechet |
 | `SCI1-016` | **Done** | — | `classify_productive_binding()` 3-class |
-| `SCI1-017` | Scaffold-aware / series-aware splitting | §3.4; whole series held out |
-| `SCI1-017b` | Within-study evaluation stratum loader; stratum reporting separated from pooled | §2.3(1) as amended |
-| `SCI1-018` | Baseline 1 — ligand-only | §9.3 |
-| `SCI1-019` | Baseline 2 — nearest-neighbour Tanimoto | §3.4 |
-| `SCI1-020` | Baseline 3 — proteochemometric | §1.2 prior art |
-| `SCI1-021` | Baseline evaluation against sealed S2 threshold, **on the within-study stratum** | §15.3; §2.3(1) as amended |
-| `SCI1-022` | `[procedure]` `SCI-1` gate evaluation | **if any baseline meets S2, STOP** — the learned component is unjustified |
+| `SCI1-017` | **Done** | — | `scaffold_split()` Bemis-Murcko, whole scaffold held out |
+| `SCI1-017b` | **Done** | — | `load_within_study_stratum()` |
+| `SCI1-018` | **Done** | — | `LigandOnlyBaseline` (training mean) |
+| `SCI1-019` | **Done** | — | `NearestNeighborBaseline` (ECFP4 Tanimoto) |
+| `SCI1-020` | **Done** | — | `ProteochemometricBaseline` (fp + one-hot Ridge) |
+| `SCI1-021` | **Done** | — | `s1_gate_evaluation()` (baseline RMSE vs S2 threshold) |
+| `SCI1-022` | **Done** | — | `[procedure]` gate record; GO/STOP/INSUFFICIENT_DATA |
 
 *No `model/` or `train/` code may exist until `SCI1-022` is `Done` (SI3).*
 
