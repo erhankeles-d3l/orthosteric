@@ -75,3 +75,17 @@ __all__ = [
     "is_censored",
     "run_adr0003_adjudication",
 ]
+
+# Lifecycle types (corpus_lifecycle)
+from orthosteric.data.corpus_lifecycle import (
+    CorpusDataMode as CorpusDataMode,
+)
+from orthosteric.data.corpus_lifecycle import (
+    CorpusLifecycleStage as CorpusLifecycleStage,
+)
+from orthosteric.data.corpus_lifecycle import (
+    CurrentCorpus as CurrentCorpus,
+)
+from orthosteric.data.corpus_lifecycle import (
+    DataModeViolation as DataModeViolation,
+)

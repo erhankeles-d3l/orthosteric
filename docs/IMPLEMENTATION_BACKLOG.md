@@ -301,6 +301,7 @@ Creates `model/`, `train/`, `eval/` (degeneracy battery, seals); `explain/` if P
 | GDR-007 | **Done** | — | Uncertainty = heteroscedastic_gaussian_v1 (2026-08-06) |
 | GDR-008 | **Done** | — | Censored likelihood = tobit1_censored_normal_v1 (2026-08-06) |
 | GDR-009 | **Done** | — | Loss = tobit1_gaussian_nll_equal_weight_v1; validation = scaffold_loso_cv_v1 (2026-08-06) |
+| corpus-lifecycle | **Done** | — | CurrentCorpus, SnapshotDiff, CorpusSnapshotRegistry, CorpusLifecyclePipeline; 24 lifecycle invariant tests |
 | GGR-002a | **Pending** | — | MMP switch set — CORPUS_REQUIRED (real data) |
 | GGR-002b | **Pending** | — | S4b sharpness multiplier — CORPUS_REQUIRED (real data) |
 

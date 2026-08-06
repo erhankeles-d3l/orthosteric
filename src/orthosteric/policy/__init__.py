@@ -81,3 +81,16 @@ __all__ = [
     "SelectivityVector",
     "UncertaintyPolicy",
 ]
+
+from orthosteric.policy._lifecycle_pipeline import (
+    LIFECYCLE_PIPELINE_VERSION as LIFECYCLE_PIPELINE_VERSION,
+)
+from orthosteric.policy._lifecycle_pipeline import (
+    CorpusLifecyclePipeline as CorpusLifecyclePipeline,
+)
+from orthosteric.policy._lifecycle_pipeline import (
+    LifecycleEligibility as LifecycleEligibility,
+)
+from orthosteric.policy._lifecycle_pipeline import (
+    LifecyclePipelineResult as LifecyclePipelineResult,
+)
