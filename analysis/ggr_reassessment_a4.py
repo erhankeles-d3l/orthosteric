@@ -1,215 +1,172 @@
 """GGR-002a/002b/010 recomputation on Activity Snapshot A4, under the
-Project-Owner-approved GDR-010/GDR-011 policies.
+Project-Owner-approved GDR-010/011/012/013/014 policies.
 
-Uses ONLY orthosteric.data.comparability (resolve_panel_key,
-atp_confirmed_panel_key) and orthosteric.data.harmonization._atp_extraction
--- the governed modules -- never ad-hoc inline key construction.
+Uses ONLY orthosteric.data.comparability, orthosteric.data.mmp_candidates,
+and orthosteric.data.noise_floor -- the governed modules -- never ad-hoc
+inline key construction or aggregation. This supersedes the prior version
+of this script, which built its own last-write-wins panel index; that
+defect is fixed by GDR-013's replicate_aggregation module, now used here.
 
-This is ANALYSIS / not governed pipeline code.  No MMP transformation rule,
-no S4b sharpness multiplier, and no dual-inhibitor inclusion rule is
-invented here.  Where the existing governance has not sealed such a rule,
-this script reports GDR_REQUIRED / CORPUS_INSUFFICIENT and stops.
+This is ANALYSIS / not governed pipeline code in itself (it reads A4 and
+writes a report; it does not decide new policy). No MMP transformation
+rule beyond GDR-012's EXPLORATORY_BEMIS_MURCKO classification, no switch-
+magnitude multiplier, and no dual-inhibitor inclusion rule is invented
+here. A4 is read-only throughout; this script does not modify it.
 """
-import sys, json, gzip, pathlib, statistics
-from collections import Counter, defaultdict
+
+from __future__ import annotations
+
+import gzip
+import json
+import sys
+from collections import Counter
+from pathlib import Path
+
 sys.path.insert(0, "src")
 
-from orthosteric.data.comparability import PanelKeyTier, resolve_panel_key, atp_confirmed_panel_key
+from orthosteric.data.mmp_candidates import generate_exploratory_scaffold_pairs
+from orthosteric.data.noise_floor import compute_isoform_noise_floors, switch_magnitude_multiplier_status
+from orthosteric.data.replicate_aggregation import ReplicateType, aggregate_records_by_cell
 
-A4 = pathlib.Path("data/snapshots/activity_snapshot_A4")
+A4 = Path("data/snapshots/activity_snapshot_A4")
 man = json.loads((A4 / "manifest.json").read_text())
 with gzip.open(A4 / "records.json.gz", "rt") as f:
     recs = json.load(f)
 acc = [r for r in recs if not r.get("exclusion_reason")]
-T1 = {"PI3Kalpha", "PI3Kbeta", "PI3Kgamma", "PI3Kdelta"}
-
-def pact(r):
-    v = r.get("pchembl_value")
-    try:
-        return float(v) if v is not None else None
-    except Exception:
-        return None
-
-# ── Build C1_PRIMARY-only panel index (GDR-011 Option D) ─────────────────────
-panel_cmpd_iso_val = defaultdict(lambda: defaultdict(dict))  # key -> ik -> iso -> pact
-panel_cmpd_scaf = defaultdict(dict)  # key -> ik -> scaffold_family_id
-n_legacy = 0
-for r in acc:
-    resolved = resolve_panel_key(r)
-    if not resolved.is_scientific_evidence:
-        n_legacy += 1
-        continue
-    key = resolved.key
-    ik = r.get("inchikey")
-    if not ik:
-        continue
-    p = pact(r)
-    if p is not None:
-        panel_cmpd_iso_val[key][ik][r.get("isoform")] = p
-    fam = r.get("scaffold_family_id")
-    if fam:
-        panel_cmpd_scaf[key][ik] = fam
-
-print(f"=== Panel index (C1_PRIMARY only; GDR-011 Option D) ===")
-print(f"  A4 accepted records:       {len(acc)}")
-print(f"  LEGACY_FALLBACK records:   {n_legacy} (excluded from all evidence below)")
-print(f"  C1_PRIMARY panels:         {len(panel_cmpd_iso_val)}")
-
-complete_pact = {}
-for key, cm in panel_cmpd_iso_val.items():
-    for ik, isod in cm.items():
-        if T1.issubset(isod):
-            complete_pact.setdefault(ik, {})
-            for iso, v in isod.items():
-                complete_pact[ik][iso] = v  # last-writer if seen in >1 complete panel
-
-n_complete_compounds = sum(
-    1 for key, cm in panel_cmpd_iso_val.items()
-    for ik, isod in cm.items() if T1.issubset(isod)
-)
-print(f"  C1_PRIMARY complete four-isoform (panel,compound) pairs: {n_complete_compounds}")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# GGR-002a -- MMP / selectivity-switch candidates
+# GGR-002a -- exploratory scaffold-pair candidates (GDR-012)
 # ══════════════════════════════════════════════════════════════════════════════
-print(f"\n{'='*70}\nGGR-002a\n{'='*70}")
+print(f"{'=' * 70}\nGGR-002a (GDR-012)\n{'=' * 70}")
 
-pairs_examined = 0
-sign_flip_candidates = 0
-same_scaffold_pairs = []
-studies_involved = set()
+scaffold_report = generate_exploratory_scaffold_pairs(acc)
 
-for key, cm in panel_cmpd_iso_val.items():
-    complete_iks = [ik for ik, isod in cm.items() if T1.issubset(isod)]
-    by_scaf = defaultdict(list)
-    for ik in complete_iks:
-        fam = panel_cmpd_scaf.get(key, {}).get(ik)
-        if fam:
-            by_scaf[fam].append(ik)
-    for fam, members in by_scaf.items():
-        for i in range(len(members)):
-            for j in range(i + 1, len(members)):
-                a_ik, b_ik = members[i], members[j]
-                a, b = cm[a_ik], cm[b_ik]
-                pairs_examined += 1
-                studies_involved.add(key[0])
-                flips = []
-                for x in ("PI3Kbeta", "PI3Kgamma", "PI3Kdelta"):
-                    da = a["PI3Kalpha"] - a[x]
-                    db = b["PI3Kalpha"] - b[x]
-                    if da * db < 0:
-                        flips.append((x, da, db))
-                if flips:
-                    sign_flip_candidates += 1
-                    same_scaffold_pairs.append((key, a_ik, b_ik, flips))
-
-print("GOVERNANCE STATUS: MMP transformation and switch-inclusion criteria")
-print("are NOT sealed by any accepted GDR (Constitution S5/§3.6 curated MMP")
-print("switch set was never frozen). This script does not invent one.")
+print("GOVERNANCE STATUS (GDR-012, accepted): every candidate below carries")
+print("evidence_class=EXPLORATORY_BEMIS_MURCKO. This is NOT matched molecular")
+print("pair (MMP) evidence -- see GDR-012 for the exact reasons why.")
 print()
-print("CORPUS-DERIVED OBSERVATION (not a governance rule):")
-print(f"  Same-scaffold, same-C1-panel, complete-4-isoform pairs examined: {pairs_examined}")
-print(f"  Pairs with >=1 isoform showing an alpha-vs-X selectivity SIGN change: {sign_flip_candidates}")
-print(f"  Distinct studies (study_id) contributing such pairs: {len(studies_involved)}")
-if same_scaffold_pairs:
-    print(f"\n  First 5 sign-flip candidates:")
-    for key, a_ik, b_ik, flips in same_scaffold_pairs[:5]:
-        print(f"    panel={key[0][:20]}.../{key[1][:30]} {a_ik[:16]} vs {b_ik[:16]}: {flips}")
+print("CORPUS-DERIVED OBSERVATION (deterministic aggregation, GDR-013):")
+print(f"  Same-scaffold, same-C1-panel, complete-4-isoform pairs examined: "
+      f"{scaffold_report.n_pairs_examined}")
+print(f"  Pairs with >=1 isoform showing an alpha-vs-X selectivity SIGN change: "
+      f"{scaffold_report.n_sign_flip_candidates}")
+print(f"  Distinct studies (study_id) contributing such pairs: "
+      f"{scaffold_report.n_studies_involved}")
+print(f"  Compounds excluded (censored/unclassified required-isoform cell, "
+      f"GDR-012 sec 3.3): {scaffold_report.n_compounds_excluded_censored_required_isoform}")
+
+sigma_basis_counts = Counter(c.sigma_diff_basis for c in scaffold_report.candidates)
+print(f"\n  sigma_diff basis used for magnitude_over_sigma (fallback order, "
+      f"never invented): {dict(sigma_basis_counts)}")
+
+ratios = [c.magnitude_over_sigma for c in scaffold_report.candidates if c.magnitude_over_sigma]
+if ratios:
+    below_2 = sum(1 for r in ratios if r < 2)
+    below_3 = sum(1 for r in ratios if r < 3)
+    print(f"  Of {len(ratios)} candidates with a usable sigma_diff reference:")
+    print(f"    magnitude < 2x sigma_diff: {below_2} ({100*below_2/len(ratios):.1f}%)")
+    print(f"    magnitude < 3x sigma_diff: {below_3} ({100*below_3/len(ratios):.1f}%)")
+    print(f"  (descriptive only -- neither 2x nor 3x is a chosen governance threshold)")
+
+print(f"\n  switch_magnitude_multiplier_status(): {switch_magnitude_multiplier_status()}")
 
 ggr002a_status = "GDR_REQUIRED"
 print(f"\nGGR-002a = {ggr002a_status}")
-print("  Rationale: candidate pairs are corpus-derived and reproducible, but no")
-print("  accepted GDR defines what makes a pair a valid MMP or what selectivity-")
-print("  switch magnitude counts as a governed 'switch'. Freezing either now")
-print("  would be inventing governance, which this script must not do.")
+print("  Rationale: candidate pairs are now deterministic and provenance-preserving")
+print("  (GDR-013), and explicitly classified EXPLORATORY_BEMIS_MURCKO, not MMP")
+print("  (GDR-012). No accepted GDR defines a true MMP transformation or a switch-")
+print("  magnitude multiplier -- both remain explicit Project Owner decisions.")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# GGR-002b -- within-study noise floor
+# GGR-002b -- per-isoform / per-isoform-pair noise floor (GDR-013)
 # ══════════════════════════════════════════════════════════════════════════════
-print(f"\n{'='*70}\nGGR-002b\n{'='*70}")
+print(f"\n{'=' * 70}\nGGR-002b (GDR-013)\n{'=' * 70}")
 
-rep_groups = defaultdict(list)
-for r in acc:
-    resolved = resolve_panel_key(r)
-    if not resolved.is_scientific_evidence:
-        continue
-    p = pact(r)
-    if p is None:
-        continue
-    key = (resolved.key, r.get("inchikey"), r.get("isoform"))
-    rep_groups[key].append(p)
+cells = aggregate_records_by_cell(acc)
+n_true = sum(1 for c in cells.values() if c.replicate_type is ReplicateType.TRUE_REPLICATE)
+n_cross = sum(1 for c in cells.values() if c.replicate_type is ReplicateType.CROSS_ASSAY)
+print(f"C1_PRIMARY cells with >=2 exact obs -- TRUE_REPLICATE: {n_true}, CROSS_ASSAY: {n_cross}")
 
-multi = {k: v for k, v in rep_groups.items() if len(v) >= 2}
-print(f"C1_PRIMARY replicate groups (n>=2 same compound x isoform x panel): {len(multi)}")
-if multi:
-    sds = [statistics.stdev(v) for v in multi.values()]
-    iso_cov = Counter(k[2] for k in multi)
-    print(f"  Total replicate observations: {sum(len(v) for v in multi.values())}")
-    print(f"  median sigma (pAct units):    {statistics.median(sds):.3f}")
-    print(f"  mean sigma:                   {statistics.mean(sds):.3f}")
-    print(f"  p90 sigma:                    {sorted(sds)[int(0.9*len(sds))-1]:.3f}")
-    print(f"  isoform coverage:             {dict(iso_cov)}")
-else:
-    print("  No C1_PRIMARY replicate groups found.")
+per_iso_report = {}
+for iso, floor in compute_isoform_noise_floors(cells).items():
+    per_iso_report[iso] = floor
+    print(f"\n  {iso}:")
+    print(f"    TRUE_REPLICATE:  n={floor.n_true_replicate_groups:4}  "
+          f"median sigma={floor.sigma_true_replicate}")
+    print(f"    CROSS_ASSAY:     n={floor.n_cross_assay_groups:4}  "
+          f"median sigma={floor.sigma_cross_assay}")
+    print(f"    pooled (reference only, NOT recommended): n={floor.n_pooled_groups:4}  "
+          f"median sigma={floor.sigma_pooled}")
 
-# ATP-confirmed secondary stratum replicate check (GDR-011 Option D secondary)
-atp_rep_groups = defaultdict(list)
-for r in acc:
-    atp_key = atp_confirmed_panel_key(r)
-    if atp_key is None:
-        continue
-    p = pact(r)
-    if p is None:
-        continue
-    full_key = (atp_key, r.get("inchikey"), r.get("isoform"))
-    atp_rep_groups[full_key].append(p)
-atp_multi = {k: v for k, v in atp_rep_groups.items() if len(v) >= 2}
-print(f"\nATP-CONFIRMED secondary-stratum replicate groups (n>=2): {len(atp_multi)}")
-if atp_multi:
-    sds2 = [statistics.stdev(v) for v in atp_multi.values()]
-    print(f"  median sigma: {statistics.median(sds2):.3f}  (n={len(atp_multi)} groups)")
+pair_floors = scaffold_report.isoform_pair_noise_floors
+print(f"\n  Per-isoform-pair sigma_diff (sqrt-sum-of-squares, independence assumed):")
+for (a, b), pf in pair_floors.items():
+    print(f"    ({a}, {b}): true_replicate={pf.sigma_diff_true_replicate}  "
+          f"cross_assay={pf.sigma_diff_cross_assay}  pooled={pf.sigma_diff_pooled}")
 
-ggr002b_status = "CORPUS_INSUFFICIENT" if not multi else "GDR_REQUIRED"
+ggr002b_status = "GDR_REQUIRED"
 print(f"\nGGR-002b = {ggr002b_status}")
-print("  Rationale: within-study sigma is corpus-derived and reproducible above.")
-print("  No accepted GDR specifies the S4b sharpness MULTIPLIER derived from it,")
-print("  or the minimum group count/isoform coverage required to seal one.")
-print("  This script reports the statistics; it does not choose a multiplier.")
+print("  Rationale: per-isoform, per-replicate-type noise statistics are now")
+print("  corpus-derived, deterministic, and reproducible (GDR-013). No accepted")
+print("  GDR specifies which figure (if any) becomes a downstream noise-floor")
+print("  multiplier for a specific consumer (e.g. a loss-function scale).")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# GGR-010 -- dual PI3K/mTOR census
+# GGR-010 -- dual PI3K/mTOR census (GDR-014: evidence gap, not a hard gate)
 # ══════════════════════════════════════════════════════════════════════════════
-print(f"\n{'='*70}\nGGR-010\n{'='*70}")
+print(f"\n{'=' * 70}\nGGR-010 (GDR-014)\n{'=' * 70}")
 print("mTOR ChEMBL target: NOT ACQUIRED. Activity Snapshot A4 contains no")
-print("mTOR (CHEMBL2842 candidate, unverified in ChEMBL 37) activity records.")
-print("No pathway-, docking-, structural-similarity-, or model-based inference")
-print("substitutes for direct mTOR activity evidence (per governance instructions).")
-print(f"\nGGR-010 = CORPUS_INSUFFICIENT")
-print("  Rationale: zero mTOR activity records in A4 -- there is no explicit")
-print("  dual PI3K/mTOR evidence to report, positive or negative.")
+print("mTOR activity records. Per GDR-014 (accepted): this is a documented")
+print("evidence gap, explicitly scoped OUT of Model Generation 1 eligibility --")
+print("not a hard training gate. No pathway-, docking-, structural-similarity-,")
+print("or model-based inference substitutes for direct mTOR activity evidence.")
+print(f"\nGGR-010 = CORPUS_INSUFFICIENT (evidence gap, non-blocking per GDR-014)")
 
 # ── Write machine-readable summary ────────────────────────────────────────────
 out = {
     "snapshot_sha256": man["snapshot_sha256"],
-    "c1_primary_panels": len(panel_cmpd_iso_val),
-    "legacy_fallback_records": n_legacy,
-    "c1_complete_four_isoform_pairs": n_complete_compounds,
+    "governance": {
+        "ggr002a_gdr": "GDR-012",
+        "ggr002b_gdr": "GDR-013",
+        "ggr010_gdr": "GDR-014",
+    },
     "ggr002a": {
         "status": ggr002a_status,
-        "same_scaffold_complete_pairs": pairs_examined,
-        "sign_flip_candidates": sign_flip_candidates,
-        "studies_involved": len(studies_involved),
+        "evidence_class": "EXPLORATORY_BEMIS_MURCKO",
+        "n_pairs_examined": scaffold_report.n_pairs_examined,
+        "n_sign_flip_candidates": scaffold_report.n_sign_flip_candidates,
+        "n_studies_involved": scaffold_report.n_studies_involved,
+        "n_compounds_excluded_censored_required_isoform":
+            scaffold_report.n_compounds_excluded_censored_required_isoform,
+        "switch_magnitude_multiplier_status": switch_magnitude_multiplier_status(),
     },
     "ggr002b": {
         "status": ggr002b_status,
-        "c1_replicate_groups": len(multi),
-        "median_sigma": statistics.median(sds) if multi else None,
-        "atp_confirmed_replicate_groups": len(atp_multi),
+        "n_true_replicate_cells": n_true,
+        "n_cross_assay_cells": n_cross,
+        "per_isoform": {
+            iso: {
+                "n_true_replicate_groups": f.n_true_replicate_groups,
+                "sigma_true_replicate": f.sigma_true_replicate,
+                "n_cross_assay_groups": f.n_cross_assay_groups,
+                "sigma_cross_assay": f.sigma_cross_assay,
+            }
+            for iso, f in per_iso_report.items()
+        },
+        "per_isoform_pair_sigma_diff": {
+            f"{a}_{b}": {
+                "true_replicate": pf.sigma_diff_true_replicate,
+                "cross_assay": pf.sigma_diff_cross_assay,
+                "pooled_reference_only": pf.sigma_diff_pooled,
+            }
+            for (a, b), pf in pair_floors.items()
+        },
     },
     "ggr010": {
         "status": "CORPUS_INSUFFICIENT",
+        "scope": "evidence_gap_non_blocking_per_gdr014",
         "mtor_records": 0,
     },
 }
 (A4 / "ggr_reassessment.json").write_text(json.dumps(out, indent=2))
-print(f"\nWrote {A4}/ggr_reassessment.json")
+print(f"\nWrote {A4}/ggr_reassessment.json (A4 itself not modified)")

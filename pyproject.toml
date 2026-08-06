@@ -40,7 +40,7 @@ select = ["E","F","I","N","UP","B","A","C4","DTZ","PT","RET","SIM","ARG","PL","R
 ignore = ["D203","D213"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "PLR2004", "D103", "D205", "D209", "PLR0913", "PLR0917", "RUF002", "ANN401"]
+"tests/*" = ["S101", "PLR2004", "D103", "D205", "D209", "PLR0913", "PLR0917", "RUF002", "ANN401", "ANN001", "ANN202", "RUF005"]
 "scripts/*" = ["S603", "S607", "S605", "S101", "PLR2004", "D103", "D205", "D400", "ANN", "T201", "INP001", "PLR0912", "PLR0915", "C901", "BLE001", "S110", "S112"]
 "src/orthosteric/pocket/_pocket_geometry.py" = ["RUF002", "ANN401"]
 "src/orthosteric/pocket/_rotamer_state.py" = ["RUF002", "RUF003", "ANN401"]

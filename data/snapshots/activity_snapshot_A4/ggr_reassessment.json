@@ -1,22 +1,70 @@
 {
   "snapshot_sha256": "05748f6627ead8f4177ee9deec51b1214920f4b8b86230da850dba9d429cc277",
-  "c1_primary_panels": 789,
-  "legacy_fallback_records": 0,
-  "c1_complete_four_isoform_pairs": 1738,
+  "governance": {
+    "ggr002a_gdr": "GDR-012",
+    "ggr002b_gdr": "GDR-013",
+    "ggr010_gdr": "GDR-014"
+  },
   "ggr002a": {
     "status": "GDR_REQUIRED",
-    "same_scaffold_complete_pairs": 6469,
-    "sign_flip_candidates": 2578,
-    "studies_involved": 82
+    "evidence_class": "EXPLORATORY_BEMIS_MURCKO",
+    "n_pairs_examined": 6469,
+    "n_sign_flip_candidates": 3256,
+    "n_studies_involved": 82,
+    "n_compounds_excluded_censored_required_isoform": 1254,
+    "switch_magnitude_multiplier_status": "RULE_MISSING/GDR_REQUIRED"
   },
   "ggr002b": {
     "status": "GDR_REQUIRED",
-    "c1_replicate_groups": 852,
-    "median_sigma": 0.26046171103347393,
-    "atp_confirmed_replicate_groups": 136
+    "n_true_replicate_cells": 420,
+    "n_cross_assay_cells": 432,
+    "per_isoform": {
+      "PI3Kalpha": {
+        "n_true_replicate_groups": 80,
+        "sigma_true_replicate": 0.0636396103067895,
+        "n_cross_assay_groups": 126,
+        "sigma_cross_assay": 0.27247478045812085
+      },
+      "PI3Kbeta": {
+        "n_true_replicate_groups": 32,
+        "sigma_true_replicate": 0.2262741699796948,
+        "n_cross_assay_groups": 109,
+        "sigma_cross_assay": 0.19091883092036754
+      },
+      "PI3Kgamma": {
+        "n_true_replicate_groups": 52,
+        "sigma_true_replicate": 0.0,
+        "n_cross_assay_groups": 87,
+        "sigma_cross_assay": 0.8485281374238578
+      },
+      "PI3Kdelta": {
+        "n_true_replicate_groups": 256,
+        "sigma_true_replicate": 0.3181980515339462,
+        "n_cross_assay_groups": 110,
+        "sigma_cross_assay": 0.4242640687119289
+      }
+    },
+    "per_isoform_pair_sigma_diff": {
+      "PI3Kalpha_PI3Kbeta": {
+        "true_replicate": 0.23505318547086282,
+        "cross_assay": 0.33270483312645316,
+        "pooled_reference_only": 0.2541944015687669
+      },
+      "PI3Kalpha_PI3Kgamma": {
+        "true_replicate": 0.0636396103067895,
+        "cross_assay": 0.8912028422226348,
+        "pooled_reference_only": 0.4535028046097438
+      },
+      "PI3Kalpha_PI3Kdelta": {
+        "true_replicate": 0.3244996147917589,
+        "cross_assay": 0.5042246582483858,
+        "pooled_reference_only": 0.4067121756093655
+      }
+    }
   },
   "ggr010": {
     "status": "CORPUS_INSUFFICIENT",
+    "scope": "evidence_gap_non_blocking_per_gdr014",
     "mtor_records": 0
   }
 }

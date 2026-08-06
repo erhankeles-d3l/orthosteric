@@ -1,8 +1,13 @@
 # Stage 0 Assessment — Activity Snapshot A4
 
-**Date:** 2026-08-06
-**Snapshot:** A4, `SNAP-05748f6627ea`
-**Governance basis:** GDR-010 (accepted, Option A), GDR-011 (accepted, Option D + ATP covariate)
+**Date:** 2026-08-06 (updated after GDR-012/013/014)
+**Snapshot:** A4, `SNAP-05748f6627ea` (unmodified throughout every update below —
+verified via `md5sum` of `manifest.json`/`records.json.gz` before and after
+each rerun in this session)
+**Governance basis:** GDR-010 (Option A), GDR-011 (Option D + ATP covariate),
+GDR-012 (exploratory scaffold-pair evidence classification), GDR-013
+(deterministic aggregation + per-isoform-pair noise floor), GDR-014
+(GGR-010 scope: evidence gap, non-blocking)
 
 ## Verdict
 
@@ -62,12 +67,60 @@ consumes (per GDR-002/GDR-003).
 
 | GGR | Status | Reason |
 |---|---|---|
-| GGR-002a | `GDR_REQUIRED` | corpus-derived pair/sign-flip counts computed (6,469 pairs, 2,578 sign-flip candidates, 82 studies); no MMP transformation or switch-inclusion criterion is sealed |
-| GGR-002b | `GDR_REQUIRED` | corpus-derived noise statistics computed (852 groups, median σ=0.260, ATP-confirmed subset 136 groups median σ=0.382); no S4b sharpness multiplier is sealed |
-| GGR-010 | `CORPUS_INSUFFICIENT` | zero mTOR activity records in A4 (mTOR ChEMBL ID unverified/unacquired) |
+| GGR-002a | `GDR_REQUIRED` | GDR-012: 6,469 EXPLORATORY_BEMIS_MURCKO pairs (deterministic, GDR-013 aggregation), 3,256 sign-flip candidates, 82 studies, 1,254 compounds excluded (censored/unclassified required-isoform cell). No true-MMP definition or switch-magnitude multiplier is sealed — `switch_magnitude_multiplier_status() == "RULE_MISSING/GDR_REQUIRED"` unconditionally |
+| GGR-002b | `GDR_REQUIRED` | GDR-013: per-isoform, per-replicate-type sigma computed and separated (TRUE_REPLICATE 420 cells / CROSS_ASSAY 432 cells); per-isoform-pair sigma_diff computed for (α,β)/(α,γ)/(α,δ). No single figure is sealed as a downstream multiplier for any specific consumer |
+| GGR-010 | `CORPUS_INSUFFICIENT` | GDR-014: zero mTOR activity records in A4; explicitly re-scoped as a documented evidence gap, non-blocking for Model Generation 1 |
 
-None of these three statuses was changed to force a different outcome; all
-three were already this way in the pre-A4 decision package and remain so.
+None of these three statuses was changed to force a different outcome.
+
+## Effect of the GDR-012/013 aggregation fix (this update)
+
+Replacing the prior last-write-wins panel index with GDR-013's
+deterministic median aggregation changed two GGR-002a figures, as
+expected — the pair *universe* is identical (6,469 pairs both before and
+after, confirming no compounds were added or removed), but resolving
+ambiguous multi-record cells to a principled median rather than an
+arbitrary "whichever record iterated last" changed which specific pairs
+register as sign-flips:
+
+| Metric | Before (last-write-wins) | After (GDR-013 median) |
+|---|---:|---:|
+| Pairs examined | 6,469 | 6,469 (unchanged — same compound universe) |
+| Sign-flip candidates | 2,578 | 3,256 |
+
+This increase is the corrected figure, not a regression — it reflects
+that some of the 473 previously-ambiguous cells (>0.3 pAct spread between
+candidate values) were, by chance, resolved toward the non-flip value
+under last-write-wins.
+
+Per-isoform TRUE_REPLICATE vs CROSS_ASSAY sigma (GDR-013), on A4:
+
+| Isoform | TRUE_REPLICATE (n, median σ) | CROSS_ASSAY (n, median σ) |
+|---|---|---|
+| PI3Kα | 80, 0.064 | 126, 0.272 |
+| PI3Kβ | 32, 0.226 | 109, 0.191 |
+| PI3Kγ | 52, 0.000¹ | 87, 0.849 |
+| PI3Kδ | 256, 0.318 | 110, 0.424 |
+
+¹ 27 of 52 PI3Kγ true-replicate cells have two source records reporting an
+identical rounded pAct value (e.g. `6.57` from two distinct ChEMBL
+activity IDs, same assay) — a real feature of the data (exact ties at
+reporting precision), not a computation defect; verified by direct
+inspection. This pulls the median toward zero and is a genuine reason a
+single pooled isoform sigma would understate PI3Kγ's true measurement
+noise for non-tied observations.
+
+Per-isoform-pair σ_diff (independence assumed, GDR-013 §3.3):
+
+| Pair | true_replicate | cross_assay | pooled (reference only) |
+|---|---:|---:|---:|
+| (α, β) | 0.235 | 0.333 | 0.254 |
+| (α, γ) | 0.064 | 0.891 | 0.454 |
+| (α, δ) | 0.324 | 0.504 | 0.407 |
+
+The (α, γ) true_replicate figure is depressed by the same tied-value
+effect noted above and should not be read as representative without that
+caveat.
 
 ## Explicit non-progression
 

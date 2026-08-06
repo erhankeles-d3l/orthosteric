@@ -25,8 +25,8 @@
   "graph_stats": {
     "total_compounds": 16235,
     "per_isoform": {
-      "PI3Kbeta": 3641,
       "PI3Kdelta": 10421,
+      "PI3Kbeta": 3641,
       "PI3Kalpha": 8059,
       "PI3Kgamma": 6896
     },
