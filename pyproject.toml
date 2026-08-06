@@ -86,6 +86,7 @@ ignore = ["D203","D213"]
     "E702",
 ]
 "src/orthosteric/eval/_productive_binding.py" = ["PLR0912", "PLR0913", "PLR0917"]
+"src/orthosteric/learning/_interfaces.py" = ["S105"]  # DegeneracyTestStatus.PASS is not a password
 "src/orthosteric/eval/_uncertainty.py" = ["PLR0913", "PLR0917"]
 "src/orthosteric/features/_pipeline.py" = [
     "ANN401",    # BioPython bio_structure typed as Any
