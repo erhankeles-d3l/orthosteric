@@ -56,6 +56,55 @@ measurement only.
 
 ---
 
+### Added — SCI1-004: Protein-Ligand Interaction Fingerprints
+
+**Files added:**
+- `src/orthosteric/features/_interaction_fingerprint.py` (820 lines)
+- Updated `src/orthosteric/features/__init__.py` with all public exports
+- `tests/features/test_sci1004_interaction_fingerprint.py` (32 tests, I1-I32)
+
+**New public API:**
+  `InteractionType` (8 values), `InteractionStatus` (5 values),
+  `FingerprintConfig`, `InteractionEvidence`, `InteractionFingerprint`,
+  `ComparativeFingerprint`, `compute_interaction_fingerprint()`,
+  `build_comparative_fingerprint()`
+
+**Eight interaction classes implemented:**
+
+| Class | Detection | Threshold |
+|---|---|---|
+| Hydrogen bond | N/O donor/acceptor pairs, D...A distance | RULE_MISSING |
+| Salt bridge | ARG/LYS/HIS vs ASP/GLU N/O pairs | RULE_MISSING |
+| pi-pi | Ring centroid (RDKit SMILES) + residue ring tables | RULE_MISSING |
+| Cation-pi | Protein ring vs ligand N; ligand ring vs protein cation | RULE_MISSING |
+| Hydrophobic | Nonpolar C/S atoms by residue type | RULE_MISSING |
+| Water-mediated | Explicit HOH only, never inferred | RULE_MISSING |
+| Halogen bond | CL/BR/I elements; C-X...A angle approximated | RULE_MISSING |
+| Metal coordination | Explicit metal elements (MG/ZN/CA/MN/FE/CU/NI/CO) | RULE_MISSING |
+
+**Scientific governance:**
+All classification thresholds in `FingerprintConfig` default to `None`
+(RULE_MISSING). Raw geometry (distances, angles, dihedrals) is always
+preserved. When a Governance Decision Record seals a threshold, the status
+automatically classifies as OBSERVED/ABSENT without code changes.
+
+**Comparative architecture:**
+`ComparativeFingerprint.canonical_comparison(pos)` returns interaction
+evidence at a given canonical residue position (from SCI1-003) across all
+four isoforms simultaneously. This is the joint structural representation
+required by Constitution §4.2.
+
+**AlphaFold hierarchy enforced:**
+If a structure's `StructureSource` is `ALPHAFOLD_GOVERNED_FALLBACK` and the
+ligand is absent, all evidence records carry `UNAVAILABLE` status. The module
+never fabricates interaction geometry.
+
+**Five status values kept strictly distinct:**
+`OBSERVED`, `ABSENT`, `UNAVAILABLE`, `RULE_MISSING`, `NOT_APPLICABLE` are
+never collapsed.
+
+---
+
 ### Added — SCI1-003: Cross-Isoform Residue Correspondence Data Model
 
 **Files added:**
