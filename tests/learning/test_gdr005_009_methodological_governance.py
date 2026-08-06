@@ -44,6 +44,7 @@ LEARNING_SRC = REPO / "src" / "orthosteric" / "learning"
 
 # ---- helpers -----------------------------------------------------------------
 
+
 def _gdr_text(filename: str) -> str:
     path = DECISION_RECORDS_DIR / filename
     assert path.exists(), f"Missing: {path}"
@@ -51,6 +52,7 @@ def _gdr_text(filename: str) -> str:
 
 
 # ---- G1-G5: GDR documents exist and are Accepted ----------------------------
+
 
 def test_g1_gdr005_exists_and_is_accepted() -> None:
     txt = _gdr_text("GDR-005-sci2-applicability-domain-algorithm.md")
@@ -78,6 +80,7 @@ def test_g5_gdr009_exists_and_is_accepted() -> None:
 
 
 # ---- G6-G10: Algorithm identifiers match GDR decisions ----------------------
+
 
 def test_g6_ad_algorithm_id_matches_gdr005() -> None:
     assert AD_ALGORITHM_ID == "leverage_knn_tanimoto_95pct_v1"
@@ -120,6 +123,7 @@ def test_g10_loss_function_matches_gdr009() -> None:
 
 # ---- G11-G13: Frozen constitution invariants --------------------------------
 
+
 def test_g11_loss_heads_frozen_at_four() -> None:
     """Constitution §4.2(2): four heads = pAct_alpha + 3 Delta axes. FROZEN."""
     assert LOSS_N_OUTPUT_HEADS == 4, (
@@ -141,6 +145,7 @@ def test_g13_ad_coverage_percentile() -> None:
 
 
 # ---- G14-G15: ModelGenerationRecord accepts all five governed fields ---------
+
 
 def test_g14_model_generation_record_with_five_governed_fields() -> None:
     rec = ModelGenerationRecord(
@@ -191,6 +196,7 @@ def test_g15_model_generation_record_none_fields_valid_pre_training() -> None:
 
 # ---- G16: No SCI2-002 implementation files exist ----------------------------
 
+
 def test_g16_no_model_implementation_files_exist() -> None:
     """SCI2-002 is not yet authorized. Only _interfaces.py and __init__.py allowed."""
     authorized_files = {"_interfaces.py", "__init__.py"}
@@ -202,6 +208,7 @@ def test_g16_no_model_implementation_files_exist() -> None:
 
 
 # ---- G17-G19: Cross-GDR consistency ----------------------------------------
+
 
 def test_g17_gdr007_gdr008_gaussian_consistency() -> None:
     """GDR-007 (Gaussian uncertainty) and GDR-008 (Tobit-1 censored normal)
