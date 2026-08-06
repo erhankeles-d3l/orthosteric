@@ -296,11 +296,11 @@ Creates `model/`, `train/`, `eval/` (degeneracy battery, seals); `explain/` if P
 |---|---|
 | `SCI2-001` | **Done** | — | Specification doc + interface schema + 10 GGRs identified |
 | GDR-004 | **Done** | — | Phase commitment = Core+Extension; GGR-002 through GGR-010 classified |
-| GDR-005 | **Pending** | — | AD algorithm (GGR-004) — required before SCI2-002 training code |
-| GDR-006 | **Pending** | — | AlphaFold model-level treatment (GGR-005) |
-| GDR-007 | **Pending** | — | Uncertainty representation (GGR-007) |
-| GDR-008 | **Pending** | — | Censored likelihood form (GGR-008) |
-| GDR-009 | **Pending** | — | Loss function specific form + pAct_alpha/Delta weighting (GGR-003) |
+| GDR-005 | **Done** | — | AD algorithm = leverage_knn_tanimoto_95pct_v1 (2026-08-06) |
+| GDR-006 | **Done** | — | AlphaFold treatment = alphafold_include_source_indicator_v1 (2026-08-06) |
+| GDR-007 | **Done** | — | Uncertainty = heteroscedastic_gaussian_v1 (2026-08-06) |
+| GDR-008 | **Done** | — | Censored likelihood = tobit1_censored_normal_v1 (2026-08-06) |
+| GDR-009 | **Done** | — | Loss = tobit1_gaussian_nll_equal_weight_v1; validation = scaffold_loso_cv_v1 (2026-08-06) |
 | GGR-002a | **Pending** | — | MMP switch set — CORPUS_REQUIRED (real data) |
 | GGR-002b | **Pending** | — | S4b sharpness multiplier — CORPUS_REQUIRED (real data) |
 

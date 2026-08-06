@@ -376,3 +376,33 @@ class ModelGenerationRecord:
     s10_committed: bool  # False until Phase 2 is committed
     s9_committed: bool  # False until Phase 2 is committed
     algorithm_version: str
+
+# ── Algorithm version constants from GDR-005 through GDR-009 ─────────────────
+
+# GDR-005: Applicability domain algorithm
+AD_ALGORITHM_ID: str = "leverage_knn_tanimoto_95pct_v1"
+AD_ALGORITHM_GDR: str = "GDR-005"
+AD_COVERAGE_PERCENTILE: float = 95.0  # RULE_AVAILABLE (Tropsha 2003; OECD QSAR guidance)
+AD_TANIMOTO_FP_RADIUS: int = 2
+AD_TANIMOTO_FP_NBITS: int = 2048
+
+# GDR-006: AlphaFold model-level treatment
+ALPHAFOLD_TREATMENT_ID: str = "alphafold_include_source_indicator_v1"
+ALPHAFOLD_TREATMENT_GDR: str = "GDR-006"
+
+# GDR-007: Uncertainty representation
+UNCERTAINTY_METHOD_ID: str = "heteroscedastic_gaussian_v1"
+UNCERTAINTY_METHOD_GDR: str = "GDR-007"
+UNCERTAINTY_COVERAGE: float = 0.95  # 95% predictive interval for S4b
+UNCERTAINTY_Z_95: float = 1.96      # z-score for 95% normal CI
+
+# GDR-008: Censored likelihood form
+CENSORED_LIKELIHOOD_ID: str = "tobit1_censored_normal_v1"
+CENSORED_LIKELIHOOD_GDR: str = "GDR-008"
+
+# GDR-009: Loss function and validation protocol
+LOSS_FUNCTION_ID: str = "tobit1_gaussian_nll_equal_weight_v1"
+VALIDATION_PROTOCOL_ID: str = "scaffold_loso_cv_v1"
+LOSS_FUNCTION_GDR: str = "GDR-009"
+LOSS_N_OUTPUT_HEADS: int = 4   # pAct_alpha + 3 Delta axes -- FROZEN by §4.2(2)
+LOSS_EQUAL_WEIGHT: float = 1.0  # FROZEN: all heads equal (implements §4.2(2))

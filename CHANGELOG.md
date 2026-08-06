@@ -2,6 +2,39 @@
 
 Maintained from the first commit, never retrofitted (ENG §8).
 
+## [Unreleased — GDR-005..GDR-009]
+
+### Added — GDR-005 through GDR-009: SCI-2 methodological governance (2026-08-06)
+
+Resolves GGR-003, GGR-004, GGR-005, GGR-007, GGR-008, GGR-009 from SCI2-001.
+All five GDRs accepted by Project Owner (2026-08-06).
+
+**Algorithm constants added** to `src/orthosteric/learning/_interfaces.py`:
+- `AD_ALGORITHM_ID = "leverage_knn_tanimoto_95pct_v1"` (GDR-005)
+- `ALPHAFOLD_TREATMENT_ID = "alphafold_include_source_indicator_v1"` (GDR-006)
+- `UNCERTAINTY_METHOD_ID = "heteroscedastic_gaussian_v1"` (GDR-007)
+- `UNCERTAINTY_COVERAGE = 0.95`, `UNCERTAINTY_Z_95 = 1.96` (GDR-007)
+- `CENSORED_LIKELIHOOD_ID = "tobit1_censored_normal_v1"` (GDR-008)
+- `LOSS_FUNCTION_ID = "tobit1_gaussian_nll_equal_weight_v1"` (GDR-009)
+- `VALIDATION_PROTOCOL_ID = "scaffold_loso_cv_v1"` (GDR-009)
+- `LOSS_N_OUTPUT_HEADS = 4`, `LOSS_EQUAL_WEIGHT = 1.0` (GDR-009, FROZEN)
+
+**Decision records added**:
+- `GDR-005`: per-isoform leverage k-NN AD with 95th-percentile self-calibrating threshold
+- `GDR-006`: include AlphaFold features with explicit `is_alphafold` source indicator
+- `GDR-007`: heteroscedastic Gaussian uncertainty; S4b interval = 2 x 1.96 x sigma_hat
+- `GDR-008`: Tobit-1 censored normal; double-censored = INDETERMINATE (zero NLL contribution)
+- `GDR-009`: equal-weight sum of 4 Tobit-1 Gaussian NLL heads; scaffold LOSO-CV protocol
+
+**Tests added**: `tests/learning/test_gdr005_009_methodological_governance.py`
+(19 tests, 796 total passing).
+
+**Still CORPUS_REQUIRED**:
+- GGR-002a: MMP switch set
+- GGR-002b: S4b sharpness multiplier
+- GGR-010: dual-inhibitor census
+
+
 ## [Unreleased]
 
 ### Added — SCI1-004: Protein-Ligand Interaction Fingerprints
