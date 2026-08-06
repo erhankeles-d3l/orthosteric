@@ -54,6 +54,13 @@ from orthosteric.features._md_interface import (
     MDStatus,
     WaterOccupancy,
 )
+from orthosteric.features._pipeline import (
+    PIPELINE_ALGORITHM_VERSION,
+    FeaturePipelineResult,
+    build_comparative_features,
+    compute_features,
+    is_path_a_compliant,
+)
 from orthosteric.features._pocket_descriptor import (
     POCKET_DESCRIPTOR_ALGORITHM_VERSION,
     PocketDescriptor,
@@ -76,6 +83,7 @@ __all__ = [
     "FEATURE_CONFIG_ALGORITHM_VERSION",
     "FINGERPRINT_ALGORITHM_VERSION",
     "MD_INTERFACE_ALGORITHM_VERSION",
+    "PIPELINE_ALGORITHM_VERSION",
     "POCKET_DESCRIPTOR_ALGORITHM_VERSION",
     "STRUCTURAL_GRAPH_ALGORITHM_VERSION",
     "ComparativeFeatureSet",
@@ -87,6 +95,7 @@ __all__ = [
     "EdgeType",
     "EnsembleMetadata",
     "FeatureConfig",
+    "FeaturePipelineResult",
     "FingerprintConfig",
     "GraphEdge",
     "GraphNode",
@@ -108,10 +117,13 @@ __all__ = [
     "StructuralGraphConfig",
     "WaterOccupancy",
     "build_comparative_feature_set",
+    "build_comparative_features",
     "build_comparative_fingerprint",
     "build_pocket_descriptor",
     "compute_contact_map",
+    "compute_features",
     "compute_interaction_fingerprint",
     "compute_structural_graph",
     "default_feature_config",
+    "is_path_a_compliant",
 ]

@@ -84,6 +84,11 @@ ignore = ["D203","D213"]
     "RUF003",
     "E702",
 ]
+"src/orthosteric/features/_pipeline.py" = [
+    "ANN401",    # BioPython bio_structure typed as Any
+    "PLR0913",   # 8-arg compute_features by design
+    "PLR0917",
+]
 "src/orthosteric/features/_interaction_fingerprint.py" = [
     "ANN401",    # BioPython atoms typed as Any (no stubs)
     "PLR0913",   # Many-arg private detection functions

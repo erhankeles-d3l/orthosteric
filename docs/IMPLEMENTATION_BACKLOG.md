@@ -270,9 +270,9 @@ Derived from Constitution §2.1, §4.6, §9.3. Creates `pocket/`, `features/`, `
 | `SCI1-006` | Ordered-water retention and flagging | §2.1 |
 | `SCI1-007` | Pocket version hashing; per-prediction reference | §5.4; SI9 immutability |
 | `SCI1-008` | Point-mutation input support; pocket re-derivation | §2.1, for S10 |
-| `SCI1-009` | `features/` scaffold | |
-| `SCI1-010` | Path A representation — correspondence-free, accepts an arbitrary ATP site | §4.6; SI4 |
-| `SCI1-011` | Path A verification on a mutated structure and an unseen ATP site | forfeits S7/S8/S10 if unmet |
+| `SCI1-009` | **Done** | — | `features/` scaffold (all SCI1-004--SCI1-008 modules present) |
+| `SCI1-010` | **Done** | — | Path A representation: `_pipeline.py`, `compute_features()` |
+| `SCI1-011` | **Done** | — | Path A verification: H1047R mutated + Vps34 unseen ATP site |
 | `SCI1-012` | `eval/` scaffold — metrics and calibration only | battery is `SCI-2` |
 | `SCI1-013` | Log-selectivity-ratio metric; per-target RMSE | §2.3(4) |
 | `SCI1-014` | Per-target calibration (ECE) + **sharpness** reporting — never aggregated | S4a, S4b; SI12 |
