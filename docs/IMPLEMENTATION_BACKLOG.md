@@ -294,7 +294,7 @@ Creates `model/`, `train/`, `eval/` (degeneracy battery, seals); `explain/` if P
 
 | ID | Objective |
 |---|---|
-| `SCI2-001` | Refine `SCI-2` backlog against `SCI-1` outcomes and the committed phase |
+| `SCI2-001` | **Done** | — | Specification doc + interface schema + 10 GGRs identified; SCI-2 implementation BLOCKED pending phase commitment and Stage 0 completion |
 
 Skeleton, to be specified at `SCI2-001`: model interface and configuration · comparative encoder · direct log-ratio prediction head (§4.2(1)) · symmetric objective (§4.2(2)) · training loop and checkpointing · per-target applicability domain (§4.2(4)) · degeneracy battery per §4.3 (pocket shuffle, ligand-only ablation, Δ-prediction, MMP switch, scaffold holdout, apo-ablation) · scrambled-label control and S10 in-silico mutation if Phase 2 · generation freeze (§15.1) · `[procedure]` gate evaluation for S2, S3, S4, S6.
 
