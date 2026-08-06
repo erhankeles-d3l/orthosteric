@@ -3,21 +3,28 @@
 Not part of src/ (this is a one-shot validation report, not governed
 pipeline code).  Read-only.
 """
-import sys, json, gzip, pathlib, subprocess, platform
+
+import gzip
+import json
+import pathlib
+import sys
+
 sys.path.insert(0, "src")
 
+from orthosteric.data.comparability import resolve_panel_key
 from orthosteric.data.snapshots._builder import SnapshotBuilder
 from orthosteric.data.snapshots._manifest import PolicyManifest, SoftwareProvenance
-from orthosteric.data.comparability import PanelKeyTier, resolve_panel_key
 
 A3 = pathlib.Path("data/snapshots/activity_snapshot_A3")
 A4 = pathlib.Path("data/snapshots/activity_snapshot_A4")
+
 
 def load(d):
     man = json.loads((d / "manifest.json").read_text())
     with gzip.open(d / "records.json.gz", "rt") as f:
         recs = json.load(f)
     return man, recs
+
 
 man3, recs3 = load(A3)
 man4, recs4 = load(A4)
@@ -50,15 +57,23 @@ pol = PolicyManifest(
 )
 sw4 = man4["software"]
 software = SoftwareProvenance(
-    python_version=sw4["python_version"], rdkit_version=sw4["rdkit_version"],
-    orthosteric_version=sw4["orthosteric_version"], git_sha=sw4["git_sha"],
-    git_dirty=sw4["git_dirty"], os_platform=sw4["os_platform"], os_version=sw4["os_version"],
-    lockfile_hash=sw4.get("lockfile_hash",""), key_package_versions=sw4.get("key_package_versions",{}),
+    python_version=sw4["python_version"],
+    rdkit_version=sw4["rdkit_version"],
+    orthosteric_version=sw4["orthosteric_version"],
+    git_sha=sw4["git_sha"],
+    git_dirty=sw4["git_dirty"],
+    os_platform=sw4["os_platform"],
+    os_version=sw4["os_version"],
+    lockfile_hash=sw4.get("lockfile_hash", ""),
+    key_package_versions=sw4.get("key_package_versions", {}),
 )
 b = SnapshotBuilder(software=software, policy=pol)
-rebuilt = b.build(recs4, source_versions=man4.get("source_versions"),
-                   parent_sha256=man4.get("parent_snapshot_sha256"))
-print(f"\n=== A4 content-hash reproducibility ===")
+rebuilt = b.build(
+    recs4,
+    source_versions=man4.get("source_versions"),
+    parent_sha256=man4.get("parent_snapshot_sha256"),
+)
+print("\n=== A4 content-hash reproducibility ===")
 print(f"  stored content_sha256:    {man4['snapshot_sha256']}")
 print(f"  rebuilt content_sha256:   {rebuilt.manifest.snapshot_sha256}")
 print(f"  REPRODUCIBLE:             {man4['snapshot_sha256'] == rebuilt.manifest.snapshot_sha256}")
@@ -67,30 +82,50 @@ print(f"  rebuilt build_prov_sha256:{rebuilt.manifest.build_provenance_sha256}")
 
 # Retrieval-timestamp invariance check: perturb, rebuild, compare
 import copy
+
 recs4b = copy.deepcopy(recs4)
 for r in recs4b:
     if "retrieval_timestamp" in r:
         r["retrieval_timestamp"] = "1999-01-01T00:00:00Z"
-rebuilt_b = b.build(recs4b, source_versions=man4.get("source_versions"),
-                     parent_sha256=man4.get("parent_snapshot_sha256"))
-print(f"\n=== retrieval_timestamp invariance on real A4 records ===")
-print(f"  content_sha256 unaffected by timestamp change: "
-      f"{rebuilt.manifest.snapshot_sha256 == rebuilt_b.manifest.snapshot_sha256}")
+rebuilt_b = b.build(
+    recs4b,
+    source_versions=man4.get("source_versions"),
+    parent_sha256=man4.get("parent_snapshot_sha256"),
+)
+print("\n=== retrieval_timestamp invariance on real A4 records ===")
+print(
+    f"  content_sha256 unaffected by timestamp change: "
+    f"{rebuilt.manifest.snapshot_sha256 == rebuilt_b.manifest.snapshot_sha256}"
+)
 
 # Environment invariance check
-sw_diff = dict(sw4); sw_diff["git_sha"] = "0"*40; sw_diff["rdkit_version"] = "9999.1.1"
+sw_diff = dict(sw4)
+sw_diff["git_sha"] = "0" * 40
+sw_diff["rdkit_version"] = "9999.1.1"
 software_diff = SoftwareProvenance(
-    python_version=sw_diff["python_version"], rdkit_version=sw_diff["rdkit_version"],
-    orthosteric_version=sw_diff["orthosteric_version"], git_sha=sw_diff["git_sha"],
-    git_dirty=sw_diff["git_dirty"], os_platform=sw_diff["os_platform"], os_version=sw_diff["os_version"],
-    lockfile_hash=sw_diff.get("lockfile_hash",""), key_package_versions=sw_diff.get("key_package_versions",{}),
+    python_version=sw_diff["python_version"],
+    rdkit_version=sw_diff["rdkit_version"],
+    orthosteric_version=sw_diff["orthosteric_version"],
+    git_sha=sw_diff["git_sha"],
+    git_dirty=sw_diff["git_dirty"],
+    os_platform=sw_diff["os_platform"],
+    os_version=sw_diff["os_version"],
+    lockfile_hash=sw_diff.get("lockfile_hash", ""),
+    key_package_versions=sw_diff.get("key_package_versions", {}),
 )
 b_diff = SnapshotBuilder(software=software_diff, policy=pol)
-rebuilt_diff = b_diff.build(recs4, source_versions=man4.get("source_versions"),
-                             parent_sha256=man4.get("parent_snapshot_sha256"))
-print(f"\n=== environment invariance (git_sha + rdkit_version changed) ===")
-print(f"  content_sha256 unaffected: {rebuilt.manifest.snapshot_sha256 == rebuilt_diff.manifest.snapshot_sha256}")
-print(f"  build_provenance_sha256 DID change: {rebuilt.manifest.build_provenance_sha256 != rebuilt_diff.manifest.build_provenance_sha256}")
+rebuilt_diff = b_diff.build(
+    recs4,
+    source_versions=man4.get("source_versions"),
+    parent_sha256=man4.get("parent_snapshot_sha256"),
+)
+print("\n=== environment invariance (git_sha + rdkit_version changed) ===")
+print(
+    f"  content_sha256 unaffected: {rebuilt.manifest.snapshot_sha256 == rebuilt_diff.manifest.snapshot_sha256}"
+)
+print(
+    f"  build_provenance_sha256 DID change: {rebuilt.manifest.build_provenance_sha256 != rebuilt_diff.manifest.build_provenance_sha256}"
+)
 
 print("\n=== Four-isoform identity (governed vocabulary) ===")
 acc4 = [r for r in recs4 if not r.get("exclusion_reason")]
@@ -103,23 +138,32 @@ print(f"  no extra isoforms: {isos <= T1}")
 print("\n=== Comparability metadata population ===")
 for f in ["study_id", "bao_format", "assay_type", "atp_status"]:
     n = sum(1 for r in acc4 if r.get(f) is not None)
-    print(f"  {f}: {n}/{len(acc4)} populated ({100*n/len(acc4):.1f}%)")
+    print(f"  {f}: {n}/{len(acc4)} populated ({100 * n / len(acc4):.1f}%)")
 
 print("\n=== ATP status cross-check ===")
 known = [r for r in acc4 if r.get("atp_status") == "known"]
 ambiguous = [r for r in acc4 if r.get("atp_status") == "ambiguous"]
 unknown = [r for r in acc4 if r.get("atp_status") == "unknown"]
-print(f"  KNOWN: {len(known)}; all have exactly one concentration_um: "
-      f"{all(r.get('atp_concentration_um') is not None for r in known)}")
-print(f"  AMBIGUOUS: {len(ambiguous)}; NONE have a selected concentration_um: "
-      f"{all(r.get('atp_concentration_um') is None for r in ambiguous)}")
-print(f"        all have >=2 candidate values: "
-      f"{all(len(r.get('atp_candidate_values_um') or []) >= 2 for r in ambiguous)}")
-print(f"  UNKNOWN: {len(unknown)}; none have a concentration_um: "
-      f"{all(r.get('atp_concentration_um') is None for r in unknown)}")
-print(f"  sum == accepted: {len(known)+len(ambiguous)+len(unknown) == len(acc4)}")
+print(
+    f"  KNOWN: {len(known)}; all have exactly one concentration_um: "
+    f"{all(r.get('atp_concentration_um') is not None for r in known)}"
+)
+print(
+    f"  AMBIGUOUS: {len(ambiguous)}; NONE have a selected concentration_um: "
+    f"{all(r.get('atp_concentration_um') is None for r in ambiguous)}"
+)
+print(
+    f"        all have >=2 candidate values: "
+    f"{all(len(r.get('atp_candidate_values_um') or []) >= 2 for r in ambiguous)}"
+)
+print(
+    f"  UNKNOWN: {len(unknown)}; none have a concentration_um: "
+    f"{all(r.get('atp_concentration_um') is None for r in unknown)}"
+)
+print(f"  sum == accepted: {len(known) + len(ambiguous) + len(unknown) == len(acc4)}")
 
 print("\n=== Resolved panel tier sanity ===")
 tiers = [resolve_panel_key(r).tier for r in acc4]
 from collections import Counter
+
 print(f"  {Counter(str(t) for t in tiers)}")

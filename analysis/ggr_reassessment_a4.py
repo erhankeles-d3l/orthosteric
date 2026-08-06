@@ -25,7 +25,10 @@ from pathlib import Path
 sys.path.insert(0, "src")
 
 from orthosteric.data.mmp_candidates import generate_exploratory_scaffold_pairs
-from orthosteric.data.noise_floor import compute_isoform_noise_floors, switch_magnitude_multiplier_status
+from orthosteric.data.noise_floor import (
+    compute_isoform_noise_floors,
+    switch_magnitude_multiplier_status,
+)
 from orthosteric.data.replicate_aggregation import ReplicateType, aggregate_records_by_cell
 
 A4 = Path("data/snapshots/activity_snapshot_A4")
@@ -46,27 +49,36 @@ print("evidence_class=EXPLORATORY_BEMIS_MURCKO. This is NOT matched molecular")
 print("pair (MMP) evidence -- see GDR-012 for the exact reasons why.")
 print()
 print("CORPUS-DERIVED OBSERVATION (deterministic aggregation, GDR-013):")
-print(f"  Same-scaffold, same-C1-panel, complete-4-isoform pairs examined: "
-      f"{scaffold_report.n_pairs_examined}")
-print(f"  Pairs with >=1 isoform showing an alpha-vs-X selectivity SIGN change: "
-      f"{scaffold_report.n_sign_flip_candidates}")
-print(f"  Distinct studies (study_id) contributing such pairs: "
-      f"{scaffold_report.n_studies_involved}")
-print(f"  Compounds excluded (censored/unclassified required-isoform cell, "
-      f"GDR-012 sec 3.3): {scaffold_report.n_compounds_excluded_censored_required_isoform}")
+print(
+    f"  Same-scaffold, same-C1-panel, complete-4-isoform pairs examined: "
+    f"{scaffold_report.n_pairs_examined}"
+)
+print(
+    f"  Pairs with >=1 isoform showing an alpha-vs-X selectivity SIGN change: "
+    f"{scaffold_report.n_sign_flip_candidates}"
+)
+print(
+    f"  Distinct studies (study_id) contributing such pairs: {scaffold_report.n_studies_involved}"
+)
+print(
+    f"  Compounds excluded (censored/unclassified required-isoform cell, "
+    f"GDR-012 sec 3.3): {scaffold_report.n_compounds_excluded_censored_required_isoform}"
+)
 
 sigma_basis_counts = Counter(c.sigma_diff_basis for c in scaffold_report.candidates)
-print(f"\n  sigma_diff basis used for magnitude_over_sigma (fallback order, "
-      f"never invented): {dict(sigma_basis_counts)}")
+print(
+    f"\n  sigma_diff basis used for magnitude_over_sigma (fallback order, "
+    f"never invented): {dict(sigma_basis_counts)}"
+)
 
 ratios = [c.magnitude_over_sigma for c in scaffold_report.candidates if c.magnitude_over_sigma]
 if ratios:
     below_2 = sum(1 for r in ratios if r < 2)
     below_3 = sum(1 for r in ratios if r < 3)
     print(f"  Of {len(ratios)} candidates with a usable sigma_diff reference:")
-    print(f"    magnitude < 2x sigma_diff: {below_2} ({100*below_2/len(ratios):.1f}%)")
-    print(f"    magnitude < 3x sigma_diff: {below_3} ({100*below_3/len(ratios):.1f}%)")
-    print(f"  (descriptive only -- neither 2x nor 3x is a chosen governance threshold)")
+    print(f"    magnitude < 2x sigma_diff: {below_2} ({100 * below_2 / len(ratios):.1f}%)")
+    print(f"    magnitude < 3x sigma_diff: {below_3} ({100 * below_3 / len(ratios):.1f}%)")
+    print("  (descriptive only -- neither 2x nor 3x is a chosen governance threshold)")
 
 print(f"\n  switch_magnitude_multiplier_status(): {switch_magnitude_multiplier_status()}")
 
@@ -91,18 +103,26 @@ per_iso_report = {}
 for iso, floor in compute_isoform_noise_floors(cells).items():
     per_iso_report[iso] = floor
     print(f"\n  {iso}:")
-    print(f"    TRUE_REPLICATE:  n={floor.n_true_replicate_groups:4}  "
-          f"median sigma={floor.sigma_true_replicate}")
-    print(f"    CROSS_ASSAY:     n={floor.n_cross_assay_groups:4}  "
-          f"median sigma={floor.sigma_cross_assay}")
-    print(f"    pooled (reference only, NOT recommended): n={floor.n_pooled_groups:4}  "
-          f"median sigma={floor.sigma_pooled}")
+    print(
+        f"    TRUE_REPLICATE:  n={floor.n_true_replicate_groups:4}  "
+        f"median sigma={floor.sigma_true_replicate}"
+    )
+    print(
+        f"    CROSS_ASSAY:     n={floor.n_cross_assay_groups:4}  "
+        f"median sigma={floor.sigma_cross_assay}"
+    )
+    print(
+        f"    pooled (reference only, NOT recommended): n={floor.n_pooled_groups:4}  "
+        f"median sigma={floor.sigma_pooled}"
+    )
 
 pair_floors = scaffold_report.isoform_pair_noise_floors
-print(f"\n  Per-isoform-pair sigma_diff (sqrt-sum-of-squares, independence assumed):")
+print("\n  Per-isoform-pair sigma_diff (sqrt-sum-of-squares, independence assumed):")
 for (a, b), pf in pair_floors.items():
-    print(f"    ({a}, {b}): true_replicate={pf.sigma_diff_true_replicate}  "
-          f"cross_assay={pf.sigma_diff_cross_assay}  pooled={pf.sigma_diff_pooled}")
+    print(
+        f"    ({a}, {b}): true_replicate={pf.sigma_diff_true_replicate}  "
+        f"cross_assay={pf.sigma_diff_cross_assay}  pooled={pf.sigma_diff_pooled}"
+    )
 
 ggr002b_status = "GDR_REQUIRED"
 print(f"\nGGR-002b = {ggr002b_status}")
@@ -120,7 +140,7 @@ print("mTOR activity records. Per GDR-014 (accepted): this is a documented")
 print("evidence gap, explicitly scoped OUT of Model Generation 1 eligibility --")
 print("not a hard training gate. No pathway-, docking-, structural-similarity-,")
 print("or model-based inference substitutes for direct mTOR activity evidence.")
-print(f"\nGGR-010 = CORPUS_INSUFFICIENT (evidence gap, non-blocking per GDR-014)")
+print("\nGGR-010 = CORPUS_INSUFFICIENT (evidence gap, non-blocking per GDR-014)")
 
 # ── Write machine-readable summary ────────────────────────────────────────────
 out = {
@@ -136,8 +156,7 @@ out = {
         "n_pairs_examined": scaffold_report.n_pairs_examined,
         "n_sign_flip_candidates": scaffold_report.n_sign_flip_candidates,
         "n_studies_involved": scaffold_report.n_studies_involved,
-        "n_compounds_excluded_censored_required_isoform":
-            scaffold_report.n_compounds_excluded_censored_required_isoform,
+        "n_compounds_excluded_censored_required_isoform": scaffold_report.n_compounds_excluded_censored_required_isoform,
         "switch_magnitude_multiplier_status": switch_magnitude_multiplier_status(),
     },
     "ggr002b": {

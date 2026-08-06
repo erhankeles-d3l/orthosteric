@@ -1,0 +1,38 @@
+{
+  "snapshot_sha256": "05748f6627ead8f4177ee9deec51b1214920f4b8b86230da850dba9d429cc277",
+  "n_selectivity_targets": 1267,
+  "scaffold_split": {
+    "train_n": 822,
+    "val_n": 191,
+    "test_n": 254,
+    "n_train_scaffolds": 407,
+    "n_val_scaffolds": 57,
+    "n_test_scaffolds": 115,
+    "scaffold_overlap": 0,
+    "content_sha256": "f5c5e8a377526fdffd46ae413fa51db0e30000df63473cc0d492191469de2dbd"
+  },
+  "baseline_rmse": {
+    "ligand_only_mean": {
+      "alpha_vs_beta": 1.1737759653832331,
+      "alpha_vs_gamma": 0.816764812485522,
+      "alpha_vs_delta": 1.1056355054619635
+    },
+    "nearest_neighbor_tanimoto": {
+      "alpha_vs_beta": 0.5601916327064611,
+      "alpha_vs_gamma": 0.7071614998082288,
+      "alpha_vs_delta": 0.5699692628817113
+    },
+    "proteochemometric_linear": {
+      "alpha_vs_beta": 0.6745268251404135,
+      "alpha_vs_gamma": 0.7599146684930715,
+      "alpha_vs_delta": 0.7140749352799488
+    }
+  },
+  "gate_record": {
+    "vote": "go",
+    "any_baseline_meets_s2": false,
+    "n_within_study": 254,
+    "rationale": "GO: ligand-only baseline RMSE = 0.817 log units (> 0.3 log units threshold). A comparative learning model may add value. Proceed to SCI-2.",
+    "algorithm_version": "gate_v1_sci1022"
+  }
+}

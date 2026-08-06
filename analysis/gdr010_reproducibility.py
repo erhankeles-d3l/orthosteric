@@ -2,7 +2,13 @@
 
 Read-only. Does NOT modify hashing. Demonstrates which fields enter identity.
 """
-import sys, json, gzip, pathlib, copy
+
+import copy
+import gzip
+import json
+import pathlib
+import sys
+
 sys.path.insert(0, "src")
 from orthosteric.data.snapshots._builder import SnapshotBuilder
 from orthosteric.data.snapshots._manifest import PolicyManifest, SoftwareProvenance
@@ -27,18 +33,25 @@ POLICY = PolicyManifest(
 )
 d = man["software"]
 BASE_SW = dict(
-    python_version=d["python_version"], rdkit_version=d["rdkit_version"],
-    orthosteric_version=d["orthosteric_version"], git_sha=d["git_sha"],
-    git_dirty=d["git_dirty"], os_platform=d["os_platform"],
-    os_version=d["os_version"], lockfile_hash=d.get("lockfile_hash", ""),
+    python_version=d["python_version"],
+    rdkit_version=d["rdkit_version"],
+    orthosteric_version=d["orthosteric_version"],
+    git_sha=d["git_sha"],
+    git_dirty=d["git_dirty"],
+    os_platform=d["os_platform"],
+    os_version=d["os_version"],
+    lockfile_hash=d.get("lockfile_hash", ""),
     key_package_versions=d.get("key_package_versions", {}),
 )
 
+
 def build(sw_over=None, rec_over=None, policy=POLICY):
-    sw = dict(BASE_SW); sw.update(sw_over or {})
+    sw = dict(BASE_SW)
+    sw.update(sw_over or {})
     recs = rec_over if rec_over is not None else records
     b = SnapshotBuilder(software=SoftwareProvenance(**sw), policy=policy)
     return b.build(recs, source_versions=man.get("source_versions")).manifest.snapshot_sha256
+
 
 baseline = build()
 print(f"Stored A3 SHA : {man['snapshot_sha256']}")
@@ -69,7 +82,7 @@ for label, sw_over, rec_over in cases:
 recs2 = copy.deepcopy(records)
 for r in recs2:
     if not r.get("exclusion_reason"):
-        r["activity_value"] = (r.get("activity_value") or 0)
+        r["activity_value"] = r.get("activity_value") or 0
         break
 recs3 = copy.deepcopy(records)
 changed_one = False
@@ -79,37 +92,68 @@ for r in recs3:
         changed_one = True
         break
 sha_sci = build({}, recs3)
-print(f"{'ONE activity_value +1.0 (scientific change)':<46}{'YES  <-- ' if sha_sci!=baseline else 'no':<20}{sha_sci[:12]}")
+print(
+    f"{'ONE activity_value +1.0 (scientific change)':<46}{'YES  <-- ' if sha_sci != baseline else 'no':<20}{sha_sci[:12]}"
+)
 
 # Policy perturbation
-pol2 = PolicyManifest(**{**{k: getattr(POLICY, k) for k in POLICY.__dataclass_fields__},
-                          "deduplication_policy": "sci0009_log_mean_v2"})
+pol2 = PolicyManifest(
+    **{
+        **{k: getattr(POLICY, k) for k in POLICY.__dataclass_fields__},
+        "deduplication_policy": "sci0009_log_mean_v2",
+    }
+)
 sha_pol = build({}, None, pol2)
-print(f"{'deduplication_policy changed (scientific)':<46}{'YES  <-- ' if sha_pol!=baseline else 'no':<20}{sha_pol[:12]}")
+print(
+    f"{'deduplication_policy changed (scientific)':<46}{'YES  <-- ' if sha_pol != baseline else 'no':<20}{sha_pol[:12]}"
+)
 
 # Retrieval timestamp inside records
 recs4 = copy.deepcopy(records)
 for r in recs4:
     r["retrieval_timestamp"] = "2099-01-01T00:00:00Z"
 sha_ts = build({}, recs4)
-print(f"{'retrieval_timestamp in records changed':<46}{'YES  <-- ' if sha_ts!=baseline else 'no':<20}{sha_ts[:12]}")
+print(
+    f"{'retrieval_timestamp in records changed':<46}{'YES  <-- ' if sha_ts != baseline else 'no':<20}{sha_ts[:12]}"
+)
 
 # Option A prototype: content hash over records+policy only
-import hashlib
-from orthosteric.data.snapshots._builder import _stable_json, _hash_payload
+from orthosteric.data.snapshots._builder import _hash_payload, _stable_json
+
+
 def content_sha(recs, policy):
-    def key(r): return (str(r.get("record_type","activity")), str(r.get("source_db","")),
-                        str(r.get("source_record_id", r.get("pdb_id",""))))
-    return _hash_payload(_stable_json(sorted(recs, key=key)) + "\n" + _stable_json(policy.to_canonical_dict()))
+    def key(r):
+        return (
+            str(r.get("record_type", "activity")),
+            str(r.get("source_db", "")),
+            str(r.get("source_record_id", r.get("pdb_id", ""))),
+        )
+
+    return _hash_payload(
+        _stable_json(sorted(recs, key=key)) + "\n" + _stable_json(policy.to_canonical_dict())
+    )
+
+
 def build_prov_sha(sw):
     return _hash_payload(_stable_json(SoftwareProvenance(**sw).to_canonical_dict()))
+
 
 print("\n=== Option A prototype (content_sha256 = records + policy only) ===")
 c_base = content_sha(records, POLICY)
 print(f"  content_sha256 baseline                : {c_base[:16]}")
-print(f"  content_sha256 after git_sha change    : {content_sha(records, POLICY)[:16]}  (unchanged by construction)")
-print(f"  content_sha256 after activity change   : {content_sha(recs3, POLICY)[:16]}  CHANGED={content_sha(recs3,POLICY)!=c_base}")
-print(f"  content_sha256 after policy change     : {content_sha(records, pol2)[:16]}  CHANGED={content_sha(records,pol2)!=c_base}")
-sw_a = dict(BASE_SW); sw_b = dict(BASE_SW); sw_b["git_sha"] = "0"*40
+print(
+    f"  content_sha256 after git_sha change    : {content_sha(records, POLICY)[:16]}  (unchanged by construction)"
+)
+print(
+    f"  content_sha256 after activity change   : {content_sha(recs3, POLICY)[:16]}  CHANGED={content_sha(recs3, POLICY) != c_base}"
+)
+print(
+    f"  content_sha256 after policy change     : {content_sha(records, pol2)[:16]}  CHANGED={content_sha(records, pol2) != c_base}"
+)
+sw_a = dict(BASE_SW)
+sw_b = dict(BASE_SW)
+sw_b["git_sha"] = "0" * 40
 print(f"  build_provenance_sha256 (env A)        : {build_prov_sha(sw_a)[:16]}")
-print(f"  build_provenance_sha256 (env B)        : {build_prov_sha(sw_b)[:16]}  DIFFERS={build_prov_sha(sw_a)!=build_prov_sha(sw_b)}")
+print(
+    f"  build_provenance_sha256 (env B)        : {build_prov_sha(sw_b)[:16]}  DIFFERS={build_prov_sha(sw_a) != build_prov_sha(sw_b)}"
+)

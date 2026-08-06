@@ -40,11 +40,13 @@ select = ["E","F","I","N","UP","B","A","C4","DTZ","PT","RET","SIM","ARG","PL","R
 ignore = ["D203","D213"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "PLR2004", "D103", "D205", "D209", "PLR0913", "PLR0917", "RUF002", "ANN401", "ANN001", "ANN202", "RUF005"]
+"tests/*" = ["S101", "PLR2004", "D103", "D205", "D209", "PLR0913", "PLR0917", "RUF002", "ANN401", "ANN001", "ANN202", "RUF005", "ANN003"]
 "scripts/*" = ["S603", "S607", "S605", "S101", "PLR2004", "D103", "D205", "D400", "ANN", "T201", "INP001", "PLR0912", "PLR0915", "C901", "BLE001", "S110", "S112"]
 "src/orthosteric/pocket/_pocket_geometry.py" = ["RUF002", "ANN401"]
 "src/orthosteric/pocket/_rotamer_state.py" = ["RUF002", "RUF003", "ANN401"]
 "src/orthosteric/pocket/_solvent_accessibility.py" = ["ANN401"]
+"src/orthosteric/eval/_target_construction.py" = ["D205"]
+"src/orthosteric/learning/_baseline_models.py" = ["D205"]
 "src/orthosteric/pocket/_residue_mapping.py" = ["RUF001", "RUF002"]
 "src/orthosteric/data/harmonization/*.py" = [
     "S110",  # try/except/pass in RDKit metal disconnection
