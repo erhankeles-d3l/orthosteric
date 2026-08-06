@@ -273,11 +273,11 @@ Derived from Constitution §2.1, §4.6, §9.3. Creates `pocket/`, `features/`, `
 | `SCI1-009` | **Done** | — | `features/` scaffold (all SCI1-004--SCI1-008 modules present) |
 | `SCI1-010` | **Done** | — | Path A representation: `_pipeline.py`, `compute_features()` |
 | `SCI1-011` | **Done** | — | Path A verification: H1047R mutated + Vps34 unseen ATP site |
-| `SCI1-012` | `eval/` scaffold — metrics and calibration only | battery is `SCI-2` |
-| `SCI1-013` | Log-selectivity-ratio metric; per-target RMSE | §2.3(4) |
-| `SCI1-014` | Per-target calibration (ECE) + **sharpness** reporting — never aggregated | S4a, S4b; SI12 |
-| `SCI1-015` | Uncertainty composition as explicit conjunction | §2.4; no `min()` |
-| `SCI1-016` | Indeterminate branch per target | §2.2; SI13 |
+| `SCI1-012` | **Done** | — | `eval/` scaffold created |
+| `SCI1-013` | **Done** | — | `log_selectivity_ratio()`, `rmse()`, `per_target_rmse()` |
+| `SCI1-014` | **Done** | — | `ece_per_target()`, `sharpness()` |
+| `SCI1-015` | **Done** | — | `compose_selectivity_confidence()` product/Frechet |
+| `SCI1-016` | **Done** | — | `classify_productive_binding()` 3-class |
 | `SCI1-017` | Scaffold-aware / series-aware splitting | §3.4; whole series held out |
 | `SCI1-017b` | Within-study evaluation stratum loader; stratum reporting separated from pooled | §2.3(1) as amended |
 | `SCI1-018` | Baseline 1 — ligand-only | §9.3 |
