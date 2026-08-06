@@ -60,59 +60,95 @@ def _build(residues: list[dict]) -> object:  # type: ignore[type-arg]
         if chain != cur:
             sb.init_chain(chain)
             cur = chain
-        sb.init_residue(str(r["name"]), str(r.get("het", " ")),
-                        int(r["seq"]), str(r.get("ins", " ")))  # type: ignore[arg-type]
+        sb.init_residue(
+            str(r["name"]), str(r.get("het", " ")), int(r["seq"]), str(r.get("ins", " "))
+        )  # type: ignore[arg-type]
         for aname, (x, y, z) in dict(r["atoms"]).items():  # type: ignore[arg-type]
             el = dict(r.get("elements", {})).get(aname, aname[0])  # type: ignore[arg-type]
-            sb.init_atom(aname, np.array([x, y, z], dtype=np.float64),
-                         1.0, 1.0, " ", aname, None, element=el)
+            sb.init_atom(
+                aname, np.array([x, y, z], dtype=np.float64), 1.0, 1.0, " ", aname, None, element=el
+            )
     return sb.get_structure()
 
 
 def _prov(pdb_id: str = "TST") -> StructureProvenance:
     return StructureProvenance(
-        source=StructureSource.EXPERIMENTAL_PDB, pdb_id=pdb_id,
-        resolution_angstrom=2.0, deposition_year=2020,
-        data_tier=DataTier.TIER1, pipeline_version=PIPELINE_V, alphafold_version=None,
+        source=StructureSource.EXPERIMENTAL_PDB,
+        pdb_id=pdb_id,
+        resolution_angstrom=2.0,
+        deposition_year=2020,
+        data_tier=DataTier.TIER1,
+        pipeline_version=PIPELINE_V,
+        alphafold_version=None,
     )
 
 
 def _record(isoform: str = "PI3Kalpha", pdb_id: str = "TST") -> StructureRecord:
     prov = _prov(pdb_id)
     construct = ConstructDescriptor(
-        isoform=isoform, uniprot_id="P42336",
-        construct_class=ConstructClass.P110_P85_HETERODIMER, mutations=(),
-        species="Homo sapiens", construct_description="test",
+        isoform=isoform,
+        uniprot_id="P42336",
+        construct_class=ConstructClass.P110_P85_HETERODIMER,
+        mutations=(),
+        species="Homo sapiens",
+        construct_description="test",
     )
     rid = make_record_id(prov, construct)
     lig = LigandRecord(
-        chain_id="A", residue_seq=900, insertion_code=" ", residue_name="LIG",
-        shape_class=LigandShapeClass.FLAT, is_atp_site=True, smiles=None, inchikey="TK001",
+        chain_id="A",
+        residue_seq=900,
+        insertion_code=" ",
+        residue_name="LIG",
+        shape_class=LigandShapeClass.FLAT,
+        is_atp_site=True,
+        smiles=None,
+        inchikey="TK001",
     )
     return StructureRecord(
-        record_id=rid, provenance=prov, construct=construct,
+        record_id=rid,
+        provenance=prov,
+        construct=construct,
         conformational_state=ConformationalState.LIGAND_BOUND,
-        chains=(), atp_site_ligands=(lig,), all_ligands=(lig,), preprocessing_flags=(),
+        chains=(),
+        atp_site_ligands=(lig,),
+        all_ligands=(lig,),
+        preprocessing_flags=(),
     )
 
 
 def _pr(name: str, seq: int, rid: str) -> PocketResidue:
-    rr = ResidueRecord(chain_id="A", residue_seq=seq, insertion_code=" ",
-                       residue_name=name, canonical_position=None,
-                       is_missing=False, missing_modelled=False)
-    return PocketResidue(residue=rr, structure_record_id=rid,
-                         minimum_distance_to_ligand=2.5, sub_region=SubRegion.AFFINITY_POCKET,
-                         observed_in_n_structures=2, correspondence_stable=True,
-                         present_with_propeller_ligand=False)
+    rr = ResidueRecord(
+        chain_id="A",
+        residue_seq=seq,
+        insertion_code=" ",
+        residue_name=name,
+        canonical_position=None,
+        is_missing=False,
+        missing_modelled=False,
+    )
+    return PocketResidue(
+        residue=rr,
+        structure_record_id=rid,
+        minimum_distance_to_ligand=2.5,
+        sub_region=SubRegion.AFFINITY_POCKET,
+        observed_in_n_structures=2,
+        correspondence_stable=True,
+        present_with_propeller_ligand=False,
+    )
 
 
 def _prs(*prs: PocketResidue, rid: str, isoform: str = "PI3Kalpha") -> PocketResidueSet:
     return PocketResidueSet(
-        isoform=isoform, construct_class=ConstructClass.P110_P85_HETERODIMER,
-        contributing_record_ids=(rid,), n_contributing_structures=1,
-        residues=prs, n_residues_total=len(prs),
-        n_residues_correspondence_stable=len(prs), n_residues_propeller_only=0,
-        cutoff_angstrom=5.0, algorithm_version=POCKET_DEFINITION_ALGORITHM_VERSION,
+        isoform=isoform,
+        construct_class=ConstructClass.P110_P85_HETERODIMER,
+        contributing_record_ids=(rid,),
+        n_contributing_structures=1,
+        residues=prs,
+        n_residues_total=len(prs),
+        n_residues_correspondence_stable=len(prs),
+        n_residues_propeller_only=0,
+        cutoff_angstrom=5.0,
+        algorithm_version=POCKET_DEFINITION_ALGORITHM_VERSION,
     )
 
 
@@ -123,19 +159,42 @@ def _run(
     pdb_id: str = "TST",
     with_table: bool = False,
 ) -> FeaturePipelineResult:
-    bio = _build([
-        {"chain": "A", "seq": 900, "het": "H_LIG", "name": "LIG",
-         "atoms": {"N": (0.0, 0.0, 0.0), "C": (1.0, 0.0, 0.0)}},
-        {"chain": "A", "seq": prot_seq, "name": prot_name,
-         "atoms": {"N": (3.5, 0.0, 0.0), "CA": (4.5, 0.0, 0.0),
-                   "C": (5.5, 0.0, 0.0), "O": (6.0, 1.0, 0.0), "CB": (4.5, 1.0, 0.0)}},
-    ])
+    bio = _build(
+        [
+            {
+                "chain": "A",
+                "seq": 900,
+                "het": "H_LIG",
+                "name": "LIG",
+                "atoms": {"N": (0.0, 0.0, 0.0), "C": (1.0, 0.0, 0.0)},
+            },
+            {
+                "chain": "A",
+                "seq": prot_seq,
+                "name": prot_name,
+                "atoms": {
+                    "N": (3.5, 0.0, 0.0),
+                    "CA": (4.5, 0.0, 0.0),
+                    "C": (5.5, 0.0, 0.0),
+                    "O": (6.0, 1.0, 0.0),
+                    "CB": (4.5, 1.0, 0.0),
+                },
+            },
+        ]
+    )
     rec = _record(isoform, pdb_id)
     pr = _pr(prot_name, prot_seq, rec.record_id)
     pocket = _prs(pr, rid=rec.record_id, isoform=isoform)
-    lig = LigandRecord(chain_id="A", residue_seq=900, insertion_code=" ", residue_name="LIG",
-                       shape_class=LigandShapeClass.FLAT, is_atp_site=True,
-                       smiles=None, inchikey="TK001")
+    lig = LigandRecord(
+        chain_id="A",
+        residue_seq=900,
+        insertion_code=" ",
+        residue_name="LIG",
+        shape_class=LigandShapeClass.FLAT,
+        is_atp_site=True,
+        smiles=None,
+        inchikey="TK001",
+    )
     tbl = None
     if with_table:
         tbl = build_correspondence_table(
@@ -146,6 +205,7 @@ def _run(
 
 
 # ── P1-P4: Basic pipeline integrity ─────────────────────────────────────────
+
 
 def test_p1_result_is_frozen() -> None:
     with pytest.raises((AttributeError, TypeError)):
@@ -170,6 +230,7 @@ def test_p4_is_path_a_compliant() -> None:
 
 
 # ── P5-P8: Path A — no correspondence table required ─────────────────────────
+
 
 def test_p5_runs_without_correspondence_table() -> None:
     r = _run(isoform="mTOR", pdb_id="MTOR_TST", with_table=False)
@@ -196,24 +257,51 @@ def test_p8_path_a_note_present() -> None:
 
 # ── P9-P11: SCI1-011 -- mutated and unseen structures ─────────────────────────
 
+
 def test_p9_mutated_structure_accepted() -> None:
     """H1047R simulated: ARG at 1047 instead of HIS. Must succeed."""
-    bio = _build([
-        {"chain": "A", "seq": 900, "het": "H_LIG", "name": "LIG",
-         "atoms": {"N": (0.0, 0.0, 0.0), "C": (1.0, 0.0, 0.0)}},
-        {"chain": "A", "seq": 1047, "name": "ARG",
-         "atoms": {"N": (3.5, 0.0, 0.0), "CA": (4.5, 0.0, 0.0),
-                   "C": (5.5, 0.0, 0.0), "O": (6.0, 1.0, 0.0), "CB": (4.5, 1.0, 0.0),
-                   "CG": (4.5, 2.0, 0.0), "CD": (4.5, 3.0, 0.0),
-                   "NE": (4.5, 4.0, 0.0), "CZ": (4.5, 5.0, 0.0),
-                   "NH1": (3.5, 5.5, 0.0), "NH2": (5.5, 5.5, 0.0)}},
-    ])
+    bio = _build(
+        [
+            {
+                "chain": "A",
+                "seq": 900,
+                "het": "H_LIG",
+                "name": "LIG",
+                "atoms": {"N": (0.0, 0.0, 0.0), "C": (1.0, 0.0, 0.0)},
+            },
+            {
+                "chain": "A",
+                "seq": 1047,
+                "name": "ARG",
+                "atoms": {
+                    "N": (3.5, 0.0, 0.0),
+                    "CA": (4.5, 0.0, 0.0),
+                    "C": (5.5, 0.0, 0.0),
+                    "O": (6.0, 1.0, 0.0),
+                    "CB": (4.5, 1.0, 0.0),
+                    "CG": (4.5, 2.0, 0.0),
+                    "CD": (4.5, 3.0, 0.0),
+                    "NE": (4.5, 4.0, 0.0),
+                    "CZ": (4.5, 5.0, 0.0),
+                    "NH1": (3.5, 5.5, 0.0),
+                    "NH2": (5.5, 5.5, 0.0),
+                },
+            },
+        ]
+    )
     rec = _record("PI3Kalpha_H1047R")
     pr = _pr("ARG", 1047, rec.record_id)
     pocket = _prs(pr, rid=rec.record_id, isoform="PI3Kalpha_H1047R")
-    lig = LigandRecord(chain_id="A", residue_seq=900, insertion_code=" ", residue_name="LIG",
-                       shape_class=LigandShapeClass.FLAT, is_atp_site=True,
-                       smiles=None, inchikey="TK001")
+    lig = LigandRecord(
+        chain_id="A",
+        residue_seq=900,
+        insertion_code=" ",
+        residue_name="LIG",
+        shape_class=LigandShapeClass.FLAT,
+        is_atp_site=True,
+        smiles=None,
+        inchikey="TK001",
+    )
     result = compute_features(bio, rec, pocket, lig, "PI3Kalpha_H1047R")
     assert is_path_a_compliant(result)
 
@@ -229,28 +317,49 @@ def test_p10_unseen_atp_site_accepted() -> None:
 def test_p11_variable_pocket_size() -> None:
     """14 pocket residues -- no fixed-size assumption."""
     recs: list[dict] = [
-        {"chain": "A", "seq": 900, "het": "H_LIG", "name": "LIG",
-         "atoms": {"N": (0.0, 0.0, 0.0), "C": (1.0, 0.0, 0.0)}},
+        {
+            "chain": "A",
+            "seq": 900,
+            "het": "H_LIG",
+            "name": "LIG",
+            "atoms": {"N": (0.0, 0.0, 0.0), "C": (1.0, 0.0, 0.0)},
+        },
     ]
     for i in range(1, 15):
-        recs.append({
-            "chain": "A", "seq": i, "name": "ALA",
-            "atoms": {"N": (float(i) * 3, 0.0, 0.0), "CA": (float(i) * 3 + 1, 0.0, 0.0),
-                      "C": (float(i) * 3 + 2, 0.0, 0.0), "O": (float(i) * 3 + 2.5, 1.0, 0.0)},
-        })
+        recs.append(
+            {
+                "chain": "A",
+                "seq": i,
+                "name": "ALA",
+                "atoms": {
+                    "N": (float(i) * 3, 0.0, 0.0),
+                    "CA": (float(i) * 3 + 1, 0.0, 0.0),
+                    "C": (float(i) * 3 + 2, 0.0, 0.0),
+                    "O": (float(i) * 3 + 2.5, 1.0, 0.0),
+                },
+            }
+        )
     bio = _build(recs)
     rec = _record()
     prs = [_pr("ALA", i, rec.record_id) for i in range(1, 15)]
     pocket = _prs(*prs, rid=rec.record_id)
-    lig = LigandRecord(chain_id="A", residue_seq=900, insertion_code=" ", residue_name="LIG",
-                       shape_class=LigandShapeClass.FLAT, is_atp_site=True,
-                       smiles=None, inchikey="TK001")
+    lig = LigandRecord(
+        chain_id="A",
+        residue_seq=900,
+        insertion_code=" ",
+        residue_name="LIG",
+        shape_class=LigandShapeClass.FLAT,
+        is_atp_site=True,
+        smiles=None,
+        inchikey="TK001",
+    )
     result = compute_features(bio, rec, pocket, lig, "PI3Kalpha")
     assert result.descriptor.n_residues == 14
     assert is_path_a_compliant(result)
 
 
 # ── P12-P14: Comparative features integration ─────────────────────────────────
+
 
 def test_p12_comparative_features_from_two_isoforms() -> None:
     ra = _run("PI3Kalpha", with_table=True)
@@ -273,6 +382,7 @@ def test_p14_feature_config_all_rule_missing() -> None:
 
 
 # ── P15-P16: SCI1-009 scaffold completeness ──────────────────────────────────
+
 
 def test_p15_scaffold_all_version_constants_present() -> None:
     """SCI1-009: all features/ module version constants importable."""
