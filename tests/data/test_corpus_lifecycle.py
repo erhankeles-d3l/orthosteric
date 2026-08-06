@@ -107,7 +107,7 @@ def _rec(record_id: str = "R1", isoform: str = "PI3Kalpha") -> dict[str, Any]:
 
 
 def _make_corpus(
-    records: list[dict], mode: CorpusDataMode = CorpusDataMode.SCIENTIFIC_CORPUS
+    records: list[dict[str, Any]], mode: CorpusDataMode = CorpusDataMode.SCIENTIFIC_CORPUS
 ) -> CurrentCorpus:
     cc = CurrentCorpus(data_mode=mode)
     cc.add_records(records)
@@ -115,7 +115,7 @@ def _make_corpus(
     return cc
 
 
-def _make_profile_for(snapshot):
+def _make_profile_for(snapshot: Any) -> Any:
     """Minimal CorpusProfile synthesized from a snapshot (for test purposes only).
 
     Uses the correct API: build_graph_stats_from_records + characterize +
@@ -168,7 +168,7 @@ def _make_assessor() -> CorpusQualityAssessor:
     )
 
 
-def _make_pipeline(registry=None) -> CorpusLifecyclePipeline:
+def _make_pipeline(registry: CorpusSnapshotRegistry | None = None) -> CorpusLifecyclePipeline:
     return CorpusLifecyclePipeline(
         assessor=_make_assessor(),
         gate_policy=CorpusQualityGatePolicy(),
