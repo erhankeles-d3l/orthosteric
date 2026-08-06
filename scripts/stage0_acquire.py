@@ -34,12 +34,23 @@ def curl_json(url: str) -> dict | None:
     """Fetch JSON via curl. Returns None on failure."""
     for attempt in range(MAX_RETRIES):
         r = subprocess.run(
-            ["curl", "-s", "--max-time", str(CURL_TIMEOUT),
-             "--retry", "0",          # we handle retries ourselves
-             "-A", "orthosteric-research-pipeline/1.0 (contact: research@example.org)",
-             "-H", "Accept: application/json",
-             url],
-            capture_output=True, text=True, timeout=CURL_TIMEOUT + 5, check=False,
+            [
+                "curl",
+                "-s",
+                "--max-time",
+                str(CURL_TIMEOUT),
+                "--retry",
+                "0",  # we handle retries ourselves
+                "-A",
+                "orthosteric-research-pipeline/1.0 (contact: research@example.org)",
+                "-H",
+                "Accept: application/json",
+                url,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=CURL_TIMEOUT + 5,
+            check=False,
         )
         text = r.stdout.strip()
         if r.returncode == 0 and text and text.startswith("{"):
@@ -48,8 +59,10 @@ def curl_json(url: str) -> dict | None:
             except json.JSONDecodeError:
                 pass
         wait = 5 * (attempt + 1)
-        print(f"    attempt {attempt+1}/{MAX_RETRIES} failed (rc={r.returncode}), "
-              f"sleeping {wait}s", flush=True)
+        print(
+            f"    attempt {attempt + 1}/{MAX_RETRIES} failed (rc={r.returncode}), sleeping {wait}s",
+            flush=True,
+        )
         time.sleep(wait)
     return None
 
@@ -62,8 +75,14 @@ def download_one_target(chembl_id: str, meta: dict) -> dict:
     target_dir = RAW_DIR / chembl_id
     target_dir.mkdir(exist_ok=True)
 
-    summary: dict = {"chembl_id": chembl_id, "gene": gene, "tier": tier,
-                     "types": {}, "total_records": 0, "errors": []}
+    summary: dict = {
+        "chembl_id": chembl_id,
+        "gene": gene,
+        "tier": tier,
+        "types": {},
+        "total_records": 0,
+        "errors": [],
+    }
 
     for st in types:
         type_dir = target_dir / st
@@ -79,12 +98,14 @@ def download_one_target(chembl_id: str, meta: dict) -> dict:
             continue
 
         # Probe
-        params = urllib.parse.urlencode({
-            "target_chembl_id": chembl_id,
-            "standard_type": st,
-            "limit": 1,
-            "format": "json",
-        })
+        params = urllib.parse.urlencode(
+            {
+                "target_chembl_id": chembl_id,
+                "standard_type": st,
+                "limit": 1,
+                "format": "json",
+            }
+        )
         probe = curl_json(f"{API}/activity/?{params}")
         if probe is None:
             msg = f"{chembl_id}/{st}: probe failed"
@@ -108,13 +129,15 @@ def download_one_target(chembl_id: str, meta: dict) -> dict:
         while offset < total:
             page_file = type_dir / f"page_{page:04d}.json"
             if not page_file.exists():
-                params = urllib.parse.urlencode({
-                    "target_chembl_id": chembl_id,
-                    "standard_type": st,
-                    "limit": PAGE_SIZE,
-                    "offset": offset,
-                    "format": "json",
-                })
+                params = urllib.parse.urlencode(
+                    {
+                        "target_chembl_id": chembl_id,
+                        "standard_type": st,
+                        "limit": PAGE_SIZE,
+                        "offset": offset,
+                        "format": "json",
+                    }
+                )
                 data = curl_json(f"{API}/activity/?{params}")
                 if data is None:
                     msg = f"{chembl_id}/{st}: page {page} failed"
@@ -152,9 +175,7 @@ def write_manifest(summaries: list[dict], version: str = "ChEMBL_37") -> None:
         "source_version": version,
         "retrieval_timestamp_utc": ts,
         "targets": summaries,
-        "total_complete_records": sum(
-            s.get("total_records", 0) for s in summaries
-        ),
+        "total_complete_records": sum(s.get("total_records", 0) for s in summaries),
     }
     path = RAW_DIR / "acquisition_manifest.json"
     path.write_text(json.dumps(manifest, indent=2))
@@ -184,8 +205,10 @@ def main():
         print(f"--- {chembl_id} ({meta['gene']}) ---", flush=True)
         s = download_one_target(chembl_id, meta)
         summaries.append(s)
-        print(f"  => {s['total_records']} records, "
-              f"{len(s['errors'])} errors: {s['errors']}", flush=True)
+        print(
+            f"  => {s['total_records']} records, {len(s['errors'])} errors: {s['errors']}",
+            flush=True,
+        )
 
     write_manifest(summaries)
 
