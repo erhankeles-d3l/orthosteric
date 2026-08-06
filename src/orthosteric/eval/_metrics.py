@@ -70,6 +70,7 @@ class SelectivityTarget:
     lr_vs_delta: float | None
     ci_half: float | None
     compound_id: str
+    smiles: str | None
     assay_atp_mm: float | None
     within_study: bool
 
