@@ -27,14 +27,26 @@ Architecture
               v
     ComparativeObjective        -- swappable: INDEPENDENT (N separate
               |                   single-output heads, no shared latent
-              |                   space) or COMPARATIVE (one joint head,
-              |                   shared latent space across all outputs)
+              |                   space), MULTI_TASK_ABSOLUTE (one joint
+              |                   head, shared latent space, trained on
+              |                   absolute [alpha,beta,gamma,delta]), or
+              |                   COMPARATIVE (one joint head, shared
+              |                   latent space, trained on the S1
+              |                   difference vector directly)
               v
     prediction: {isoform: pAct}
 
 `ComparativeSelectivityModelV1` is the orchestrator that wires these three
 together. Swapping the encoder, head, or objective never requires
 rewriting the other two -- each is an independent constructor argument.
+This third objective (MULTI_TASK_ABSOLUTE) exists specifically to
+decompose the Family B result (COMPARATIVE beat INDEPENDENT) into its two
+possible causes -- shared representation vs. comparative target
+formulation -- via the three-way Baseline 0/1/2 ablation in
+analysis/run_baseline1_absolute_pls.py: MULTI_TASK_ABSOLUTE shares
+INDEPENDENT's target semantics (absolute isoform activities) but
+COMPARATIVE's shared latent space, isolating the shared-representation
+effect on its own.
 
 Structural evidence extension boundary (not implemented; Phase 6)
 ---------------------------------------------------------------------
@@ -96,6 +108,13 @@ class ComparativeObjective(StrEnum):
     #: N separate single-output models, one per alpha-vs-X difference,
     #: no shared latent space or parameters across outputs.
     INDEPENDENT = "independent"
+
+    #: One joint model, shared latent space, trained on the ABSOLUTE
+    #: four-isoform activity vector [alpha, beta, gamma, delta].
+    #: Selectivity differences are derived post hoc (pred_alpha - pred_X),
+    #: never trained on directly. Isolates the shared-representation
+    #: effect from the comparative-target effect (see module docstring).
+    MULTI_TASK_ABSOLUTE = "multi_task_absolute"
 
     #: One joint model whose targets are the full S1 vector at once,
     #: with genuine shared-parameter/latent coupling across outputs.
@@ -235,6 +254,18 @@ class ComparativeSelectivityModelV1:
                 head = self.head_factory()
                 head.fit(x, y)
                 self._heads[iso] = head
+        elif self.objective is ComparativeObjective.MULTI_TASK_ABSOLUTE:
+            alpha = np.array([e.pac_alpha for e in kept])
+            y = np.column_stack(
+                [alpha]
+                + [
+                    alpha - np.array([getattr(e, _AXIS_ATTR[iso]) for e in kept])
+                    for iso in _NON_REFERENCE_ISOFORMS
+                ]
+            )  # absolute [alpha, beta, gamma, delta], recovered via alpha - diff
+            head = self.head_factory()
+            head.fit(x, y)
+            self._heads["_joint"] = head
         else:  # COMPARATIVE
             y = np.column_stack(
                 [np.array([e.pac_alpha for e in kept])]
@@ -268,9 +299,28 @@ class ComparativeSelectivityModelV1:
         if head is None:
             return {}
         pred = head.predict(x)[0]
+        if self.objective is ComparativeObjective.MULTI_TASK_ABSOLUTE:
+            # Head was trained directly on [alpha, beta, gamma, delta]
+            # (absolute values) -- no arithmetic needed to recover them.
+            return {
+                "PI3Kalpha": float(pred[0]),
+                **{iso: float(pred[i + 1]) for i, iso in enumerate(_NON_REFERENCE_ISOFORMS)},
+            }
+        # COMPARATIVE: head was trained on [alpha, diff_beta, diff_gamma,
+        # diff_delta]. pred[i+1] is a DIFFERENCE, not an absolute isoform
+        # value -- must reconstruct via alpha - diff. (This reconstruction
+        # was previously missing here -- a real bug caught while adding
+        # MULTI_TASK_ABSOLUTE and re-reading this method; the standalone
+        # analysis/run_family_b_controlled_comparison.py script never had
+        # this bug because it evaluated the diff prediction directly
+        # against the actual diff, never relabeling it as an isoform value.)
+        alpha_pred = float(pred[0])
         return {
-            "PI3Kalpha": float(pred[0]),
-            **{iso: float(pred[i + 1]) for i, iso in enumerate(_NON_REFERENCE_ISOFORMS)},
+            "PI3Kalpha": alpha_pred,
+            **{
+                iso: alpha_pred - float(pred[i + 1])
+                for i, iso in enumerate(_NON_REFERENCE_ISOFORMS)
+            },
         }
 
     def as_scorer(self) -> SelectivityScorer:

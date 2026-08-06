@@ -191,3 +191,77 @@ def test_unfitted_model_predicts_empty() -> None:
         head_factory=lambda: PLSHead(n_components=2),
     )
     assert model.predict("CCO") == {}
+
+
+# ── MULTI_TASK_ABSOLUTE objective (Baseline 1 decomposition) ────────────────
+
+
+def test_multi_task_absolute_objective_fits_and_predicts() -> None:
+    model = ComparativeSelectivityModelV1(
+        encoder=MorganEncoder(),
+        objective=ComparativeObjective.MULTI_TASK_ABSOLUTE,
+        head_factory=lambda: PLSHead(n_components=2),
+    )
+    model.fit(_examples())
+    preds = model.predict("CCO")
+    assert set(preds) == {"PI3Kalpha", "PI3Kbeta", "PI3Kgamma", "PI3Kdelta"}
+
+
+class _FixedJointHead:
+    """Deterministic dummy head: always predicts a known [alpha, x, y, z]
+    row, regardless of fit data or input -- used to test the EXACT
+    reconstruction arithmetic in predict(), not just output key presence."""
+
+    def fit(self, x, y):
+        pass
+
+    def predict(self, x):
+        return np.tile(np.array([7.0, 3.0, 2.0, 1.0]), (x.shape[0], 1))
+
+
+def test_comparative_predict_reconstructs_alpha_minus_diff_correctly() -> None:
+    """Regression test for a real bug found while adding
+    MULTI_TASK_ABSOLUTE: COMPARATIVE's head predicts [alpha, diff_beta,
+    diff_gamma, diff_delta] -- predict() must return alpha - diff for each
+    isoform, NOT the raw diff value relabeled as the isoform's activity."""
+    model = ComparativeSelectivityModelV1(
+        encoder=MorganEncoder(),
+        objective=ComparativeObjective.COMPARATIVE,
+        head_factory=_FixedJointHead,
+    )
+    model.fit(_examples())
+    preds = model.predict("CCO")
+    # head always predicts [alpha=7.0, diff_beta=3.0, diff_gamma=2.0, diff_delta=1.0]
+    assert preds["PI3Kalpha"] == 7.0
+    assert preds["PI3Kbeta"] == 4.0  # 7.0 - 3.0, NOT 3.0
+    assert preds["PI3Kgamma"] == 5.0  # 7.0 - 2.0, NOT 2.0
+    assert preds["PI3Kdelta"] == 6.0  # 7.0 - 1.0, NOT 1.0
+
+
+def test_multi_task_absolute_predict_uses_raw_values_no_arithmetic() -> None:
+    """MULTI_TASK_ABSOLUTE's head is trained on absolute values directly
+    -- predict() must pass them through unchanged, unlike COMPARATIVE."""
+    model = ComparativeSelectivityModelV1(
+        encoder=MorganEncoder(),
+        objective=ComparativeObjective.MULTI_TASK_ABSOLUTE,
+        head_factory=_FixedJointHead,
+    )
+    model.fit(_examples())
+    preds = model.predict("CCO")
+    assert preds["PI3Kalpha"] == 7.0
+    assert preds["PI3Kbeta"] == 3.0  # passthrough, no arithmetic
+    assert preds["PI3Kgamma"] == 2.0
+    assert preds["PI3Kdelta"] == 1.0
+
+
+def test_three_objectives_all_swappable_independently_of_encoder_and_head() -> None:
+    """All three ComparativeObjective values work with the same
+    encoder/head_factory pair -- the target formulation is a genuine
+    third independent axis of variation, not a special case of the other
+    two."""
+    kwargs = {"encoder": MorganEncoder(), "head_factory": lambda: PLSHead(n_components=2)}
+    for objective in ComparativeObjective:
+        model = ComparativeSelectivityModelV1(objective=objective, **kwargs)
+        model.fit(_examples())
+        preds = model.predict("CCO")
+        assert "PI3Kbeta" in preds  # every objective predicts beta somehow
