@@ -1,1 +1,1 @@
-"""Tests for the features package."""
+"""Tests for features/ (Phase C SCI-1)."""

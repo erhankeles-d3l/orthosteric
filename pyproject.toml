@@ -68,6 +68,15 @@ ignore = ["D203","D213"]
 ]
 "scripts/refresh_corpus.py" = ["D103", "S607"]
 "tests/data/sources/*.py" = ["PLC0415"]  # monkeypatch requires local import
+"src/orthosteric/features/_interaction_fingerprint.py" = [
+    "ANN401",    # BioPython atoms typed as Any (no stubs)
+    "PLR0913",   # Many-arg private detection functions
+    "PLR0917",   # Same
+    "ARG001",    # isoform parameter reserved for future use
+    "RUF003",    # EN DASH in structural formula comments
+    "E702",      # Inline conditionals in geometry helpers
+    "BLE001",    # Broad except in RDKit aromatic detection (external)
+]
 
 
 [tool.ruff.lint.pydocstyle]
@@ -97,6 +106,13 @@ disallow_untyped_calls = false
 ignore_errors = false
 warn_unused_ignores = false
 
+[[tool.mypy.overrides]]
+# Features module using BioPython + RDKit (no stubs): suppress untyped errors
+module = ["orthosteric.features._interaction_fingerprint"]
+disallow_untyped_calls = false
+warn_unused_ignores = false
+warn_unreachable = false
+
 [tool.pytest.ini_options]
 filterwarnings = [
     "ignore::RuntimeWarning:Bio.PDB.vectors",
@@ -119,3 +135,10 @@ disable_error_code = ["comparison-overlap", "unused-ignore"]
 [[tool.mypy.overrides]]
 module = "orthosteric.data.harmonization._scaffold"
 disable_error_code = ["unreachable"]
+
+[[tool.mypy.overrides]]
+module = "tests.features.*"
+disallow_untyped_calls = false
+warn_return_any = false
+ignore_errors = false
+disallow_any_generics = false

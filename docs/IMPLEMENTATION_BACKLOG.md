@@ -220,7 +220,7 @@ fully tested.
 | `SCI1-001` | **Next** | — | `pocket/` data models: `StructureRecord`, `StructureProvenance`, `PocketDefinitionPolicy`, `PocketResidueSet` (pure-Python, no external deps) |
 | `SCI1-002` | **Done** | — | `pocket/` geometry + rotamer: `_pocket_geometry`, `_rotamer_state`, `_solvent_accessibility` (BioPython/numpy) |
 | `SCI1-003` | **Done** | — | `pocket/` residue mapping: `_residue_mapping` (cross-isoform correspondence data model, Constitution §2.1) |
-| `SCI1-004` | Pending | — | `features/` interaction fingerprints: `_interaction_fingerprint` |
+| `SCI1-004` | **Done** | — | `features/` interaction fingerprints: `_interaction_fingerprint` (8 evidence classes, RULE_MISSING-by-default thresholds, canonical-position alignment) |
 | `SCI1-005` | Pending | — | `features/` contact maps + graph: `_contact_map`, `_structural_graph` |
 | `SCI1-006` | Pending | — | `features/` descriptors + comparative set: `_pocket_descriptor`, `_comparative_feature` |
 | `SCI1-007` | Pending | — | `features/` MD interface stubs: `_md_interface` |

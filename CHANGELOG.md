@@ -4,6 +4,107 @@ Maintained from the first commit, never retrofitted (ENG §8).
 
 ## [Unreleased]
 
+### Added — SCI1-004: Protein-Ligand Interaction Fingerprints
+
+**Files added:**
+- `src/orthosteric/features/_interaction_fingerprint.py` — `InteractionType`
+  (8 classes: hydrogen_bond, salt_bridge, pi_pi, cation_pi, hydrophobic,
+  water_mediated, halogen_bond, metal_coordination), `InteractionStatus`
+  (OBSERVED / ABSENT / UNAVAILABLE / RULE_MISSING / NOT_APPLICABLE),
+  `InteractionEvidence`, `InteractionFingerprint`, `ComparativeFingerprint`,
+  `FingerprintConfig`, `compute_interaction_fingerprint()`,
+  `build_comparative_fingerprint()`
+
+**Scientific rules:**
+- Atom/element chemistry used to locate candidate interactions (H-bond donor/
+  acceptor elements, aromatic ring atom names, hydrophobic atom identity,
+  halogen/metal elements) is RULE_AVAILABLE — standard biochemistry, not a
+  Constitution-governed threshold.
+- All geometric classification thresholds (D...A distance, angle cutoffs,
+  pi-pi centroid distance, salt-bridge cutoff, cation-pi cutoff, hydrophobic
+  cutoff, halogen-bond geometry, metal coordination geometry) are
+  RULE_MISSING by default — `FingerprintConfig` fields default to `None` and
+  every candidate close enough to be geometrically plausible is recorded with
+  raw geometry preserved and `status = RULE_MISSING`. No threshold is
+  invented; each becomes configurable only once a GDR seals a value.
+- Water-mediated interactions are only ever reported when an explicit `HOH`/
+  `WAT` residue is present in the structure — absence of a direct contact is
+  never inferred as water-mediated.
+- AlphaFold fallback structures with no experimentally observed ligand pose
+  produce `UNAVAILABLE` evidence for every interaction type; the
+  `StructureSource` label is never relabelled as experimental.
+
+**Comparative representation:** `ComparativeFingerprint` aligns per-isoform
+`InteractionFingerprint`s by SCI1-003 canonical residue position (not raw PDB
+numbering), so `canonical_comparison(pos)` returns the evidence at the same
+homologous position across all supplied isoforms.
+
+**Determinism:** all detection passes iterate protein/ligand atoms and pocket
+residues in sorted order; `InteractionFingerprint.content_sha256()` /
+`ComparativeFingerprint.content_sha256()` provide canonical-JSON content
+hashes consistent with the SCI1-002/SCI1-003 provenance pattern.
+
+**Tests added:** `tests/features/test_sci1004_interaction_fingerprint.py`
+(32 tests, I1–I32: data model/enums, AlphaFold hierarchy, each interaction
+class's RULE_MISSING/OBSERVED/ABSENT behaviour, water-mediated explicit-water
+requirement, canonical-position propagation, comparative alignment,
+determinism, provenance).
+
+**Constraint:** no ML/learned interaction detection, no docking scores, no
+affinity/selectivity values anywhere in this layer — pure structural
+measurement only.
+
+---
+
+### Added — SCI1-004: Protein-Ligand Interaction Fingerprints
+
+**Files added:**
+- `src/orthosteric/features/_interaction_fingerprint.py` (820 lines)
+- Updated `src/orthosteric/features/__init__.py` with all public exports
+- `tests/features/test_sci1004_interaction_fingerprint.py` (32 tests, I1-I32)
+
+**New public API:**
+  `InteractionType` (8 values), `InteractionStatus` (5 values),
+  `FingerprintConfig`, `InteractionEvidence`, `InteractionFingerprint`,
+  `ComparativeFingerprint`, `compute_interaction_fingerprint()`,
+  `build_comparative_fingerprint()`
+
+**Eight interaction classes implemented:**
+
+| Class | Detection | Threshold |
+|---|---|---|
+| Hydrogen bond | N/O donor/acceptor pairs, D...A distance | RULE_MISSING |
+| Salt bridge | ARG/LYS/HIS vs ASP/GLU N/O pairs | RULE_MISSING |
+| pi-pi | Ring centroid (RDKit SMILES) + residue ring tables | RULE_MISSING |
+| Cation-pi | Protein ring vs ligand N; ligand ring vs protein cation | RULE_MISSING |
+| Hydrophobic | Nonpolar C/S atoms by residue type | RULE_MISSING |
+| Water-mediated | Explicit HOH only, never inferred | RULE_MISSING |
+| Halogen bond | CL/BR/I elements; C-X...A angle approximated | RULE_MISSING |
+| Metal coordination | Explicit metal elements (MG/ZN/CA/MN/FE/CU/NI/CO) | RULE_MISSING |
+
+**Scientific governance:**
+All classification thresholds in `FingerprintConfig` default to `None`
+(RULE_MISSING). Raw geometry (distances, angles, dihedrals) is always
+preserved. When a Governance Decision Record seals a threshold, the status
+automatically classifies as OBSERVED/ABSENT without code changes.
+
+**Comparative architecture:**
+`ComparativeFingerprint.canonical_comparison(pos)` returns interaction
+evidence at a given canonical residue position (from SCI1-003) across all
+four isoforms simultaneously. This is the joint structural representation
+required by Constitution §4.2.
+
+**AlphaFold hierarchy enforced:**
+If a structure's `StructureSource` is `ALPHAFOLD_GOVERNED_FALLBACK` and the
+ligand is absent, all evidence records carry `UNAVAILABLE` status. The module
+never fabricates interaction geometry.
+
+**Five status values kept strictly distinct:**
+`OBSERVED`, `ABSENT`, `UNAVAILABLE`, `RULE_MISSING`, `NOT_APPLICABLE` are
+never collapsed.
+
+---
+
 ### Added — SCI1-003: Cross-Isoform Residue Correspondence Data Model
 
 **Files added:**
