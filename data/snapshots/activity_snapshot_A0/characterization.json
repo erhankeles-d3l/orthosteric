@@ -1,0 +1,73 @@
+{
+  "total_records": 14331,
+  "accepted_records": 14148,
+  "excluded_records": 183,
+  "per_isoform": {
+    "PIK3CB": 4818,
+    "PIK3CG": 9330
+  },
+  "unique_inchikeys": 7667,
+  "unique_documents": 483,
+  "within_study_both_isoforms": 3469,
+  "within_study_beta_only": 962,
+  "within_study_gamma_only": 5178,
+  "replicate_groups": 201,
+  "censoring_distribution": {
+    "exact": 8447,
+    "right": 2171,
+    "left": 3530
+  },
+  "top_10_documents_by_records": [
+    [
+      "CHEMBL5729533",
+      1021
+    ],
+    [
+      "CHEMBL5725325",
+      604
+    ],
+    [
+      "CHEMBL5725838",
+      452
+    ],
+    [
+      "CHEMBL5727418",
+      408
+    ],
+    [
+      "CHEMBL1240340",
+      405
+    ],
+    [
+      "CHEMBL5725589",
+      374
+    ],
+    [
+      "CHEMBL3886547",
+      328
+    ],
+    [
+      "CHEMBL5727800",
+      304
+    ],
+    [
+      "CHEMBL5729145",
+      287
+    ],
+    [
+      "CHEMBL3879901",
+      274
+    ]
+  ],
+  "snapshot_sha256": "2b8f5ce6f236344b6e7d5ca67729a7fae77d3cb47a9fca2f9e36d4f3a9599493",
+  "snapshot_id": "SNAP-2b8f5ce6f236",
+  "chembl_version": "ChEMBL_37",
+  "targets_acquired": [
+    "CHEMBL3145",
+    "CHEMBL3267"
+  ],
+  "targets_pending_verification": [
+    "PIK3CA(PENDING)",
+    "PIK3CD(PENDING)"
+  ]
+}

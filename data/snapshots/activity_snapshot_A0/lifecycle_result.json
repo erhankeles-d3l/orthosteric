@@ -1,0 +1,25 @@
+{
+  "snapshot_sha256": "2b8f5ce6f236344b6e7d5ca67729a7fae77d3cb47a9fca2f9e36d4f3a9599493",
+  "eligibility": "ineligible_gate_stop",
+  "gate_status": "stop",
+  "gate_rationale": "STRUCTURALLY_DEGENERATE in ['coverage', 'missingness']: the corpus cannot support the comparative learning task as currently assembled.",
+  "eligible_for_training": false,
+  "lifecycle_stage": "gate_decided_stop",
+  "dimension_summary": {
+    "connectivity": "non_degenerate_unquantified",
+    "coverage": "structurally_degenerate",
+    "missingness": "structurally_degenerate",
+    "publication_concentration": "non_degenerate_unquantified",
+    "scaffold_diversity": "governed_threshold_not_met",
+    "structural_coverage": "not_yet_available",
+    "confidence": "insufficient_data"
+  },
+  "result_sha256": "09b397a279e758cdbb3ed34b4456ba343e35da371976d6a2761310a0adb7250e",
+  "engineering_params": {
+    "n_c": 2952,
+    "n_b": 2870,
+    "n_w": 0,
+    "n_complete_compounds": 0,
+    "n_connected_components": 230
+  }
+}
