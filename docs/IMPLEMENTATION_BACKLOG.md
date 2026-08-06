@@ -223,8 +223,8 @@ fully tested.
 | `SCI1-004` | **Done** | — | `features/` interaction fingerprints: `_interaction_fingerprint` (8 evidence classes, RULE_MISSING-by-default thresholds, canonical-position alignment) |
 | `SCI1-005` | **Done** | — | `features/` contact maps + graph: `_contact_map`, `_structural_graph` |
 | `SCI1-006` | **Done** | — | `features/` descriptors + comparative set: `_pocket_descriptor`, `_comparative_feature` |
-| `SCI1-007` | Pending | — | `features/` MD interface stubs: `_md_interface` |
-| `SCI1-008` | Pending | — | `features/` governed config: `FeatureConfig`, versioned |
+| `SCI1-007` | **Done** | — | `features/` MD interface stubs: `_md_interface` |
+| `SCI1-008` | **Done** | — | `features/` governed config: `FeatureConfig`, versioned |
 
 ## SCI-2 — Comparative Representation Learning · **Phase C, provisional**
 
