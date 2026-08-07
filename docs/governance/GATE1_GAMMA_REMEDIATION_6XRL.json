@@ -1,0 +1,96 @@
+{
+  "pdb_id": "6XRL",
+  "ligand_ccd": "V7Y",
+  "ligand_common_name": "IPI-549 (eganelisib)",
+  "resolution_a": 2.99,
+  "specificity_pocket_completeness_check": "Trp812 and Val882 -- the exact residues diagnosed as the cause of 6AUD's Gate-1 failure -- verified fully modeled, full-occupancy in 6XRL (absent from both REMARK 465 and REMARK 480 in the raw deposited PDB).",
+  "seed_results": [
+    {
+      "seed": 1,
+      "rmsd": 0.792,
+      "rmsd_error": null,
+      "score": -10.657,
+      "dock_time_s": 12.0
+    },
+    {
+      "seed": 2,
+      "rmsd": 0.612,
+      "rmsd_error": null,
+      "score": -10.642,
+      "dock_time_s": 12.6
+    },
+    {
+      "seed": 3,
+      "rmsd": 5.356,
+      "rmsd_error": null,
+      "score": -8.914,
+      "dock_time_s": 11.7
+    },
+    {
+      "seed": 4,
+      "rmsd": 1.154,
+      "rmsd_error": null,
+      "score": -10.074,
+      "dock_time_s": 11.8
+    },
+    {
+      "seed": 5,
+      "rmsd": 0.795,
+      "rmsd_error": null,
+      "score": -10.752,
+      "dock_time_s": 11.4
+    }
+  ],
+  "n_valid_rmsd": 5,
+  "best_rmsd": 0.612,
+  "median_rmsd": 0.795,
+  "worst_rmsd": 5.356,
+  "n_pass_2A": 4,
+  "gate1_pose_criterion": "PASS",
+  "hinge_hbond_recovery": {
+    "checked_residue": "Val882 (Gate-0-verified hinge anchor: delta Val828 -> alpha Val851 -> gamma Val882)",
+    "result": "Recovered in all 4 passing seeds (1,2,4,5), consistent donor role (Val882 backbone N-H to ligand), distances 2.90-3.32 A -- genuine ATP-competitive hinge chemistry, not merely a coincidental RMSD pass.",
+    "per_seed": {
+      "1": [
+        [
+          "VAL882",
+          "acceptor",
+          3.3361
+        ],
+        [
+          "VAL882",
+          "donor",
+          2.8978
+        ]
+      ],
+      "2": [
+        [
+          "VAL882",
+          "donor",
+          3.0744
+        ]
+      ],
+      "4": [
+        [
+          "VAL882",
+          "donor",
+          3.1832
+        ]
+      ],
+      "5": [
+        [
+          "VAL882",
+          "acceptor",
+          3.3268
+        ],
+        [
+          "VAL882",
+          "donor",
+          2.8987
+        ]
+      ]
+    }
+  },
+  "decision_matrix_outcome": "Gamma PASS (per the mandate decision matrix): the alternative experimental structure (6XRL) achieves the Gate-1 criterion (4/5 <=2.0A) with chemically valid RMSD and the conserved hinge interaction is recovered. Interpretation: the original 6AUD failure is most consistent with receptor-structure-specific limitations (confirmed: Trp812/Val882 incompleteness in 6AUD specifically) rather than a general inability of the docking protocol to reproduce PI3Kgamma binding. Per the instruction to find an adequate experimental structure before considering modeled completion: one was found and validated -- modeled completion is not needed for gamma at this time.",
+  "standing_status_update": "This validates 6XRL as a Gate-1-PASSING gamma receptor. It does NOT retroactively revalidate any already-committed analysis that used 6AUD (Gate 3, Representation 2/3, geometry ladder) -- those results stand as computed, with the gamma Gate-1-FAIL caveat that was already attached to them at the time. Re-running production docking/representation work against 6XRL instead of 6AUD is the natural next step for any FUTURE gamma-involving analysis, but is a separate, not-yet-executed task, explicitly deferred here rather than folded into this validation."
+}
