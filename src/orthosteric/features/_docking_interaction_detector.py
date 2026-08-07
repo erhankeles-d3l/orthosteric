@@ -377,6 +377,24 @@ class AtomResidueInteraction:
     isoform: str
     receptor_id: str
     docking_score: float | None
+    #: For H_BOND only: "donor" or "acceptor", from the RESIDUE's
+    #: perspective. Already computed internally by detect_hbonds's two
+    #: directional loops (ligand-donor->protein-acceptor vs
+    #: protein-donor->ligand-acceptor) but previously discarded before
+    #: reaching this record -- added additively here (no change to any
+    #: existing distance/angle/cutoff logic or count) because downstream
+    #: residue-functional-class derivation (H_BOND_DONOR_CAPABLE vs
+    #: H_BOND_ACCEPTOR_CAPABLE) requires it and must not re-guess
+    #: something already known at detection time. None for every other
+    #: interaction type.
+    residue_hbond_role: str | None = None
+    #: For SALT_BRIDGE/CHARGED_CONTACT_CANDIDATE only: "anionic" or
+    #: "cationic", from the RESIDUE's perspective. Already computed
+    #: internally by detect_charged_contact_candidates's
+    #: CATIONIC_RESIDUES/ANIONIC_RESIDUES branch but previously
+    #: discarded -- added additively for the same reason as above. None
+    #: for every other interaction type.
+    residue_charge_sign: str | None = None
     detector_policy: str = field(default=DETECTOR_POLICY_ID)
 
     def to_dict(self) -> dict[str, Any]:
@@ -397,6 +415,8 @@ class AtomResidueInteraction:
             "isoform": self.isoform,
             "receptor_id": self.receptor_id,
             "docking_score": self.docking_score,
+            "residue_hbond_role": self.residue_hbond_role,
+            "residue_charge_sign": self.residue_charge_sign,
             "detector_policy": self.detector_policy,
         }
 
@@ -422,6 +442,11 @@ def detect_hbonds(
         if angle < _HBOND_ANGLE_MIN_DEG:
             return
         lig_a, prot_a = (acceptor, donor_heavy) if acceptor.is_ligand else (donor_heavy, acceptor)
+        # The residue's role is already known from which side of this
+        # closure donor_heavy/acceptor came from -- if the PROTEIN atom
+        # is donor_heavy, the residue donated; if it's acceptor, the
+        # residue accepted. Never re-derived by guessing later.
+        residue_role = "donor" if not donor_heavy.is_ligand else "acceptor"
         out.append(
             AtomResidueInteraction(
                 interaction_type=InteractionType.H_BOND,
@@ -440,6 +465,7 @@ def detect_hbonds(
                 isoform=meta["isoform"],
                 receptor_id=meta["receptor_id"],
                 docking_score=meta.get("docking_score"),
+                residue_hbond_role=residue_role,
             )
         )
 
@@ -499,7 +525,14 @@ def detect_charged_contact_candidates(
         prot_by_residue.setdefault((a.chain_id, a.residue_seq), []).append(a)
     for (chain_id, resnum), atoms in prot_by_residue.items():
         rn = atoms[0].residue_name
-        if rn not in CATIONIC_RESIDUES and rn not in ANIONIC_RESIDUES:
+        # The branch already known here (a residue name is never in both
+        # sets) is the residue's charge sign -- captured once per residue
+        # rather than re-derived per atom-pair, and never left implicit.
+        if rn in CATIONIC_RESIDUES:
+            charge_sign = "cationic"
+        elif rn in ANIONIC_RESIDUES:
+            charge_sign = "anionic"
+        else:
             continue
         for pa in atoms:
             if pa.element not in ("N", "O"):
@@ -531,6 +564,7 @@ def detect_charged_contact_candidates(
                             isoform=meta["isoform"],
                             receptor_id=meta["receptor_id"],
                             docking_score=meta.get("docking_score"),
+                            residue_charge_sign=charge_sign,
                         )
                     )
     return out
