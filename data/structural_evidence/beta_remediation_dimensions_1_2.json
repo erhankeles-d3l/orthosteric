@@ -1,0 +1,183 @@
+{
+  "dimension_1_global_sequence": {
+    "n_mouse_residues": 855,
+    "n_human_residues": 1070,
+    "alignment_coverage_pct": 79.91,
+    "identity_pct_at_aligned": 95.67,
+    "n_gap_positions": 215,
+    "n_gap_outside_construct_range": 125,
+    "n_gap_inside_construct_range": 90,
+    "n_remark465_missing_chainA_corrected": 97,
+    "disorder_diagnosis_consistent": true,
+    "correction_note": "The first ad hoc REMARK 465 count (213) combined both protein chains in the asymmetric unit and was invalid as a chain-A comparator. Corrected here: chain-A-only count is 97. Of the 215 total gap positions, 125 fall outside the mouse construct's own crystallized range (never expressed, not disorder) and 90 fall inside it (candidate disorder, consistent with the corrected 97-residue count within 7).",
+    "interpretation": "Coverage numerically below the 85% pre-registered threshold, but fully explained by (a) a truncated crystallization construct and (b) ordinary loop disorder within that construct -- neither is sequence divergence between mouse and human PIK3CB."
+  },
+  "dimension_2_pocket_correspondence": {
+    "n_ligand_heavy_atoms": 26,
+    "n_pocket_residues": 19,
+    "n_pocket_residues_overlapping_missing_list": 0,
+    "n_mapped": 19,
+    "n_identical_at_mapped": 19,
+    "mapped_pct": 100.0,
+    "identical_pct": 100.0,
+    "pocket_table": [
+      {
+        "mouse_resnum": 771,
+        "mouse_resname": "LYS",
+        "human_resnum": 777,
+        "human_resname": "LYS",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 772,
+        "mouse_resname": "TYR",
+        "human_resnum": 778,
+        "human_resname": "TYR",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 773,
+        "mouse_resname": "MET",
+        "human_resnum": 779,
+        "human_resname": "MET",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 779,
+        "mouse_resname": "PRO",
+        "human_resnum": 785,
+        "human_resname": "PRO",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 780,
+        "mouse_resname": "LEU",
+        "human_resnum": 786,
+        "human_resname": "LEU",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 781,
+        "mouse_resname": "TRP",
+        "human_resnum": 787,
+        "human_resname": "TRP",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 797,
+        "mouse_resname": "ILE",
+        "human_resnum": 803,
+        "human_resname": "ILE",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 799,
+        "mouse_resname": "LYS",
+        "human_resnum": 805,
+        "human_resname": "LYS",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 807,
+        "mouse_resname": "ASP",
+        "human_resnum": 813,
+        "human_resname": "ASP",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 833,
+        "mouse_resname": "TYR",
+        "human_resnum": 839,
+        "human_resname": "TYR",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 845,
+        "mouse_resname": "ILE",
+        "human_resnum": 851,
+        "human_resname": "ILE",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 846,
+        "mouse_resname": "GLU",
+        "human_resnum": 852,
+        "human_resname": "GLU",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 847,
+        "mouse_resname": "VAL",
+        "human_resnum": 853,
+        "human_resname": "VAL",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 848,
+        "mouse_resname": "VAL",
+        "human_resnum": 854,
+        "human_resname": "VAL",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 851,
+        "mouse_resname": "SER",
+        "human_resnum": 857,
+        "human_resname": "SER",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 920,
+        "mouse_resname": "MET",
+        "human_resnum": 926,
+        "human_resname": "MET",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 928,
+        "mouse_resname": "PHE",
+        "human_resnum": 934,
+        "human_resname": "PHE",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 930,
+        "mouse_resname": "ILE",
+        "human_resnum": 936,
+        "human_resname": "ILE",
+        "mapped": true,
+        "identical": true
+      },
+      {
+        "mouse_resnum": 931,
+        "mouse_resname": "ASP",
+        "human_resnum": 937,
+        "human_resname": "ASP",
+        "mapped": true,
+        "identical": true
+      }
+    ],
+    "anchor_equivalent_positions_mouse_numbering": {
+      "specificity_pocket_1_alpha_Met772": 773,
+      "specificity_pocket_2_alpha_Trp780": 781,
+      "hinge_alpha_Val851": 848
+    }
+  }
+}
