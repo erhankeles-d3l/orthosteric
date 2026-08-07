@@ -1,0 +1,151 @@
+{
+  "PI3Kalpha": {
+    "pdb_id": "8EXL",
+    "ligand_ccd": "799",
+    "seed_results": [
+      {
+        "seed": 1,
+        "rmsd": 1.506,
+        "rmsd_error": null,
+        "score": -10.236,
+        "dock_time_s": 4.0
+      },
+      {
+        "seed": 2,
+        "rmsd": 1.484,
+        "rmsd_error": null,
+        "score": -10.206,
+        "dock_time_s": 4.2
+      },
+      {
+        "seed": 3,
+        "rmsd": 1.164,
+        "rmsd_error": null,
+        "score": -10.574,
+        "dock_time_s": 4.3
+      },
+      {
+        "seed": 4,
+        "rmsd": 1.534,
+        "rmsd_error": null,
+        "score": -10.177,
+        "dock_time_s": 4.2
+      },
+      {
+        "seed": 5,
+        "rmsd": 1.656,
+        "rmsd_error": null,
+        "score": -10.705,
+        "dock_time_s": 4.3
+      }
+    ],
+    "n_valid_rmsd": 5,
+    "best_rmsd": 1.164,
+    "median_rmsd": 1.506,
+    "worst_rmsd": 1.656,
+    "n_pass_2A": 5,
+    "gate1_pose_criterion": "PASS"
+  },
+  "PI3Kgamma": {
+    "pdb_id": "6AUD",
+    "ligand_ccd": "BWY",
+    "seed_results": [
+      {
+        "seed": 1,
+        "rmsd": 2.854,
+        "rmsd_error": null,
+        "score": -8.871,
+        "dock_time_s": 5.5
+      },
+      {
+        "seed": 2,
+        "rmsd": 2.198,
+        "rmsd_error": null,
+        "score": -9.133,
+        "dock_time_s": 5.0
+      },
+      {
+        "seed": 3,
+        "rmsd": 1.536,
+        "rmsd_error": null,
+        "score": -9.268,
+        "dock_time_s": 5.7
+      },
+      {
+        "seed": 4,
+        "rmsd": 5.928,
+        "rmsd_error": null,
+        "score": -9.212,
+        "dock_time_s": 4.7
+      },
+      {
+        "seed": 5,
+        "rmsd": 2.692,
+        "rmsd_error": null,
+        "score": -9.191,
+        "dock_time_s": 5.5
+      }
+    ],
+    "n_valid_rmsd": 5,
+    "best_rmsd": 1.536,
+    "median_rmsd": 2.692,
+    "worst_rmsd": 5.928,
+    "n_pass_2A": 1,
+    "gate1_pose_criterion": "FAIL",
+    "failure_diagnosis": {
+      "method": "checked heavy-atom completeness of all pocket residues within 8A of the BWY ligand centroid, directly against the ORIGINAL downloaded 6AUD.pdb (not a receptor-prep-pipeline artifact -- same raw file used throughout this project since early sessions)",
+      "finding": "15 pocket residues have incomplete heavy-atom counts in the actual deposited 2.015-A crystal structure, including Val882 (the verified hinge H-bond anchor, missing side-chain CG1/CG2) and Trp812 (verified specificity-pocket anchor, missing backbone N/C/O and ring CD1)",
+      "interpretation": "genuine crystallographic disorder/incompleteness in this specific PDB entry, not a bug in this project own receptor-preparation pipeline -- plausible real cause of the observed self-docking instability (wide seed-to-seed RMSD spread, 1/5 pass) since missing side-chain atoms near the binding site can create artificial extra pocket volume the docking search exploits inconsistently across seeds",
+      "incomplete_residue_count": 15,
+      "recommended_next_step": "per Gate 4 (ensemble receptor expansion), gamma is the isoform with the strongest documented case for using a real, more complete alternative structure or a locally-repaired/rotamer-completed model rather than relying on 6AUD alone -- this finding directly motivates that gate rather than being a dead end"
+    }
+  },
+  "PI3Kdelta": {
+    "pdb_id": "6PYR",
+    "ligand_ccd": "P5J",
+    "seed_results": [
+      {
+        "seed": 1,
+        "rmsd": 0.614,
+        "rmsd_error": null,
+        "score": -10.541,
+        "dock_time_s": 5.5
+      },
+      {
+        "seed": 2,
+        "rmsd": 0.625,
+        "rmsd_error": null,
+        "score": -10.439,
+        "dock_time_s": 5.4
+      },
+      {
+        "seed": 3,
+        "rmsd": 0.588,
+        "rmsd_error": null,
+        "score": -10.525,
+        "dock_time_s": 5.5
+      },
+      {
+        "seed": 4,
+        "rmsd": 0.617,
+        "rmsd_error": null,
+        "score": -10.498,
+        "dock_time_s": 5.5
+      },
+      {
+        "seed": 5,
+        "rmsd": 0.579,
+        "rmsd_error": null,
+        "score": -10.509,
+        "dock_time_s": 5.3
+      }
+    ],
+    "n_valid_rmsd": 5,
+    "best_rmsd": 0.579,
+    "median_rmsd": 0.614,
+    "worst_rmsd": 0.625,
+    "n_pass_2A": 5,
+    "gate1_pose_criterion": "PASS"
+  },
+  "gate1_overall": "PARTIAL: alpha PASS, delta PASS, gamma FAIL (diagnosed -- genuine crystallographic incompleteness near binding site, not a pipeline bug), beta not applicable (no experimental co-crystal, per mandate section 3.3/4.5)"
+}
