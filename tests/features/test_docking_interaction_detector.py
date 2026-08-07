@@ -137,6 +137,51 @@ def test_charged_contact_negative_too_far() -> None:
     assert hits == []
 
 
+# ── SALT_BRIDGE promotion: confirmed vs unconfirmed ligand charge ───────────
+
+
+def test_confirmed_charged_atom_promotes_to_salt_bridge() -> None:
+    """When the caller supplies a confirmed-charged atom name (from real
+    pH-aware protonation), the SAME geometry that would otherwise be
+    CHARGED_CONTACT_CANDIDATE is promoted to SALT_BRIDGE."""
+    lig_n = _atom("N1", "N", "N", 0.0, 0.0, 0.0)
+    prot_o = _atom(
+        "OE1", "O", "OA", 0.0, 0.0, 3.5, resname="GLU", resnum=50, chain="A", is_ligand=False
+    )
+    unconfirmed = detect_charged_contact_candidates([lig_n], [prot_o], _META)
+    confirmed = detect_charged_contact_candidates(
+        [lig_n], [prot_o], _META, ligand_confirmed_charged_names=frozenset({"N1"})
+    )
+    assert unconfirmed[0].interaction_type is InteractionType.CHARGED_CONTACT_CANDIDATE
+    assert confirmed[0].interaction_type is InteractionType.SALT_BRIDGE
+    assert unconfirmed[0].distance_angstrom == confirmed[0].distance_angstrom
+
+
+def test_unrelated_confirmed_charge_name_does_not_promote() -> None:
+    """Supplying a confirmed-charged-atom set that doesn't include THIS
+    atom's name must not accidentally promote it."""
+    lig_n = _atom("N1", "N", "N", 0.0, 0.0, 0.0)
+    prot_o = _atom(
+        "OE1", "O", "OA", 0.0, 0.0, 3.5, resname="GLU", resnum=50, chain="A", is_ligand=False
+    )
+    hits = detect_charged_contact_candidates(
+        [lig_n], [prot_o], _META, ligand_confirmed_charged_names=frozenset({"N99_not_present"})
+    )
+    assert hits[0].interaction_type is InteractionType.CHARGED_CONTACT_CANDIDATE
+
+
+def test_detect_all_interactions_passes_through_confirmed_charge_names() -> None:
+    lig_n = _atom("N1", "N", "N", 0.0, 0.0, 0.0)
+    prot_o = _atom(
+        "OE1", "O", "OA", 0.0, 0.0, 3.5, resname="GLU", resnum=50, chain="A", is_ligand=False
+    )
+    hits = detect_all_interactions(
+        [lig_n], [prot_o], _META, ligand_confirmed_charged_names=frozenset({"N1"})
+    )
+    salt_bridges = [h for h in hits if h.interaction_type is InteractionType.SALT_BRIDGE]
+    assert len(salt_bridges) == 1
+
+
 # ── Hydrophobic contact: requires chemically compatible atoms ────────────────
 
 

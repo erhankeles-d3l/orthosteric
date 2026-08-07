@@ -22,10 +22,15 @@ import numpy as np
 from rdkit import Chem
 
 from orthosteric.features._docking_interaction_detector import (
+    InteractionType,
     content_sha256,
     detect_all_interactions,
     parse_pdbqt_atoms,
     residue_level_summary,
+)
+from orthosteric.features._ligand_protonation import (
+    charged_atom_names_from_pose,
+    protonate_ligand,
 )
 
 #: Spatial pre-filter radius (efficiency only, not a scientific threshold --
@@ -80,8 +85,11 @@ def ligand_aromatic_atom_names(smiles: str, ligand_atoms) -> frozenset[str]:
 
 all_results = {}
 per_compound_type_counts: dict[str, dict[str, dict[str, int]]] = defaultdict(dict)
+protonation_cache: dict[str, object] = {}
+promotion_stats = {"promoted_to_salt_bridge": 0, "remained_candidate": 0, "ambiguous_compounds": []}
 
-print("=== Atom-residue interaction detection on 20 real docking poses ===\n")
+print("=== Atom-residue interaction detection on 20 real docking poses ===")
+print("=== NOW WITH REAL pH-AWARE PROTONATION (Dimorphite-DL 2.0.2, pH 7.4) ===\n")
 for key, entry in manifest.items():
     cid, iso = entry["compound_id"], entry["isoform"]
     pose_path = Path(entry["pose_pdbqt"])
@@ -93,12 +101,30 @@ for key, entry in manifest.items():
     protein_atoms = filter_pocket_atoms(ligand_atoms, protein_atoms_full)
     arom_names = ligand_aromatic_atom_names(entry["smiles"], ligand_atoms)
 
+    if cid not in protonation_cache:
+        protonation_cache[cid] = protonate_ligand(entry["smiles"], ph=7.4)
+        prot = protonation_cache[cid]
+        if prot is not None and prot.is_ambiguous:
+            promotion_stats["ambiguous_compounds"].append(cid)
+    protonation = protonation_cache[cid]
+    confirmed_charged_names = (
+        charged_atom_names_from_pose(protonation, ligand_atoms) if protonation else frozenset()
+    )
+
     meta = {
         "compound_id": cid, "isoform": iso, "receptor_id": entry["receptor_id"],
         "docking_score": entry["docking_score"],
     }
-    interactions = detect_all_interactions(ligand_atoms, protein_atoms, meta, arom_names)
+    interactions = detect_all_interactions(
+        ligand_atoms, protein_atoms, meta, arom_names, confirmed_charged_names
+    )
     summary = residue_level_summary(interactions)
+
+    for it in interactions:
+        if it.interaction_type is InteractionType.SALT_BRIDGE:
+            promotion_stats["promoted_to_salt_bridge"] += 1
+        elif it.interaction_type is InteractionType.CHARGED_CONTACT_CANDIDATE:
+            promotion_stats["remained_candidate"] += 1
 
     type_counts: dict[str, int] = {}
     for it in interactions:
@@ -108,6 +134,12 @@ for key, entry in manifest.items():
     all_results[key] = {
         "compound_id": cid, "isoform": iso, "receptor_id": entry["receptor_id"],
         "docking_score": entry["docking_score"],
+        "protonation": {
+            "selected_smiles": protonation.selected_smiles if protonation else None,
+            "is_ambiguous": protonation.is_ambiguous if protonation else None,
+            "n_states": protonation.n_states if protonation else None,
+            "n_confirmed_charged_atoms": len(confirmed_charged_names),
+        },
         "n_ligand_atoms": len(ligand_atoms), "n_protein_pocket_atoms_considered": len(protein_atoms),
         "n_interactions": len(interactions), "interaction_type_counts": type_counts,
         "atom_level": [it.to_dict() for it in interactions],
@@ -161,3 +193,12 @@ for r in all_results.values():
 print(f"Total pose analyses: {n_total}")
 print(f"Poses with >=1 detected interaction: {n_with_interactions}")
 print(f"Total interactions by type (all 20 poses): {dict(type_totals)}")
+
+print("\n=== Salt-bridge promotion (real pH-aware protonation, Dimorphite-DL 2.0.2, pH 7.4) ===")
+print(f"Confirmed SALT_BRIDGE (ligand atom verified charged): {promotion_stats['promoted_to_salt_bridge']}")
+print(f"Remained CHARGED_CONTACT_CANDIDATE (unconfirmed): {promotion_stats['remained_candidate']}")
+print(f"Compounds with ambiguous protonation state at pH 7.4: {promotion_stats['ambiguous_compounds']}")
+for cid, prot in protonation_cache.items():
+    if prot:
+        print(f"  {cid}: selected={prot.selected_smiles!r} "
+              f"n_states={prot.n_states} confirmed_charged_atoms={len(prot.charged_atom_indices)}")

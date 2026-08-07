@@ -4,6 +4,12 @@
     "isoform": "PI3Kalpha",
     "receptor_id": "8EXL",
     "docking_score": -9.04,
+    "protonation": {
+      "selected_smiles": "O=c1c2ccccc2oc2cc(N3CCOCC3)ccc12",
+      "is_ambiguous": false,
+      "n_states": 1,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 21,
     "n_protein_pocket_atoms_considered": 761,
     "n_interactions": 1,
@@ -49,6 +55,12 @@
     "isoform": "PI3Kbeta",
     "receptor_id": "AF-P42338",
     "docking_score": -7.134,
+    "protonation": {
+      "selected_smiles": "O=c1c2ccccc2oc2cc(N3CCOCC3)ccc12",
+      "is_ambiguous": false,
+      "n_states": 1,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 21,
     "n_protein_pocket_atoms_considered": 877,
     "n_interactions": 6,
@@ -212,6 +224,12 @@
     "isoform": "PI3Kgamma",
     "receptor_id": "6AUD",
     "docking_score": -8.393,
+    "protonation": {
+      "selected_smiles": "O=c1c2ccccc2oc2cc(N3CCOCC3)ccc12",
+      "is_ambiguous": false,
+      "n_states": 1,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 21,
     "n_protein_pocket_atoms_considered": 842,
     "n_interactions": 2,
@@ -286,6 +304,12 @@
     "isoform": "PI3Kdelta",
     "receptor_id": "6PYR",
     "docking_score": -8.437,
+    "protonation": {
+      "selected_smiles": "O=c1c2ccccc2oc2cc(N3CCOCC3)ccc12",
+      "is_ambiguous": false,
+      "n_states": 1,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 21,
     "n_protein_pocket_atoms_considered": 886,
     "n_interactions": 4,
@@ -398,109 +422,20 @@
     "isoform": "PI3Kalpha",
     "receptor_id": "8EXL",
     "docking_score": -8.765,
+    "protonation": {
+      "selected_smiles": "O=c1c([O-])c(-c2ccc(O)c([O-])c2)oc2cc(O)cc(O)c12",
+      "is_ambiguous": true,
+      "n_states": 32,
+      "n_confirmed_charged_atoms": 2
+    },
     "n_ligand_atoms": 27,
     "n_protein_pocket_atoms_considered": 960,
     "n_interactions": 9,
     "interaction_type_counts": {
-      "charged_contact_candidate": 5,
-      "h_bond": 4
+      "h_bond": 4,
+      "salt_bridge": 5
     },
     "atom_level": [
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 21,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 810,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "OD2",
-        "distance_angstrom": 3.1408,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kalpha",
-        "receptor_id": "8EXL",
-        "docking_score": -8.765,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 23,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 810,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "OD2",
-        "distance_angstrom": 3.885,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kalpha",
-        "receptor_id": "8EXL",
-        "docking_score": -8.765,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 5,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 849,
-        "residue_name": "GLU",
-        "chain_id": "A",
-        "protein_atom_name": "O",
-        "distance_angstrom": 3.6857,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kalpha",
-        "receptor_id": "8EXL",
-        "docking_score": -8.765,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 25,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 849,
-        "residue_name": "GLU",
-        "chain_id": "A",
-        "protein_atom_name": "O",
-        "distance_angstrom": 3.799,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kalpha",
-        "receptor_id": "8EXL",
-        "docking_score": -8.765,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 21,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 933,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "N",
-        "distance_angstrom": 3.0877,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kalpha",
-        "receptor_id": "8EXL",
-        "docking_score": -8.765,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
       {
         "interaction_type": "h_bond",
         "status": "observed",
@@ -576,6 +511,101 @@
         "receptor_id": "8EXL",
         "docking_score": -8.765,
         "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 21,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 810,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "OD2",
+        "distance_angstrom": 3.1408,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kalpha",
+        "receptor_id": "8EXL",
+        "docking_score": -8.765,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 23,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 810,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "OD2",
+        "distance_angstrom": 3.885,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kalpha",
+        "receptor_id": "8EXL",
+        "docking_score": -8.765,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 5,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 849,
+        "residue_name": "GLU",
+        "chain_id": "A",
+        "protein_atom_name": "O",
+        "distance_angstrom": 3.6857,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kalpha",
+        "receptor_id": "8EXL",
+        "docking_score": -8.765,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 25,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 849,
+        "residue_name": "GLU",
+        "chain_id": "A",
+        "protein_atom_name": "O",
+        "distance_angstrom": 3.799,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kalpha",
+        "receptor_id": "8EXL",
+        "docking_score": -8.765,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 21,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 933,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "N",
+        "distance_angstrom": 3.0877,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kalpha",
+        "receptor_id": "8EXL",
+        "docking_score": -8.765,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
       }
     ],
     "residue_level": [
@@ -584,7 +614,7 @@
         "residue_number": 810,
         "residue_name": "ASP",
         "interaction_types": {
-          "charged_contact_candidate": 2
+          "salt_bridge": 2
         },
         "min_distance_angstrom": 3.1408
       },
@@ -602,7 +632,7 @@
         "residue_number": 849,
         "residue_name": "GLU",
         "interaction_types": {
-          "charged_contact_candidate": 2
+          "salt_bridge": 2
         },
         "min_distance_angstrom": 3.6857
       },
@@ -629,26 +659,32 @@
         "residue_number": 933,
         "residue_name": "ASP",
         "interaction_types": {
-          "charged_contact_candidate": 1,
-          "h_bond": 1
+          "h_bond": 1,
+          "salt_bridge": 1
         },
         "min_distance_angstrom": 3.0877
       }
     ],
-    "content_sha256": "2fd4af4aeece33601f6fe0c3ce9a71cf87b99922d77e194bb0cb04214783e646"
+    "content_sha256": "b650f9462faa9122e4749f347d08bf68f46da6b22bfc777d09811a7fb9956107"
   },
   "Quercetin__PI3Kbeta": {
     "compound_id": "Quercetin",
     "isoform": "PI3Kbeta",
     "receptor_id": "AF-P42338",
     "docking_score": -6.733,
+    "protonation": {
+      "selected_smiles": "O=c1c([O-])c(-c2ccc(O)c([O-])c2)oc2cc(O)cc(O)c12",
+      "is_ambiguous": true,
+      "n_states": 32,
+      "n_confirmed_charged_atoms": 2
+    },
     "n_ligand_atoms": 27,
     "n_protein_pocket_atoms_considered": 977,
     "n_interactions": 5,
     "interaction_type_counts": {
       "cation_pi": 1,
-      "charged_contact_candidate": 3,
-      "h_bond": 1
+      "h_bond": 1,
+      "salt_bridge": 3
     },
     "atom_level": [
       {
@@ -662,63 +698,6 @@
         "chain_id": "A",
         "protein_atom_name": "NZ",
         "distance_angstrom": 4.3716,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kbeta",
-        "receptor_id": "AF-P42338",
-        "docking_score": -6.733,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 25,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 805,
-        "residue_name": "LYS",
-        "chain_id": "A",
-        "protein_atom_name": "NZ",
-        "distance_angstrom": 2.8734,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kbeta",
-        "receptor_id": "AF-P42338",
-        "docking_score": -6.733,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 5,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 937,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "N",
-        "distance_angstrom": 3.7163,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kbeta",
-        "receptor_id": "AF-P42338",
-        "docking_score": -6.733,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 25,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 937,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "N",
-        "distance_angstrom": 3.7374,
         "angle_degrees": null,
         "plane_angle_degrees": null,
         "compound_id": "Quercetin",
@@ -745,6 +724,63 @@
         "receptor_id": "AF-P42338",
         "docking_score": -6.733,
         "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 25,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 805,
+        "residue_name": "LYS",
+        "chain_id": "A",
+        "protein_atom_name": "NZ",
+        "distance_angstrom": 2.8734,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kbeta",
+        "receptor_id": "AF-P42338",
+        "docking_score": -6.733,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 5,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 937,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "N",
+        "distance_angstrom": 3.7163,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kbeta",
+        "receptor_id": "AF-P42338",
+        "docking_score": -6.733,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 25,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 937,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "N",
+        "distance_angstrom": 3.7374,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kbeta",
+        "receptor_id": "AF-P42338",
+        "docking_score": -6.733,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
       }
     ],
     "residue_level": [
@@ -754,8 +790,8 @@
         "residue_name": "LYS",
         "interaction_types": {
           "cation_pi": 1,
-          "charged_contact_candidate": 1,
-          "h_bond": 1
+          "h_bond": 1,
+          "salt_bridge": 1
         },
         "min_distance_angstrom": 2.8734
       },
@@ -764,121 +800,32 @@
         "residue_number": 937,
         "residue_name": "ASP",
         "interaction_types": {
-          "charged_contact_candidate": 2
+          "salt_bridge": 2
         },
         "min_distance_angstrom": 3.7163
       }
     ],
-    "content_sha256": "c453438a7e319c2b43f700e728d8493ac7dc331223b4c725f4c339a2da6c7727"
+    "content_sha256": "babff2af0889bb95ab1e59e0bac5e8d38bbbdcef2635094446e9d17609e21c32"
   },
   "Quercetin__PI3Kgamma": {
     "compound_id": "Quercetin",
     "isoform": "PI3Kgamma",
     "receptor_id": "6AUD",
     "docking_score": -8.769,
+    "protonation": {
+      "selected_smiles": "O=c1c([O-])c(-c2ccc(O)c([O-])c2)oc2cc(O)cc(O)c12",
+      "is_ambiguous": true,
+      "n_states": 32,
+      "n_confirmed_charged_atoms": 2
+    },
     "n_ligand_atoms": 27,
     "n_protein_pocket_atoms_considered": 957,
     "n_interactions": 8,
     "interaction_type_counts": {
-      "charged_contact_candidate": 5,
-      "h_bond": 3
+      "h_bond": 3,
+      "salt_bridge": 5
     },
     "atom_level": [
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 13,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 833,
-        "residue_name": "LYS",
-        "chain_id": "A",
-        "protein_atom_name": "NZ",
-        "distance_angstrom": 3.4305,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kgamma",
-        "receptor_id": "6AUD",
-        "docking_score": -8.769,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 11,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 841,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "OD2",
-        "distance_angstrom": 3.7139,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kgamma",
-        "receptor_id": "6AUD",
-        "docking_score": -8.769,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 11,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 964,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "N",
-        "distance_angstrom": 3.2478,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kgamma",
-        "receptor_id": "6AUD",
-        "docking_score": -8.769,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 13,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 964,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "OD1",
-        "distance_angstrom": 3.2473,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kgamma",
-        "receptor_id": "6AUD",
-        "docking_score": -8.769,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 13,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 964,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "OD2",
-        "distance_angstrom": 3.8686,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kgamma",
-        "receptor_id": "6AUD",
-        "docking_score": -8.769,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
       {
         "interaction_type": "h_bond",
         "status": "observed",
@@ -935,6 +882,101 @@
         "receptor_id": "6AUD",
         "docking_score": -8.769,
         "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 13,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 833,
+        "residue_name": "LYS",
+        "chain_id": "A",
+        "protein_atom_name": "NZ",
+        "distance_angstrom": 3.4305,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kgamma",
+        "receptor_id": "6AUD",
+        "docking_score": -8.769,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 11,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 841,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "OD2",
+        "distance_angstrom": 3.7139,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kgamma",
+        "receptor_id": "6AUD",
+        "docking_score": -8.769,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 11,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 964,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "N",
+        "distance_angstrom": 3.2478,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kgamma",
+        "receptor_id": "6AUD",
+        "docking_score": -8.769,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 13,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 964,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "OD1",
+        "distance_angstrom": 3.2473,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kgamma",
+        "receptor_id": "6AUD",
+        "docking_score": -8.769,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 13,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 964,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "OD2",
+        "distance_angstrom": 3.8686,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kgamma",
+        "receptor_id": "6AUD",
+        "docking_score": -8.769,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
       }
     ],
     "residue_level": [
@@ -943,8 +985,8 @@
         "residue_number": 833,
         "residue_name": "LYS",
         "interaction_types": {
-          "charged_contact_candidate": 1,
-          "h_bond": 1
+          "h_bond": 1,
+          "salt_bridge": 1
         },
         "min_distance_angstrom": 3.4305
       },
@@ -953,7 +995,7 @@
         "residue_number": 841,
         "residue_name": "ASP",
         "interaction_types": {
-          "charged_contact_candidate": 1
+          "salt_bridge": 1
         },
         "min_distance_angstrom": 3.7139
       },
@@ -971,160 +1013,33 @@
         "residue_number": 964,
         "residue_name": "ASP",
         "interaction_types": {
-          "charged_contact_candidate": 3,
-          "h_bond": 1
+          "h_bond": 1,
+          "salt_bridge": 3
         },
         "min_distance_angstrom": 3.2473
       }
     ],
-    "content_sha256": "60897b32ea7e141d3addb4449a053292c60efce3e44052967adaa14a3d015ffa"
+    "content_sha256": "c28e5aec92ff26f436147665612213465a707cd97fe627eaafe64e57bccbf3ce"
   },
   "Quercetin__PI3Kdelta": {
     "compound_id": "Quercetin",
     "isoform": "PI3Kdelta",
     "receptor_id": "6PYR",
     "docking_score": -8.303,
+    "protonation": {
+      "selected_smiles": "O=c1c([O-])c(-c2ccc(O)c([O-])c2)oc2cc(O)cc(O)c12",
+      "is_ambiguous": true,
+      "n_states": 32,
+      "n_confirmed_charged_atoms": 2
+    },
     "n_ligand_atoms": 27,
     "n_protein_pocket_atoms_considered": 951,
     "n_interactions": 10,
     "interaction_type_counts": {
-      "charged_contact_candidate": 7,
-      "h_bond": 3
+      "h_bond": 3,
+      "salt_bridge": 7
     },
     "atom_level": [
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 23,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 779,
-        "residue_name": "LYS",
-        "chain_id": "A",
-        "protein_atom_name": "NZ",
-        "distance_angstrom": 3.8193,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kdelta",
-        "receptor_id": "6PYR",
-        "docking_score": -8.303,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 21,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 787,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "OD2",
-        "distance_angstrom": 3.6944,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kdelta",
-        "receptor_id": "6PYR",
-        "docking_score": -8.303,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 23,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 787,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "OD2",
-        "distance_angstrom": 3.7885,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kdelta",
-        "receptor_id": "6PYR",
-        "docking_score": -8.303,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 5,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 826,
-        "residue_name": "GLU",
-        "chain_id": "A",
-        "protein_atom_name": "O",
-        "distance_angstrom": 3.4069,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kdelta",
-        "receptor_id": "6PYR",
-        "docking_score": -8.303,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 25,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 826,
-        "residue_name": "GLU",
-        "chain_id": "A",
-        "protein_atom_name": "O",
-        "distance_angstrom": 3.5389,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kdelta",
-        "receptor_id": "6PYR",
-        "docking_score": -8.303,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 21,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 911,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "N",
-        "distance_angstrom": 3.1126,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kdelta",
-        "receptor_id": "6PYR",
-        "docking_score": -8.303,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
-      {
-        "interaction_type": "charged_contact_candidate",
-        "status": "observed",
-        "ligand_atom_index": 23,
-        "ligand_atom_name": "O",
-        "ligand_atom_element": "O",
-        "residue_number": 911,
-        "residue_name": "ASP",
-        "chain_id": "A",
-        "protein_atom_name": "OD2",
-        "distance_angstrom": 3.6612,
-        "angle_degrees": null,
-        "plane_angle_degrees": null,
-        "compound_id": "Quercetin",
-        "isoform": "PI3Kdelta",
-        "receptor_id": "6PYR",
-        "docking_score": -8.303,
-        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
-      },
       {
         "interaction_type": "h_bond",
         "status": "observed",
@@ -1181,6 +1096,139 @@
         "receptor_id": "6PYR",
         "docking_score": -8.303,
         "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 23,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 779,
+        "residue_name": "LYS",
+        "chain_id": "A",
+        "protein_atom_name": "NZ",
+        "distance_angstrom": 3.8193,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kdelta",
+        "receptor_id": "6PYR",
+        "docking_score": -8.303,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 21,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 787,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "OD2",
+        "distance_angstrom": 3.6944,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kdelta",
+        "receptor_id": "6PYR",
+        "docking_score": -8.303,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 23,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 787,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "OD2",
+        "distance_angstrom": 3.7885,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kdelta",
+        "receptor_id": "6PYR",
+        "docking_score": -8.303,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 5,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 826,
+        "residue_name": "GLU",
+        "chain_id": "A",
+        "protein_atom_name": "O",
+        "distance_angstrom": 3.4069,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kdelta",
+        "receptor_id": "6PYR",
+        "docking_score": -8.303,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 25,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 826,
+        "residue_name": "GLU",
+        "chain_id": "A",
+        "protein_atom_name": "O",
+        "distance_angstrom": 3.5389,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kdelta",
+        "receptor_id": "6PYR",
+        "docking_score": -8.303,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 21,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 911,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "N",
+        "distance_angstrom": 3.1126,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kdelta",
+        "receptor_id": "6PYR",
+        "docking_score": -8.303,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
+      },
+      {
+        "interaction_type": "salt_bridge",
+        "status": "observed",
+        "ligand_atom_index": 23,
+        "ligand_atom_name": "O",
+        "ligand_atom_element": "O",
+        "residue_number": 911,
+        "residue_name": "ASP",
+        "chain_id": "A",
+        "protein_atom_name": "OD2",
+        "distance_angstrom": 3.6612,
+        "angle_degrees": null,
+        "plane_angle_degrees": null,
+        "compound_id": "Quercetin",
+        "isoform": "PI3Kdelta",
+        "receptor_id": "6PYR",
+        "docking_score": -8.303,
+        "detector_policy": "docking_interaction_detector_v2_charged_contact_relabel"
       }
     ],
     "residue_level": [
@@ -1189,7 +1237,7 @@
         "residue_number": 779,
         "residue_name": "LYS",
         "interaction_types": {
-          "charged_contact_candidate": 1
+          "salt_bridge": 1
         },
         "min_distance_angstrom": 3.8193
       },
@@ -1198,7 +1246,7 @@
         "residue_number": 787,
         "residue_name": "ASP",
         "interaction_types": {
-          "charged_contact_candidate": 2
+          "salt_bridge": 2
         },
         "min_distance_angstrom": 3.6944
       },
@@ -1207,7 +1255,7 @@
         "residue_number": 826,
         "residue_name": "GLU",
         "interaction_types": {
-          "charged_contact_candidate": 2
+          "salt_bridge": 2
         },
         "min_distance_angstrom": 3.4069
       },
@@ -1225,19 +1273,25 @@
         "residue_number": 911,
         "residue_name": "ASP",
         "interaction_types": {
-          "charged_contact_candidate": 2,
-          "h_bond": 1
+          "h_bond": 1,
+          "salt_bridge": 2
         },
         "min_distance_angstrom": 3.1126
       }
     ],
-    "content_sha256": "79b207c616e83728206cbda37b5d173cf73724579e365237dad0963350b7b56f"
+    "content_sha256": "bf841886a8510fe8b73efe47c15e1f3c971b2fc28f51f5739d3ee8dd9dca0c24"
   },
   "Staurosporine_core__PI3Kalpha": {
     "compound_id": "Staurosporine_core",
     "isoform": "PI3Kalpha",
     "receptor_id": "8EXL",
     "docking_score": -8.873,
+    "protonation": {
+      "selected_smiles": "CN[C@@H]1C[C@H]2O[C@@](C)([C@@H]1OC)n1c3ccccc3c3c4c(c5c6ccccc6n2c5c31)C(=O)NC4",
+      "is_ambiguous": true,
+      "n_states": 2,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 37,
     "n_protein_pocket_atoms_considered": 892,
     "n_interactions": 10,
@@ -1491,6 +1545,12 @@
     "isoform": "PI3Kbeta",
     "receptor_id": "AF-P42338",
     "docking_score": -8.491,
+    "protonation": {
+      "selected_smiles": "CN[C@@H]1C[C@H]2O[C@@](C)([C@@H]1OC)n1c3ccccc3c3c4c(c5c6ccccc6n2c5c31)C(=O)NC4",
+      "is_ambiguous": true,
+      "n_states": 2,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 37,
     "n_protein_pocket_atoms_considered": 996,
     "n_interactions": 11,
@@ -1774,6 +1834,12 @@
     "isoform": "PI3Kgamma",
     "receptor_id": "6AUD",
     "docking_score": -11.258,
+    "protonation": {
+      "selected_smiles": "CN[C@@H]1C[C@H]2O[C@@](C)([C@@H]1OC)n1c3ccccc3c3c4c(c5c6ccccc6n2c5c31)C(=O)NC4",
+      "is_ambiguous": true,
+      "n_states": 2,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 37,
     "n_protein_pocket_atoms_considered": 1028,
     "n_interactions": 13,
@@ -2103,6 +2169,12 @@
     "isoform": "PI3Kdelta",
     "receptor_id": "6PYR",
     "docking_score": -9.261,
+    "protonation": {
+      "selected_smiles": "CN[C@@H]1C[C@H]2O[C@@](C)([C@@H]1OC)n1c3ccccc3c3c4c(c5c6ccccc6n2c5c31)C(=O)NC4",
+      "is_ambiguous": true,
+      "n_states": 2,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 37,
     "n_protein_pocket_atoms_considered": 880,
     "n_interactions": 14,
@@ -2450,6 +2522,12 @@
     "isoform": "PI3Kalpha",
     "receptor_id": "8EXL",
     "docking_score": -7.164,
+    "protonation": {
+      "selected_smiles": "Cc1ccc(-c2nc(N)nc(N)n2)cc1",
+      "is_ambiguous": false,
+      "n_states": 1,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 19,
     "n_protein_pocket_atoms_considered": 852,
     "n_interactions": 13,
@@ -2772,6 +2850,12 @@
     "isoform": "PI3Kbeta",
     "receptor_id": "AF-P42338",
     "docking_score": -6.002,
+    "protonation": {
+      "selected_smiles": "Cc1ccc(-c2nc(N)nc(N)n2)cc1",
+      "is_ambiguous": false,
+      "n_states": 1,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 19,
     "n_protein_pocket_atoms_considered": 873,
     "n_interactions": 10,
@@ -3029,6 +3113,12 @@
     "isoform": "PI3Kgamma",
     "receptor_id": "6AUD",
     "docking_score": -7.405,
+    "protonation": {
+      "selected_smiles": "Cc1ccc(-c2nc(N)nc(N)n2)cc1",
+      "is_ambiguous": false,
+      "n_states": 1,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 19,
     "n_protein_pocket_atoms_considered": 894,
     "n_interactions": 18,
@@ -3455,6 +3545,12 @@
     "isoform": "PI3Kdelta",
     "receptor_id": "6PYR",
     "docking_score": -7.694,
+    "protonation": {
+      "selected_smiles": "Cc1ccc(-c2nc(N)nc(N)n2)cc1",
+      "is_ambiguous": false,
+      "n_states": 1,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 19,
     "n_protein_pocket_atoms_considered": 934,
     "n_interactions": 15,
@@ -3825,6 +3921,12 @@
     "isoform": "PI3Kalpha",
     "receptor_id": "8EXL",
     "docking_score": -6.994,
+    "protonation": {
+      "selected_smiles": "COc1cc2ncnc(N3CCOCC3)c2cc1OC",
+      "is_ambiguous": false,
+      "n_states": 1,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 20,
     "n_protein_pocket_atoms_considered": 833,
     "n_interactions": 11,
@@ -4115,6 +4217,12 @@
     "isoform": "PI3Kbeta",
     "receptor_id": "AF-P42338",
     "docking_score": -5.447,
+    "protonation": {
+      "selected_smiles": "COc1cc2ncnc(N3CCOCC3)c2cc1OC",
+      "is_ambiguous": false,
+      "n_states": 1,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 20,
     "n_protein_pocket_atoms_considered": 908,
     "n_interactions": 12,
@@ -4419,6 +4527,12 @@
     "isoform": "PI3Kgamma",
     "receptor_id": "6AUD",
     "docking_score": -7.501,
+    "protonation": {
+      "selected_smiles": "COc1cc2ncnc(N3CCOCC3)c2cc1OC",
+      "is_ambiguous": false,
+      "n_states": 1,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 20,
     "n_protein_pocket_atoms_considered": 896,
     "n_interactions": 14,
@@ -4784,6 +4898,12 @@
     "isoform": "PI3Kdelta",
     "receptor_id": "6PYR",
     "docking_score": -6.458,
+    "protonation": {
+      "selected_smiles": "COc1cc2ncnc(N3CCOCC3)c2cc1OC",
+      "is_ambiguous": false,
+      "n_states": 1,
+      "n_confirmed_charged_atoms": 0
+    },
     "n_ligand_atoms": 20,
     "n_protein_pocket_atoms_considered": 815,
     "n_interactions": 15,

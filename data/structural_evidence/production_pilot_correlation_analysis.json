@@ -1,0 +1,286 @@
+{
+  "n_compounds": 24,
+  "per_axis_correlation": {
+    "PI3Kbeta": {
+      "n": 24,
+      "pearson_r": 0.3642851545027106,
+      "pearson_p": 0.08010729520944657,
+      "spearman_r": 0.3660869565217391,
+      "spearman_p": 0.07851394802456449,
+      "sign_agreement": 13,
+      "sign_agreement_pct": 54.2
+    },
+    "PI3Kgamma": {
+      "n": 24,
+      "pearson_r": 0.18325653220851487,
+      "pearson_p": 0.391369452219381,
+      "spearman_r": 0.13999999999999999,
+      "spearman_p": 0.5140986909290425,
+      "sign_agreement": 15,
+      "sign_agreement_pct": 62.5
+    },
+    "PI3Kdelta": {
+      "n": 24,
+      "pearson_r": 0.2373326847538196,
+      "pearson_p": 0.2641364155169963,
+      "spearman_r": 0.36225267218609536,
+      "spearman_p": 0.08193381150543322,
+      "sign_agreement": 11,
+      "sign_agreement_pct": 45.8
+    }
+  },
+  "interaction_type_correlations_above_0.3": {
+    "charged_contact_candidate_vs_PI3Kbeta": {
+      "spearman_r": -0.4390020359205627,
+      "p": 0.03185943534630513,
+      "n": 24
+    },
+    "hydrophobic_contact_vs_PI3Kbeta": {
+      "spearman_r": 0.3028604732908715,
+      "p": 0.15028014247442353,
+      "n": 24
+    }
+  },
+  "rows": [
+    {
+      "compound_id": "ADGGYDAFIHSYFI-UHFFFAOYSA-N",
+      "stratum": "alpha_selective",
+      "delta_dock_PI3Kbeta": 2.3679999999999994,
+      "exp_PI3Kbeta": 1.3000000000000007,
+      "delta_dock_PI3Kgamma": 0.14400000000000013,
+      "exp_PI3Kgamma": 1.33,
+      "delta_dock_PI3Kdelta": 1.3409999999999993,
+      "exp_PI3Kdelta": 1.1300000000000008
+    },
+    {
+      "compound_id": "AIGSGJXYLHDMBA-UHFFFAOYSA-N",
+      "stratum": "alpha_selective",
+      "delta_dock_PI3Kbeta": 2.8290000000000006,
+      "exp_PI3Kbeta": 2.08,
+      "delta_dock_PI3Kgamma": 0.27200000000000024,
+      "exp_PI3Kgamma": 1.4500000000000002,
+      "delta_dock_PI3Kdelta": 1.0389999999999997,
+      "exp_PI3Kdelta": 1.8399999999999999
+    },
+    {
+      "compound_id": "AOSQGSGJTZNGRW-UHFFFAOYSA-N",
+      "stratum": "alpha_selective",
+      "delta_dock_PI3Kbeta": 2.220999999999999,
+      "exp_PI3Kbeta": 1.2200000000000006,
+      "delta_dock_PI3Kgamma": -0.05799999999999983,
+      "exp_PI3Kgamma": 2.7600000000000007,
+      "delta_dock_PI3Kdelta": 0.9149999999999991,
+      "exp_PI3Kdelta": 0.9300000000000006
+    },
+    {
+      "compound_id": "BDVSUNBERXCCGI-LBPRGKRZSA-N",
+      "stratum": "alpha_selective",
+      "delta_dock_PI3Kbeta": 1.6189999999999998,
+      "exp_PI3Kbeta": 2.09,
+      "delta_dock_PI3Kgamma": 0.07899999999999885,
+      "exp_PI3Kgamma": 1.96,
+      "delta_dock_PI3Kdelta": 1.4289999999999994,
+      "exp_PI3Kdelta": 1.3399999999999999
+    },
+    {
+      "compound_id": "BLGWHBSBBJNKJO-UHFFFAOYSA-N",
+      "stratum": "alpha_selective",
+      "delta_dock_PI3Kbeta": 2.5340000000000007,
+      "exp_PI3Kbeta": 2.1,
+      "delta_dock_PI3Kgamma": -0.3829999999999991,
+      "exp_PI3Kgamma": 1.83,
+      "delta_dock_PI3Kdelta": -0.6379999999999999,
+      "exp_PI3Kdelta": 2.2199999999999998
+    },
+    {
+      "compound_id": "BSQLZYLYNZVTMY-VIFPVBQESA-N",
+      "stratum": "alpha_selective",
+      "delta_dock_PI3Kbeta": 3.3870000000000005,
+      "exp_PI3Kbeta": 2.25,
+      "delta_dock_PI3Kgamma": 0.7509999999999994,
+      "exp_PI3Kgamma": 1.71,
+      "delta_dock_PI3Kdelta": 0.2580000000000009,
+      "exp_PI3Kdelta": 1.3999999999999995
+    },
+    {
+      "compound_id": "APNVWSGILOQBOV-UHFFFAOYSA-N",
+      "stratum": "other_selective",
+      "delta_dock_PI3Kbeta": 1.2329999999999988,
+      "exp_PI3Kbeta": -2.5,
+      "delta_dock_PI3Kgamma": -0.75,
+      "exp_PI3Kgamma": 0.2999999999999998,
+      "delta_dock_PI3Kdelta": 0.5589999999999993,
+      "exp_PI3Kdelta": -1.0999999999999996
+    },
+    {
+      "compound_id": "AUNMZFMPIXHYCD-UHFFFAOYSA-N",
+      "stratum": "other_selective",
+      "delta_dock_PI3Kbeta": 2.4540000000000006,
+      "exp_PI3Kbeta": -0.7700000000000005,
+      "delta_dock_PI3Kgamma": -0.16999999999999993,
+      "exp_PI3Kgamma": -1.5900000000000007,
+      "delta_dock_PI3Kdelta": 0.05799999999999983,
+      "exp_PI3Kdelta": -3.2600000000000007
+    },
+    {
+      "compound_id": "AXQKJTHCYRYSLF-UHFFFAOYSA-N",
+      "stratum": "other_selective",
+      "delta_dock_PI3Kbeta": 2.5599999999999996,
+      "exp_PI3Kbeta": -1.2800000000000002,
+      "delta_dock_PI3Kgamma": 1.0909999999999993,
+      "exp_PI3Kgamma": -1.5700000000000003,
+      "delta_dock_PI3Kdelta": 0.8379999999999992,
+      "exp_PI3Kdelta": -1.4299999999999997
+    },
+    {
+      "compound_id": "BAFZKCJTJOBLQE-UHFFFAOYSA-N",
+      "stratum": "other_selective",
+      "delta_dock_PI3Kbeta": 2.3709999999999996,
+      "exp_PI3Kbeta": -3.9000000000000004,
+      "delta_dock_PI3Kgamma": 0.7270000000000003,
+      "exp_PI3Kgamma": -0.39999999999999947,
+      "delta_dock_PI3Kdelta": 0.7590000000000003,
+      "exp_PI3Kdelta": -2.299999999999999
+    },
+    {
+      "compound_id": "BONZFPDJDIJKQF-UHFFFAOYSA-N",
+      "stratum": "other_selective",
+      "delta_dock_PI3Kbeta": 0.6599999999999993,
+      "exp_PI3Kbeta": -1.8000000000000007,
+      "delta_dock_PI3Kgamma": -0.5350000000000001,
+      "exp_PI3Kgamma": 0.20000000000000018,
+      "delta_dock_PI3Kdelta": -0.38200000000000145,
+      "exp_PI3Kdelta": -1.2000000000000002
+    },
+    {
+      "compound_id": "BWVQDRRLGFHKGN-UHFFFAOYSA-N",
+      "stratum": "other_selective",
+      "delta_dock_PI3Kbeta": 2.3019999999999996,
+      "exp_PI3Kbeta": 0.33000000000000007,
+      "delta_dock_PI3Kgamma": 0.270999999999999,
+      "exp_PI3Kgamma": -1.0899999999999999,
+      "delta_dock_PI3Kdelta": 0.3669999999999991,
+      "exp_PI3Kdelta": -1.2999999999999998
+    },
+    {
+      "compound_id": "AAHKGRWRYBCWDL-UHFFFAOYSA-N",
+      "stratum": "non_selective",
+      "delta_dock_PI3Kbeta": 1.9589999999999996,
+      "exp_PI3Kbeta": 0.33999999999999986,
+      "delta_dock_PI3Kgamma": -0.5200000000000014,
+      "exp_PI3Kgamma": -0.07000000000000028,
+      "delta_dock_PI3Kdelta": 0.6489999999999991,
+      "exp_PI3Kdelta": -0.8999999999999995
+    },
+    {
+      "compound_id": "ABKTZGMEAXGKRA-FQEVSTJZSA-N",
+      "stratum": "non_selective",
+      "delta_dock_PI3Kbeta": 0.6820000000000004,
+      "exp_PI3Kbeta": 0.0,
+      "delta_dock_PI3Kgamma": 0.5079999999999991,
+      "exp_PI3Kgamma": 0.0900000000000003,
+      "delta_dock_PI3Kdelta": -0.13100000000000023,
+      "exp_PI3Kdelta": 0.0900000000000003
+    },
+    {
+      "compound_id": "AFVKBPLUPVLQSJ-UHFFFAOYSA-N",
+      "stratum": "non_selective",
+      "delta_dock_PI3Kbeta": 1.7109999999999994,
+      "exp_PI3Kbeta": 0.20000000000000018,
+      "delta_dock_PI3Kgamma": -0.8440000000000012,
+      "exp_PI3Kgamma": -1.4399999999999995,
+      "delta_dock_PI3Kdelta": 0.38399999999999945,
+      "exp_PI3Kdelta": -0.09999999999999964
+    },
+    {
+      "compound_id": "AJFNMVDOTHBCMX-UHFFFAOYSA-N",
+      "stratum": "non_selective",
+      "delta_dock_PI3Kbeta": 1.6219999999999999,
+      "exp_PI3Kbeta": -0.5999999999999996,
+      "delta_dock_PI3Kgamma": -0.8070000000000004,
+      "exp_PI3Kgamma": 0.09999999999999964,
+      "delta_dock_PI3Kdelta": 0.5289999999999999,
+      "exp_PI3Kdelta": -0.09999999999999964
+    },
+    {
+      "compound_id": "AJNRXFUIGQGJKY-UHFFFAOYSA-N",
+      "stratum": "non_selective",
+      "delta_dock_PI3Kbeta": 1.112,
+      "exp_PI3Kbeta": -0.20999999999999996,
+      "delta_dock_PI3Kgamma": -0.2569999999999997,
+      "exp_PI3Kgamma": -0.13999999999999968,
+      "delta_dock_PI3Kdelta": 0.2569999999999997,
+      "exp_PI3Kdelta": 0.03000000000000025
+    },
+    {
+      "compound_id": "AKWMLDWUORVTLQ-UHFFFAOYSA-N",
+      "stratum": "non_selective",
+      "delta_dock_PI3Kbeta": 2.5839999999999996,
+      "exp_PI3Kbeta": -0.20999999999999908,
+      "delta_dock_PI3Kgamma": 1.6530000000000005,
+      "exp_PI3Kgamma": 1.7600000000000007,
+      "delta_dock_PI3Kdelta": 1.447000000000001,
+      "exp_PI3Kdelta": 0.05000000000000071
+    },
+    {
+      "compound_id": "ABEVETPHKVRJTO-UHFFFAOYSA-N",
+      "stratum": "intermediate",
+      "delta_dock_PI3Kbeta": 0.786999999999999,
+      "exp_PI3Kbeta": -0.40000000000000036,
+      "delta_dock_PI3Kgamma": -0.29600000000000115,
+      "exp_PI3Kgamma": -0.20000000000000018,
+      "delta_dock_PI3Kdelta": 0.25099999999999945,
+      "exp_PI3Kdelta": -1.7000000000000002
+    },
+    {
+      "compound_id": "ACCFLVVUVBJNGT-AWEZNQCLSA-N",
+      "stratum": "intermediate",
+      "delta_dock_PI3Kbeta": 2.6580000000000004,
+      "exp_PI3Kbeta": 1.1100000000000003,
+      "delta_dock_PI3Kgamma": 0.5449999999999999,
+      "exp_PI3Kgamma": 0.6000000000000005,
+      "delta_dock_PI3Kdelta": 0.8930000000000007,
+      "exp_PI3Kdelta": 0.8000000000000007
+    },
+    {
+      "compound_id": "ADLJEZREHNJMCU-UHFFFAOYSA-N",
+      "stratum": "intermediate",
+      "delta_dock_PI3Kbeta": 1.7860000000000005,
+      "exp_PI3Kbeta": 0.3699999999999992,
+      "delta_dock_PI3Kgamma": 0.5389999999999997,
+      "exp_PI3Kgamma": 1.2199999999999998,
+      "delta_dock_PI3Kdelta": 1.0180000000000007,
+      "exp_PI3Kdelta": 0.41999999999999993
+    },
+    {
+      "compound_id": "ADQKWHMLZWYXPE-UHFFFAOYSA-N",
+      "stratum": "intermediate",
+      "delta_dock_PI3Kbeta": 1.8689999999999998,
+      "exp_PI3Kbeta": -1.1500000000000004,
+      "delta_dock_PI3Kgamma": 0.3309999999999995,
+      "exp_PI3Kgamma": 1.0199999999999996,
+      "delta_dock_PI3Kdelta": 0.7970000000000006,
+      "exp_PI3Kdelta": -0.4200000000000008
+    },
+    {
+      "compound_id": "AGEIBLLCZVGHLI-UHFFFAOYSA-N",
+      "stratum": "intermediate",
+      "delta_dock_PI3Kbeta": 1.5919999999999996,
+      "exp_PI3Kbeta": 0.6800000000000006,
+      "delta_dock_PI3Kgamma": 0.4969999999999999,
+      "exp_PI3Kgamma": -0.3299999999999992,
+      "delta_dock_PI3Kdelta": 0.22499999999999964,
+      "exp_PI3Kdelta": -0.6199999999999992
+    },
+    {
+      "compound_id": "AIKJBINJGKQOJL-UHFFFAOYSA-N",
+      "stratum": "intermediate",
+      "delta_dock_PI3Kbeta": 2.8049999999999997,
+      "exp_PI3Kbeta": 0.16000000000000014,
+      "delta_dock_PI3Kgamma": 0.5879999999999992,
+      "exp_PI3Kgamma": 0.6700000000000008,
+      "delta_dock_PI3Kdelta": 1.1819999999999995,
+      "exp_PI3Kdelta": 1.0
+    }
+  ]
+}

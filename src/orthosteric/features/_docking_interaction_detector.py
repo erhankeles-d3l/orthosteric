@@ -161,9 +161,14 @@ _DONOR_H_TYPE = "HD"  # AutoDock convention: confirmed donor hydrogen
 
 class InteractionType(StrEnum):
     H_BOND = "h_bond"
-    #: Renamed from SALT_BRIDGE (see module docstring, "Charged-contact
-    #: relabelling" section). NOT a confirmed ionic interaction -- ligand
-    #: ionization state is unverified in this pipeline.
+    #: Confirmed ionic interaction: the ligand atom's charge state is
+    #: verified via real pH-aware protonation (Dimorphite-DL), not
+    #: guessed from atom type alone. See features._ligand_protonation.
+    SALT_BRIDGE = "salt_bridge"
+    #: The unconfirmed counterpart of SALT_BRIDGE (see module docstring,
+    #: "Charged-contact relabelling"): geometry matches, but the ligand
+    #: atom's ionization state was not confirmed (no protonation result
+    #: supplied, or its formal charge in the selected state is zero).
     CHARGED_CONTACT_CANDIDATE = "charged_contact_candidate"
     PI_PI = "pi_pi"
     CATION_PI = "cation_pi"
@@ -406,7 +411,24 @@ def detect_charged_contact_candidates(
     ligand_atoms: list[PoseAtom],
     protein_atoms: list[PoseAtom],
     meta: dict[str, Any],
+    ligand_confirmed_charged_names: frozenset[str] = frozenset(),
 ) -> list[AtomResidueInteraction]:
+    """Detect charged-group contacts, split into two evidentiary tiers.
+
+    SALT_BRIDGE (this session's real chemistry upgrade): the ligand atom
+    is CONFIRMED charged in the selected pH-7.4 protonation state (its
+    name is in `ligand_confirmed_charged_names`, from
+    features._ligand_protonation via real Dimorphite-DL formal charges).
+
+    CHARGED_CONTACT_CANDIDATE (unchanged from the prior session): the
+    ligand atom is an acceptor-type or bare nitrogen near a charged
+    protein residue, but its own ionization state was NOT confirmed
+    (either no protonation result was supplied, or the atom's formal
+    charge in the selected state is zero/unknown).
+
+    An atom is only ever promoted to SALT_BRIDGE with positive
+    confirming evidence, never guessed into it.
+    """
     out: list[AtomResidueInteraction] = []
     lig_charged = [
         a for a in ligand_atoms if a.autodock_type in _ACCEPTOR_TYPES or a.element == "N"
@@ -424,9 +446,15 @@ def detect_charged_contact_candidates(
             for la in lig_charged:
                 d = _dist(la, pa)
                 if d <= _CHARGED_CONTACT_CUTOFF_A:
+                    confirmed = la.name in ligand_confirmed_charged_names
+                    itype = (
+                        InteractionType.SALT_BRIDGE
+                        if confirmed
+                        else InteractionType.CHARGED_CONTACT_CANDIDATE
+                    )
                     out.append(
                         AtomResidueInteraction(
-                            interaction_type=InteractionType.CHARGED_CONTACT_CANDIDATE,
+                            interaction_type=itype,
                             status=InteractionGeometryStatus.OBSERVED,
                             ligand_atom_index=la.index,
                             ligand_atom_name=la.name,
@@ -581,11 +609,14 @@ def detect_all_interactions(
     protein_atoms: list[PoseAtom],
     meta: dict[str, Any],
     ligand_aromatic_names: frozenset[str] = frozenset(),
+    ligand_confirmed_charged_names: frozenset[str] = frozenset(),
 ) -> list[AtomResidueInteraction]:
     """Run all implemented detectors and return sorted, deterministic results."""
     results = (
         detect_hbonds(ligand_atoms, protein_atoms, meta)
-        + detect_charged_contact_candidates(ligand_atoms, protein_atoms, meta)
+        + detect_charged_contact_candidates(
+            ligand_atoms, protein_atoms, meta, ligand_confirmed_charged_names
+        )
         + detect_hydrophobic_contacts(ligand_atoms, protein_atoms, meta)
         + detect_pi_pi(ligand_atoms, protein_atoms, meta, ligand_aromatic_names)
         + detect_cation_pi(ligand_atoms, protein_atoms, meta, ligand_aromatic_names)

@@ -127,6 +127,17 @@ module = "sklearn.*"
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
+# dimorphite_dl ships no PEP 561 stubs; RDKit calls inside our thin wrapper
+# are untyped for the same reason as the Bio.* override below.
+module = ["dimorphite_dl"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "orthosteric.features._ligand_protonation"
+warn_unreachable = false
+disable_error_code = ["no-untyped-call"]
+
+[[tool.mypy.overrides]]
 module = "orthosteric.eval._baselines"
 warn_unreachable = false
 

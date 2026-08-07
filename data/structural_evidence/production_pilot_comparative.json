@@ -1,0 +1,541 @@
+{
+  "ADGGYDAFIHSYFI-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 3,
+      "h_bond": 2,
+      "hydrophobic_contact": 20
+    },
+    "PI3Kbeta": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 3,
+      "hydrophobic_contact": 19
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 3,
+      "h_bond": 1,
+      "hydrophobic_contact": 18
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 3,
+      "h_bond": 2,
+      "hydrophobic_contact": 11
+    }
+  },
+  "AIGSGJXYLHDMBA-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 9,
+      "h_bond": 2,
+      "hydrophobic_contact": 4
+    },
+    "PI3Kbeta": {
+      "cation_pi": 2,
+      "charged_contact_candidate": 8,
+      "h_bond": 3,
+      "hydrophobic_contact": 1
+    },
+    "PI3Kgamma": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 7,
+      "h_bond": 4,
+      "hydrophobic_contact": 1,
+      "pi_pi": 1
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 3,
+      "h_bond": 1,
+      "hydrophobic_contact": 2
+    }
+  },
+  "AOSQGSGJTZNGRW-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 5,
+      "h_bond": 3,
+      "hydrophobic_contact": 10
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 6,
+      "h_bond": 1,
+      "hydrophobic_contact": 21
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 7,
+      "h_bond": 4,
+      "hydrophobic_contact": 7,
+      "pi_pi": 1
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 5,
+      "h_bond": 3,
+      "hydrophobic_contact": 12
+    }
+  },
+  "BDVSUNBERXCCGI-LBPRGKRZSA-N": {
+    "PI3Kalpha": {
+      "h_bond": 3,
+      "hydrophobic_contact": 18
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 1,
+      "h_bond": 2,
+      "hydrophobic_contact": 17
+    },
+    "PI3Kgamma": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 5,
+      "h_bond": 1,
+      "hydrophobic_contact": 17
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 2,
+      "h_bond": 2,
+      "hydrophobic_contact": 13
+    }
+  },
+  "BLGWHBSBBJNKJO-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 4,
+      "h_bond": 2,
+      "hydrophobic_contact": 4
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 4,
+      "h_bond": 2,
+      "hydrophobic_contact": 8
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 7,
+      "h_bond": 2,
+      "hydrophobic_contact": 3
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 9,
+      "h_bond": 3,
+      "hydrophobic_contact": 5
+    }
+  },
+  "BSQLZYLYNZVTMY-VIFPVBQESA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 9,
+      "h_bond": 4,
+      "hydrophobic_contact": 3
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 7,
+      "h_bond": 3,
+      "hydrophobic_contact": 10
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 6,
+      "h_bond": 2,
+      "hydrophobic_contact": 1
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 10,
+      "h_bond": 3,
+      "hydrophobic_contact": 3
+    }
+  },
+  "APNVWSGILOQBOV-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 1,
+      "hydrophobic_contact": 5
+    },
+    "PI3Kbeta": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 5,
+      "hydrophobic_contact": 3
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 4,
+      "h_bond": 1,
+      "hydrophobic_contact": 13
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 1,
+      "h_bond": 1,
+      "hydrophobic_contact": 6,
+      "pi_pi": 1
+    }
+  },
+  "AUNMZFMPIXHYCD-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 3
+    },
+    "PI3Kbeta": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 7,
+      "h_bond": 2,
+      "hydrophobic_contact": 3
+    },
+    "PI3Kgamma": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 1,
+      "hydrophobic_contact": 9,
+      "pi_pi": 1
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 2,
+      "h_bond": 2,
+      "hydrophobic_contact": 6
+    }
+  },
+  "AXQKJTHCYRYSLF-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 1,
+      "h_bond": 2,
+      "hydrophobic_contact": 11
+    },
+    "PI3Kbeta": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 2,
+      "hydrophobic_contact": 5
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 3,
+      "h_bond": 1,
+      "hydrophobic_contact": 2
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 1,
+      "h_bond": 1,
+      "hydrophobic_contact": 7
+    }
+  },
+  "BAFZKCJTJOBLQE-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 5,
+      "h_bond": 1,
+      "hydrophobic_contact": 13
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 6,
+      "h_bond": 3,
+      "hydrophobic_contact": 9
+    },
+    "PI3Kgamma": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 6,
+      "h_bond": 3,
+      "hydrophobic_contact": 14
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 4,
+      "h_bond": 3,
+      "hydrophobic_contact": 14
+    }
+  },
+  "BONZFPDJDIJKQF-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 8
+    },
+    "PI3Kbeta": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 3,
+      "hydrophobic_contact": 9
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 3,
+      "h_bond": 3,
+      "hydrophobic_contact": 9
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 7
+    }
+  },
+  "BWVQDRRLGFHKGN-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "h_bond": 1,
+      "hydrophobic_contact": 5
+    },
+    "PI3Kbeta": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 4,
+      "h_bond": 2,
+      "hydrophobic_contact": 5
+    },
+    "PI3Kgamma": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 1,
+      "h_bond": 1,
+      "hydrophobic_contact": 4
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 1,
+      "h_bond": 1,
+      "hydrophobic_contact": 6
+    }
+  },
+  "AAHKGRWRYBCWDL-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 2,
+      "h_bond": 3,
+      "hydrophobic_contact": 14
+    },
+    "PI3Kbeta": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 6,
+      "h_bond": 3,
+      "hydrophobic_contact": 7
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 5,
+      "h_bond": 2,
+      "hydrophobic_contact": 25
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 18
+    }
+  },
+  "ABKTZGMEAXGKRA-FQEVSTJZSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 5,
+      "h_bond": 5,
+      "hydrophobic_contact": 11
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 7,
+      "h_bond": 1,
+      "hydrophobic_contact": 1
+    },
+    "PI3Kgamma": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 4
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 4,
+      "hydrophobic_contact": 12,
+      "pi_pi": 1
+    }
+  },
+  "AFVKBPLUPVLQSJ-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 1,
+      "h_bond": 2,
+      "hydrophobic_contact": 2
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 3
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 5
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 8,
+      "h_bond": 3,
+      "hydrophobic_contact": 1
+    }
+  },
+  "AJFNMVDOTHBCMX-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 1,
+      "hydrophobic_contact": 9
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 1,
+      "hydrophobic_contact": 12
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 6,
+      "h_bond": 3,
+      "hydrophobic_contact": 19
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 3,
+      "h_bond": 2,
+      "hydrophobic_contact": 12
+    }
+  },
+  "AJNRXFUIGQGJKY-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1
+    },
+    "PI3Kbeta": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 4,
+      "h_bond": 2
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 3,
+      "h_bond": 1
+    },
+    "PI3Kdelta": {
+      "h_bond": 1,
+      "pi_pi": 1
+    }
+  },
+  "AKWMLDWUORVTLQ-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 3,
+      "h_bond": 1,
+      "hydrophobic_contact": 16
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 12
+    },
+    "PI3Kgamma": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 16
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 1,
+      "h_bond": 2,
+      "hydrophobic_contact": 9
+    }
+  },
+  "ABEVETPHKVRJTO-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 1,
+      "h_bond": 3,
+      "hydrophobic_contact": 5
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 5,
+      "h_bond": 3,
+      "hydrophobic_contact": 4
+    },
+    "PI3Kgamma": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 1,
+      "h_bond": 3,
+      "hydrophobic_contact": 3,
+      "pi_pi": 1
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 2,
+      "h_bond": 2,
+      "hydrophobic_contact": 4,
+      "pi_pi": 1
+    }
+  },
+  "ACCFLVVUVBJNGT-AWEZNQCLSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 5,
+      "h_bond": 2,
+      "hydrophobic_contact": 9
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 3,
+      "hydrophobic_contact": 14
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 4,
+      "h_bond": 2,
+      "hydrophobic_contact": 7
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 3,
+      "h_bond": 2,
+      "hydrophobic_contact": 16
+    }
+  },
+  "ADLJEZREHNJMCU-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 4,
+      "h_bond": 2,
+      "hydrophobic_contact": 3
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 2,
+      "hydrophobic_contact": 14
+    },
+    "PI3Kgamma": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 2,
+      "h_bond": 3,
+      "hydrophobic_contact": 8
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 2
+    }
+  },
+  "ADQKWHMLZWYXPE-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "cation_pi": 2,
+      "charged_contact_candidate": 2,
+      "h_bond": 2,
+      "hydrophobic_contact": 11
+    },
+    "PI3Kbeta": {
+      "charged_contact_candidate": 5,
+      "h_bond": 2,
+      "hydrophobic_contact": 10
+    },
+    "PI3Kgamma": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 15,
+      "salt_bridge": 2
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 2,
+      "hydrophobic_contact": 18
+    }
+  },
+  "AGEIBLLCZVGHLI-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "charged_contact_candidate": 2,
+      "h_bond": 3,
+      "hydrophobic_contact": 10
+    },
+    "PI3Kbeta": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 5,
+      "hydrophobic_contact": 2
+    },
+    "PI3Kgamma": {
+      "charged_contact_candidate": 4,
+      "h_bond": 1,
+      "hydrophobic_contact": 9
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 6,
+      "h_bond": 2,
+      "hydrophobic_contact": 2
+    }
+  },
+  "AIKJBINJGKQOJL-UHFFFAOYSA-N": {
+    "PI3Kalpha": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 1,
+      "h_bond": 3,
+      "hydrophobic_contact": 9
+    },
+    "PI3Kbeta": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 9,
+      "h_bond": 1,
+      "hydrophobic_contact": 11
+    },
+    "PI3Kgamma": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 8,
+      "h_bond": 4,
+      "hydrophobic_contact": 1
+    },
+    "PI3Kdelta": {
+      "charged_contact_candidate": 8,
+      "h_bond": 2,
+      "hydrophobic_contact": 5
+    }
+  }
+}

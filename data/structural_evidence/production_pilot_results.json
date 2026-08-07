@@ -1,0 +1,1357 @@
+{
+  "ADGGYDAFIHSYFI-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "ADGGYDAFIHSYFI-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -8.549,
+    "stratum": "alpha_selective",
+    "n_interactions": 25,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 3,
+      "h_bond": 2,
+      "hydrophobic_contact": 20
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "3d59d529f895e503ab65bac16f34e9c472c8f42a3ee6a284108c5dab416c61dc"
+  },
+  "ADGGYDAFIHSYFI-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "ADGGYDAFIHSYFI-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -6.181,
+    "stratum": "alpha_selective",
+    "n_interactions": 23,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 3,
+      "hydrophobic_contact": 19
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "db13cb1cebb229bbae41b230457e5d07156e73640b3253027714e1d590677cc6"
+  },
+  "ADGGYDAFIHSYFI-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "ADGGYDAFIHSYFI-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -8.405,
+    "stratum": "alpha_selective",
+    "n_interactions": 22,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 3,
+      "h_bond": 1,
+      "hydrophobic_contact": 18
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "64265d966d71066ee13e4deffd4f4a15d5e8560878f4abed7a382e67f06b1ffd"
+  },
+  "ADGGYDAFIHSYFI-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "ADGGYDAFIHSYFI-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -7.208,
+    "stratum": "alpha_selective",
+    "n_interactions": 16,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 3,
+      "h_bond": 2,
+      "hydrophobic_contact": 11
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "eaacc7cebb2af4fc3c88c04f82ec12b05ce7d7308fd5a92411d70d82360a6fc8"
+  },
+  "AIGSGJXYLHDMBA-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "AIGSGJXYLHDMBA-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -9.493,
+    "stratum": "alpha_selective",
+    "n_interactions": 15,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 9,
+      "h_bond": 2,
+      "hydrophobic_contact": 4
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "9987bea5be17826acb57d11c9bd328d035362f847c6c556c51448c60eb3c940c"
+  },
+  "AIGSGJXYLHDMBA-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "AIGSGJXYLHDMBA-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -6.664,
+    "stratum": "alpha_selective",
+    "n_interactions": 14,
+    "interaction_type_counts": {
+      "cation_pi": 2,
+      "charged_contact_candidate": 8,
+      "h_bond": 3,
+      "hydrophobic_contact": 1
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "5459f10e96c9e244d5f4aa136db155ae77788c44744edbd52924bdc9c346f40c"
+  },
+  "AIGSGJXYLHDMBA-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "AIGSGJXYLHDMBA-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -9.221,
+    "stratum": "alpha_selective",
+    "n_interactions": 14,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 7,
+      "h_bond": 4,
+      "hydrophobic_contact": 1,
+      "pi_pi": 1
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "e1ed98bb3d1f331399cc3f86f71b6f216488c4d384bd4577e18fa94d672c1a31"
+  },
+  "AIGSGJXYLHDMBA-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "AIGSGJXYLHDMBA-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -8.454,
+    "stratum": "alpha_selective",
+    "n_interactions": 6,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 3,
+      "h_bond": 1,
+      "hydrophobic_contact": 2
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "70d453b2711222acdbdabe72d63259ecfce1c83a1cf0ab2041f30ed8de7f0406"
+  },
+  "AOSQGSGJTZNGRW-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "AOSQGSGJTZNGRW-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -9.77,
+    "stratum": "alpha_selective",
+    "n_interactions": 18,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 5,
+      "h_bond": 3,
+      "hydrophobic_contact": 10
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "c0f169acbc7c598d2aaa55b28f23bb1ffcd5bc73b501304a0c4aec8114b3eb1d"
+  },
+  "AOSQGSGJTZNGRW-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "AOSQGSGJTZNGRW-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -7.549,
+    "stratum": "alpha_selective",
+    "n_interactions": 28,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 6,
+      "h_bond": 1,
+      "hydrophobic_contact": 21
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "83cc6640505efeb60ea5aa80bebd01d3a775d1c5ccbe6ce21a999c88dc53675f"
+  },
+  "AOSQGSGJTZNGRW-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "AOSQGSGJTZNGRW-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -9.828,
+    "stratum": "alpha_selective",
+    "n_interactions": 19,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 7,
+      "h_bond": 4,
+      "hydrophobic_contact": 7,
+      "pi_pi": 1
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "ed210ddca56c9c4cf6f80f54addd50b22428869f605ad9ddba94749b539c8775"
+  },
+  "AOSQGSGJTZNGRW-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "AOSQGSGJTZNGRW-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -8.855,
+    "stratum": "alpha_selective",
+    "n_interactions": 20,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 5,
+      "h_bond": 3,
+      "hydrophobic_contact": 12
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "294951aeccee7034ae7d9ee8dc8722e4f2f42849ed60a1e1dbc80897bff1fcce"
+  },
+  "BDVSUNBERXCCGI-LBPRGKRZSA-N__PI3Kalpha": {
+    "compound_id": "BDVSUNBERXCCGI-LBPRGKRZSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -8.344,
+    "stratum": "alpha_selective",
+    "n_interactions": 21,
+    "interaction_type_counts": {
+      "h_bond": 3,
+      "hydrophobic_contact": 18
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "c90c2d98aeff277a2feea1abbd2cc1a31b0f475137a76471d3fe173a338b19ac"
+  },
+  "BDVSUNBERXCCGI-LBPRGKRZSA-N__PI3Kbeta": {
+    "compound_id": "BDVSUNBERXCCGI-LBPRGKRZSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -6.725,
+    "stratum": "alpha_selective",
+    "n_interactions": 20,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 1,
+      "h_bond": 2,
+      "hydrophobic_contact": 17
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "b3542abf7b262109bcce448db6df2d67f92009065badad651a571ea7496c2586"
+  },
+  "BDVSUNBERXCCGI-LBPRGKRZSA-N__PI3Kgamma": {
+    "compound_id": "BDVSUNBERXCCGI-LBPRGKRZSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -8.265,
+    "stratum": "alpha_selective",
+    "n_interactions": 24,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 5,
+      "h_bond": 1,
+      "hydrophobic_contact": 17
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "97cceb0e959eea4af7c6b2db801b42e84fcd80cd849b003924f9109fc61dafed"
+  },
+  "BDVSUNBERXCCGI-LBPRGKRZSA-N__PI3Kdelta": {
+    "compound_id": "BDVSUNBERXCCGI-LBPRGKRZSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -6.915,
+    "stratum": "alpha_selective",
+    "n_interactions": 17,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 2,
+      "hydrophobic_contact": 13
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "94bae143407b9d786fd94faa9025123b21568f2501dda5c403e67c7deda02b5d"
+  },
+  "BLGWHBSBBJNKJO-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "BLGWHBSBBJNKJO-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -9.711,
+    "stratum": "alpha_selective",
+    "n_interactions": 10,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 4,
+      "h_bond": 2,
+      "hydrophobic_contact": 4
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "1a67bbd1505451c82209e3fd8929978d54d2af3a5b19ddc3390abf9153c3ab05"
+  },
+  "BLGWHBSBBJNKJO-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "BLGWHBSBBJNKJO-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -7.177,
+    "stratum": "alpha_selective",
+    "n_interactions": 14,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 4,
+      "h_bond": 2,
+      "hydrophobic_contact": 8
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "0d717fcd02e175acfe637604c24e7fa323aa5ec600e7099b9bff267dbcc8488f"
+  },
+  "BLGWHBSBBJNKJO-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "BLGWHBSBBJNKJO-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -10.094,
+    "stratum": "alpha_selective",
+    "n_interactions": 12,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 7,
+      "h_bond": 2,
+      "hydrophobic_contact": 3
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "b392930c642ae269c7249ce3cfe786d2f1b6475d9c808ee1054734e5be43f921"
+  },
+  "BLGWHBSBBJNKJO-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "BLGWHBSBBJNKJO-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -10.349,
+    "stratum": "alpha_selective",
+    "n_interactions": 17,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 9,
+      "h_bond": 3,
+      "hydrophobic_contact": 5
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "3f2d75b24173ca73f5cf1f27b0a971aa648dba61c35dc090a692d493a90dda70"
+  },
+  "BSQLZYLYNZVTMY-VIFPVBQESA-N__PI3Kalpha": {
+    "compound_id": "BSQLZYLYNZVTMY-VIFPVBQESA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -10.227,
+    "stratum": "alpha_selective",
+    "n_interactions": 16,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 9,
+      "h_bond": 4,
+      "hydrophobic_contact": 3
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "23d4e45541d6942ecbec87b7c0e32867fe69b56d8baf1c30e63379393627d2a8"
+  },
+  "BSQLZYLYNZVTMY-VIFPVBQESA-N__PI3Kbeta": {
+    "compound_id": "BSQLZYLYNZVTMY-VIFPVBQESA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -6.84,
+    "stratum": "alpha_selective",
+    "n_interactions": 20,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 7,
+      "h_bond": 3,
+      "hydrophobic_contact": 10
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "fb06d8a0b932f3f45006bc90bb4ce65b17a2b4c6c770ddc9204853e79fde7e15"
+  },
+  "BSQLZYLYNZVTMY-VIFPVBQESA-N__PI3Kgamma": {
+    "compound_id": "BSQLZYLYNZVTMY-VIFPVBQESA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -9.476,
+    "stratum": "alpha_selective",
+    "n_interactions": 9,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 6,
+      "h_bond": 2,
+      "hydrophobic_contact": 1
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "a841dbc60078fa1148883eaa31c6d8c6e2d866dfeb0b3b9c33309ed3e7a76e32"
+  },
+  "BSQLZYLYNZVTMY-VIFPVBQESA-N__PI3Kdelta": {
+    "compound_id": "BSQLZYLYNZVTMY-VIFPVBQESA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -9.969,
+    "stratum": "alpha_selective",
+    "n_interactions": 16,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 10,
+      "h_bond": 3,
+      "hydrophobic_contact": 3
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "87d7e79d19a1da133e5d1786aca28e145c4358fda49560ff97cdd329ccf4a4db"
+  },
+  "APNVWSGILOQBOV-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "APNVWSGILOQBOV-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -9.395,
+    "stratum": "other_selective",
+    "n_interactions": 6,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 1,
+      "hydrophobic_contact": 5
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "117ec420a485466ab5c05517502035fd57c19e1f5fc80dc3fe853e2f19e3ccc8"
+  },
+  "APNVWSGILOQBOV-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "APNVWSGILOQBOV-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -8.162,
+    "stratum": "other_selective",
+    "n_interactions": 9,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 5,
+      "hydrophobic_contact": 3
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "e572ea79d254ce95c868e7953b2b3556795b77c1a58cf8891dd8c15b10bd29e3"
+  },
+  "APNVWSGILOQBOV-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "APNVWSGILOQBOV-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -10.145,
+    "stratum": "other_selective",
+    "n_interactions": 18,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 4,
+      "h_bond": 1,
+      "hydrophobic_contact": 13
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "da1f4ca8481ed43f3e3423d03cb81d4bd70abd8b1831992630fdc2c4f8cce2c1"
+  },
+  "APNVWSGILOQBOV-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "APNVWSGILOQBOV-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -8.836,
+    "stratum": "other_selective",
+    "n_interactions": 9,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 1,
+      "h_bond": 1,
+      "hydrophobic_contact": 6,
+      "pi_pi": 1
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "861276120211e0594ffed872ef39caf905a0ebe352db656059560a97a0ea2f87"
+  },
+  "AUNMZFMPIXHYCD-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "AUNMZFMPIXHYCD-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -10.484,
+    "stratum": "other_selective",
+    "n_interactions": 6,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 3
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "aba9196d3f4b64567f65a56596315be4a0b430b1aa78ecbd7b578456c1c7670c"
+  },
+  "AUNMZFMPIXHYCD-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "AUNMZFMPIXHYCD-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -8.03,
+    "stratum": "other_selective",
+    "n_interactions": 13,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 7,
+      "h_bond": 2,
+      "hydrophobic_contact": 3
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "50ae89d0a7ca2bf82aff3c03a094f6b699ac16932371b15454f3c99d49d4cb01"
+  },
+  "AUNMZFMPIXHYCD-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "AUNMZFMPIXHYCD-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -10.654,
+    "stratum": "other_selective",
+    "n_interactions": 12,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 1,
+      "hydrophobic_contact": 9,
+      "pi_pi": 1
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "535eb63d8008bd7c4c710b1b7558424788413fd2b65e385dc3f203d1c47e344a"
+  },
+  "AUNMZFMPIXHYCD-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "AUNMZFMPIXHYCD-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -10.426,
+    "stratum": "other_selective",
+    "n_interactions": 10,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 2,
+      "hydrophobic_contact": 6
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "010aaf092edc7e48c4af3588572968a869b987aec1c3fc22c0ebd38683ca1090"
+  },
+  "AXQKJTHCYRYSLF-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "AXQKJTHCYRYSLF-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -9.373,
+    "stratum": "other_selective",
+    "n_interactions": 14,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 1,
+      "h_bond": 2,
+      "hydrophobic_contact": 11
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "e0047aaf6bc227279139306afb9b68d19bef67db69a6cceecaf4ddfedbcbed40"
+  },
+  "AXQKJTHCYRYSLF-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "AXQKJTHCYRYSLF-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -6.813,
+    "stratum": "other_selective",
+    "n_interactions": 8,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 2,
+      "hydrophobic_contact": 5
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "9e55a644e24f09cf1cedea080f6c8bba5b6f33e8cc332f2fc36b196fc37ca139"
+  },
+  "AXQKJTHCYRYSLF-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "AXQKJTHCYRYSLF-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -8.282,
+    "stratum": "other_selective",
+    "n_interactions": 6,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 3,
+      "h_bond": 1,
+      "hydrophobic_contact": 2
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "137387019a55e1a8e288f799cc2bbac71eb721cf4757d667e3aa3aa41b921e79"
+  },
+  "AXQKJTHCYRYSLF-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "AXQKJTHCYRYSLF-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -8.535,
+    "stratum": "other_selective",
+    "n_interactions": 9,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 1,
+      "h_bond": 1,
+      "hydrophobic_contact": 7
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "464fbaca0b0bca668c4d79ad482301b7dae468972d25121011ce87a0bba06ffc"
+  },
+  "BAFZKCJTJOBLQE-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "BAFZKCJTJOBLQE-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -8.763,
+    "stratum": "other_selective",
+    "n_interactions": 19,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 5,
+      "h_bond": 1,
+      "hydrophobic_contact": 13
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "9f287d6a72f9f259774dbb605dc6998377e20053871cc6a9834223ad3c9f1792"
+  },
+  "BAFZKCJTJOBLQE-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "BAFZKCJTJOBLQE-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -6.392,
+    "stratum": "other_selective",
+    "n_interactions": 18,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 6,
+      "h_bond": 3,
+      "hydrophobic_contact": 9
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "fb250f9f0ce55c21578a7ffa7ed4fd4530d6cd9bb5ef8300e6574d292246fc0e"
+  },
+  "BAFZKCJTJOBLQE-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "BAFZKCJTJOBLQE-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -8.036,
+    "stratum": "other_selective",
+    "n_interactions": 24,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 6,
+      "h_bond": 3,
+      "hydrophobic_contact": 14
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "1b9286e9874ee5ca6bc855eed94ab24f668c4785ba34e27a0fe1eccd6f9e0d17"
+  },
+  "BAFZKCJTJOBLQE-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "BAFZKCJTJOBLQE-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -8.004,
+    "stratum": "other_selective",
+    "n_interactions": 21,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 4,
+      "h_bond": 3,
+      "hydrophobic_contact": 14
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "2cdf6104ebe2b9028bf9bfd5a2b690465428cec95a48561c0f2a464c2fffc949"
+  },
+  "BONZFPDJDIJKQF-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "BONZFPDJDIJKQF-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -8.61,
+    "stratum": "other_selective",
+    "n_interactions": 11,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 8
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "95502a05de5cdbc3eba69587f6c8e24cbb1476f6f24efccb38e3cb256a9e9978"
+  },
+  "BONZFPDJDIJKQF-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "BONZFPDJDIJKQF-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -7.95,
+    "stratum": "other_selective",
+    "n_interactions": 13,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 3,
+      "hydrophobic_contact": 9
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "789d5281402e7d35dddea4089a22214e428e45c23ae90e37da262f3402fd0b1c"
+  },
+  "BONZFPDJDIJKQF-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "BONZFPDJDIJKQF-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -9.145,
+    "stratum": "other_selective",
+    "n_interactions": 15,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 3,
+      "h_bond": 3,
+      "hydrophobic_contact": 9
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "26645de6fba04cad64364253feb6c8cec9c5ab49e30e9ce8a10495f2679ba6b8"
+  },
+  "BONZFPDJDIJKQF-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "BONZFPDJDIJKQF-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -8.992,
+    "stratum": "other_selective",
+    "n_interactions": 10,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 7
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "6b4c0022181b4218021d379802915bac74bfc9a69518fb1e53cbc5d1495ea1be"
+  },
+  "BWVQDRRLGFHKGN-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "BWVQDRRLGFHKGN-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -8.818,
+    "stratum": "other_selective",
+    "n_interactions": 6,
+    "interaction_type_counts": {
+      "h_bond": 1,
+      "hydrophobic_contact": 5
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "ddb42ad036aa0931b0ec28bd218d123ed6ee9801517f922b77afaa4806ebe6ca"
+  },
+  "BWVQDRRLGFHKGN-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "BWVQDRRLGFHKGN-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -6.516,
+    "stratum": "other_selective",
+    "n_interactions": 12,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 4,
+      "h_bond": 2,
+      "hydrophobic_contact": 5
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "8dd28cdc5cc90e4c85ba247c85d3636dcc9be51932b02869ac726357582ac4ae"
+  },
+  "BWVQDRRLGFHKGN-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "BWVQDRRLGFHKGN-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -8.547,
+    "stratum": "other_selective",
+    "n_interactions": 7,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 1,
+      "h_bond": 1,
+      "hydrophobic_contact": 4
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "b74532fbdd975353ff6c5a7007a4f248f36645b60408ea6e2ca9f38cc945dd4d"
+  },
+  "BWVQDRRLGFHKGN-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "BWVQDRRLGFHKGN-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -8.451,
+    "stratum": "other_selective",
+    "n_interactions": 8,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 1,
+      "h_bond": 1,
+      "hydrophobic_contact": 6
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "5fe7d6ed036917916a288e15425fa91ef6266fcd110074bf43ecdd7395cea9fa"
+  },
+  "AAHKGRWRYBCWDL-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "AAHKGRWRYBCWDL-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -8.152,
+    "stratum": "non_selective",
+    "n_interactions": 19,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 3,
+      "hydrophobic_contact": 14
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "dbf8abd114ab3d2225ec3b002833485fbe52a6a03e6df30e2ae2f8deb91c265e"
+  },
+  "AAHKGRWRYBCWDL-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "AAHKGRWRYBCWDL-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -6.193,
+    "stratum": "non_selective",
+    "n_interactions": 17,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 6,
+      "h_bond": 3,
+      "hydrophobic_contact": 7
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "c49b406fba428d04f62ca527215bec89affd2a094222a8af3b5bc219e4b177b0"
+  },
+  "AAHKGRWRYBCWDL-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "AAHKGRWRYBCWDL-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -8.672,
+    "stratum": "non_selective",
+    "n_interactions": 32,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 5,
+      "h_bond": 2,
+      "hydrophobic_contact": 25
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "b80b66a136d55ccbf0f3cdc771d73b04db93ec650509fce30f53485db865c155"
+  },
+  "AAHKGRWRYBCWDL-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "AAHKGRWRYBCWDL-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -7.503,
+    "stratum": "non_selective",
+    "n_interactions": 21,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 18
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "450afb88cdb9921b7775fc0efe744db96cd1a78eb39e9ed250ec8683c589cfd6"
+  },
+  "ABKTZGMEAXGKRA-FQEVSTJZSA-N__PI3Kalpha": {
+    "compound_id": "ABKTZGMEAXGKRA-FQEVSTJZSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -9.808,
+    "stratum": "non_selective",
+    "n_interactions": 21,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 5,
+      "h_bond": 5,
+      "hydrophobic_contact": 11
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "f853a1a0d54f9920c3b484dae3465c31d080611bbc9b15fa3e598c482f123c2a"
+  },
+  "ABKTZGMEAXGKRA-FQEVSTJZSA-N__PI3Kbeta": {
+    "compound_id": "ABKTZGMEAXGKRA-FQEVSTJZSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -9.126,
+    "stratum": "non_selective",
+    "n_interactions": 9,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 7,
+      "h_bond": 1,
+      "hydrophobic_contact": 1
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "19edbea750dfcfe4705565359a895b2ad1bcf0fb32b67d67f79880ce095696b3"
+  },
+  "ABKTZGMEAXGKRA-FQEVSTJZSA-N__PI3Kgamma": {
+    "compound_id": "ABKTZGMEAXGKRA-FQEVSTJZSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -9.3,
+    "stratum": "non_selective",
+    "n_interactions": 8,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 4
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "f81b08f3f0272fc752964e1053488d76e5c6d1c5996add63ca2651b49a7adc30"
+  },
+  "ABKTZGMEAXGKRA-FQEVSTJZSA-N__PI3Kdelta": {
+    "compound_id": "ABKTZGMEAXGKRA-FQEVSTJZSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -9.939,
+    "stratum": "non_selective",
+    "n_interactions": 17,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 4,
+      "hydrophobic_contact": 12,
+      "pi_pi": 1
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "d8201b7b8d3d8981dc88bcea730ff202d62f06627f2a168b36425c5f36a94c75"
+  },
+  "AFVKBPLUPVLQSJ-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "AFVKBPLUPVLQSJ-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -8.299,
+    "stratum": "non_selective",
+    "n_interactions": 5,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 1,
+      "h_bond": 2,
+      "hydrophobic_contact": 2
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "10cc6385cde824b2fc68bb89368e9f36c58ae68acea6ac2464a8b268dd04b026"
+  },
+  "AFVKBPLUPVLQSJ-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "AFVKBPLUPVLQSJ-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -6.588,
+    "stratum": "non_selective",
+    "n_interactions": 3,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 3
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "881834e5eb60066bd81a2f1024d025c0f262ecf97b29b5a41d524ec82a0f4112"
+  },
+  "AFVKBPLUPVLQSJ-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "AFVKBPLUPVLQSJ-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -9.143,
+    "stratum": "non_selective",
+    "n_interactions": 8,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 5
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "fc701801251eea29c276f33db1a6f732e3a69f9b851533e108af31997f23b9bc"
+  },
+  "AFVKBPLUPVLQSJ-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "AFVKBPLUPVLQSJ-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -7.915,
+    "stratum": "non_selective",
+    "n_interactions": 12,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 8,
+      "h_bond": 3,
+      "hydrophobic_contact": 1
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "21413f8d078b23efe1ba36833bb5f5461c9ccfb0d4ad137dcf02262539bb9cdf"
+  },
+  "AJFNMVDOTHBCMX-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "AJFNMVDOTHBCMX-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -7.507,
+    "stratum": "non_selective",
+    "n_interactions": 10,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 1,
+      "hydrophobic_contact": 9
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "665c53669be444d63d98283b12eaa21ae8a0a2574baae681991bd57aed6ca0f8"
+  },
+  "AJFNMVDOTHBCMX-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "AJFNMVDOTHBCMX-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -5.885,
+    "stratum": "non_selective",
+    "n_interactions": 13,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 1,
+      "hydrophobic_contact": 12
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "cfaabf1498653b9357f8e080fdff6d0ae2fd486618c1edf043d6e78134c7d43a"
+  },
+  "AJFNMVDOTHBCMX-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "AJFNMVDOTHBCMX-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -8.314,
+    "stratum": "non_selective",
+    "n_interactions": 28,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 6,
+      "h_bond": 3,
+      "hydrophobic_contact": 19
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "3188083909e0a0d6e4acf39ec46aa001ffca6962daa573f3ef79352bfcc25717"
+  },
+  "AJFNMVDOTHBCMX-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "AJFNMVDOTHBCMX-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -6.978,
+    "stratum": "non_selective",
+    "n_interactions": 17,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 3,
+      "h_bond": 2,
+      "hydrophobic_contact": 12
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "6e1b88e6bb9ff9d5840487bfe9dd723be248177cdb58d477dc341f8a59856849"
+  },
+  "AJNRXFUIGQGJKY-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "AJNRXFUIGQGJKY-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -9.038,
+    "stratum": "non_selective",
+    "n_interactions": 3,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "17e8ad72db760b7c708249b3f2dca7ad5547fae4fa2fdebee1cb3bedd0cd6c64"
+  },
+  "AJNRXFUIGQGJKY-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "AJNRXFUIGQGJKY-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -7.926,
+    "stratum": "non_selective",
+    "n_interactions": 7,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 4,
+      "h_bond": 2
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "90249a56dff605c6c3f76c76fddf3d0e9d611526e58677e9e465898e82bc44b7"
+  },
+  "AJNRXFUIGQGJKY-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "AJNRXFUIGQGJKY-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -9.295,
+    "stratum": "non_selective",
+    "n_interactions": 4,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 3,
+      "h_bond": 1
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "c55ba69c316d3dc5f4118c96d9a9d9ed565551765a29327fd15e47b7dca76e55"
+  },
+  "AJNRXFUIGQGJKY-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "AJNRXFUIGQGJKY-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -8.781,
+    "stratum": "non_selective",
+    "n_interactions": 2,
+    "interaction_type_counts": {
+      "h_bond": 1,
+      "pi_pi": 1
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "4d5d38ccc69f1b7a631f1db90a95d8247aad5b223fff2b00124eae22146246f5"
+  },
+  "AKWMLDWUORVTLQ-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "AKWMLDWUORVTLQ-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -10.698,
+    "stratum": "non_selective",
+    "n_interactions": 20,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 3,
+      "h_bond": 1,
+      "hydrophobic_contact": 16
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "1dc0e13e9242ba4466341724639269ea4e542e5a8c311c950d7e01ce5f1bae10"
+  },
+  "AKWMLDWUORVTLQ-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "AKWMLDWUORVTLQ-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -8.114,
+    "stratum": "non_selective",
+    "n_interactions": 15,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 12
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "ad4695340d1bde2b28b24037638815d30ff3eb1084866f3af359108632412c89"
+  },
+  "AKWMLDWUORVTLQ-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "AKWMLDWUORVTLQ-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -9.045,
+    "stratum": "non_selective",
+    "n_interactions": 20,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 16
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "1e9cc8c451fb832d93d3515021a2245e04b46627cb2c613e25356b9249d5af99"
+  },
+  "AKWMLDWUORVTLQ-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "AKWMLDWUORVTLQ-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -9.251,
+    "stratum": "non_selective",
+    "n_interactions": 12,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 1,
+      "h_bond": 2,
+      "hydrophobic_contact": 9
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "423693d7639bc37c09fe15052ac145d18a775ff6fd589b5db1661eee7eeafb21"
+  },
+  "ABEVETPHKVRJTO-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "ABEVETPHKVRJTO-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -9.44,
+    "stratum": "intermediate",
+    "n_interactions": 9,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 1,
+      "h_bond": 3,
+      "hydrophobic_contact": 5
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "cfdb56dac4fef631d8dbd1907899fd7c1eea57003de817cbf8360a5e28e710b9"
+  },
+  "ABEVETPHKVRJTO-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "ABEVETPHKVRJTO-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -8.653,
+    "stratum": "intermediate",
+    "n_interactions": 12,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 5,
+      "h_bond": 3,
+      "hydrophobic_contact": 4
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "d2ce30e54eb38665d1eec108de6ec9630cdf0b57833fe3c25628f28b6ba55c50"
+  },
+  "ABEVETPHKVRJTO-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "ABEVETPHKVRJTO-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -9.736,
+    "stratum": "intermediate",
+    "n_interactions": 9,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 1,
+      "h_bond": 3,
+      "hydrophobic_contact": 3,
+      "pi_pi": 1
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "9912669bc1f91c7d84159aadfde5beb6591a7d8ddf62114fa4ce0322bb4c7eb1"
+  },
+  "ABEVETPHKVRJTO-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "ABEVETPHKVRJTO-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -9.189,
+    "stratum": "intermediate",
+    "n_interactions": 9,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 2,
+      "hydrophobic_contact": 4,
+      "pi_pi": 1
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "4987aae721749bb5e061a2cb260a03f7dc6eeb916e1d012844fcba630cbdf8e6"
+  },
+  "ACCFLVVUVBJNGT-AWEZNQCLSA-N__PI3Kalpha": {
+    "compound_id": "ACCFLVVUVBJNGT-AWEZNQCLSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -9.547,
+    "stratum": "intermediate",
+    "n_interactions": 16,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 5,
+      "h_bond": 2,
+      "hydrophobic_contact": 9
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "f6af47d3514ed6c73a3e5f992290ca9551ea763a3926b20d51be14640ffb4bd0"
+  },
+  "ACCFLVVUVBJNGT-AWEZNQCLSA-N__PI3Kbeta": {
+    "compound_id": "ACCFLVVUVBJNGT-AWEZNQCLSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -6.889,
+    "stratum": "intermediate",
+    "n_interactions": 17,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 3,
+      "hydrophobic_contact": 14
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "07f806758f89761cc1561f31760bfa4aeafd44690faf73da76e2e61c76fe7c10"
+  },
+  "ACCFLVVUVBJNGT-AWEZNQCLSA-N__PI3Kgamma": {
+    "compound_id": "ACCFLVVUVBJNGT-AWEZNQCLSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -9.002,
+    "stratum": "intermediate",
+    "n_interactions": 13,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 4,
+      "h_bond": 2,
+      "hydrophobic_contact": 7
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "62762731c9656d5e8b750249fe0c922e595c9145b3e76ac9a6cf472cb94beee7"
+  },
+  "ACCFLVVUVBJNGT-AWEZNQCLSA-N__PI3Kdelta": {
+    "compound_id": "ACCFLVVUVBJNGT-AWEZNQCLSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -8.654,
+    "stratum": "intermediate",
+    "n_interactions": 21,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 3,
+      "h_bond": 2,
+      "hydrophobic_contact": 16
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "26e2a88b4e79623948402c785f84fce57ddf57732069aaf9edb4d2dbfdc52ea2"
+  },
+  "ADLJEZREHNJMCU-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "ADLJEZREHNJMCU-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -8.906,
+    "stratum": "intermediate",
+    "n_interactions": 9,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 4,
+      "h_bond": 2,
+      "hydrophobic_contact": 3
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "d2984127e21b0ac7a21de56cd1d62a4d29041b46775d86ba51de1fd64583fe73"
+  },
+  "ADLJEZREHNJMCU-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "ADLJEZREHNJMCU-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -7.12,
+    "stratum": "intermediate",
+    "n_interactions": 16,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "hydrophobic_contact": 14
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "837a81217f12403b747cf6baf4382372bd7157fe7005016ae68b84cbc9bbe4d7"
+  },
+  "ADLJEZREHNJMCU-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "ADLJEZREHNJMCU-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -8.367,
+    "stratum": "intermediate",
+    "n_interactions": 14,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 2,
+      "h_bond": 3,
+      "hydrophobic_contact": 8
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "826b5712aca622690c5053801dcac16079d13904768c7c069ad383a4be6d70aa"
+  },
+  "ADLJEZREHNJMCU-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "ADLJEZREHNJMCU-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -7.888,
+    "stratum": "intermediate",
+    "n_interactions": 5,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 2
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "e6e23039704e14710a658f58de55489f68b938e21d47b084a83532e89f1cb659"
+  },
+  "ADQKWHMLZWYXPE-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "ADQKWHMLZWYXPE-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -9.359,
+    "stratum": "intermediate",
+    "n_interactions": 17,
+    "interaction_type_counts": {
+      "cation_pi": 2,
+      "charged_contact_candidate": 2,
+      "h_bond": 2,
+      "hydrophobic_contact": 11
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "9f8b0b0643b98b9f41d807ae872d490b3ec63dce61c324745b8719bd34a93e09"
+  },
+  "ADQKWHMLZWYXPE-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "ADQKWHMLZWYXPE-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -7.49,
+    "stratum": "intermediate",
+    "n_interactions": 17,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 5,
+      "h_bond": 2,
+      "hydrophobic_contact": 10
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "9b4f257cf4d59c2e74ba42050ea15976ac96ce22cd2f3f352683f4e2c8e62b6d"
+  },
+  "ADQKWHMLZWYXPE-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "ADQKWHMLZWYXPE-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -9.028,
+    "stratum": "intermediate",
+    "n_interactions": 21,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 2,
+      "h_bond": 1,
+      "hydrophobic_contact": 15,
+      "salt_bridge": 2
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "405e39980b565e7fb36dc804686628a284c5cff7aa540948a33398bce8d0f1bd"
+  },
+  "ADQKWHMLZWYXPE-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "ADQKWHMLZWYXPE-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -8.562,
+    "stratum": "intermediate",
+    "n_interactions": 20,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "hydrophobic_contact": 18
+    },
+    "protonation_ambiguous": true,
+    "content_sha256": "aea0c696a518e12132848d08e8d8b184af2c90257948d33ab98160ca0e9b72f5"
+  },
+  "AGEIBLLCZVGHLI-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "AGEIBLLCZVGHLI-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -8.398,
+    "stratum": "intermediate",
+    "n_interactions": 15,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 2,
+      "h_bond": 3,
+      "hydrophobic_contact": 10
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "90f1241cf39512c79f70eb1534d2fd009e7f1acc53604858cd3ed9c235865c6d"
+  },
+  "AGEIBLLCZVGHLI-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "AGEIBLLCZVGHLI-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -6.806,
+    "stratum": "intermediate",
+    "n_interactions": 8,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 5,
+      "hydrophobic_contact": 2
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "3ac2d20ca499428446e9e9b17f10ced04e237b98d1ef9331a0a5d1d1f7ec9324"
+  },
+  "AGEIBLLCZVGHLI-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "AGEIBLLCZVGHLI-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -7.901,
+    "stratum": "intermediate",
+    "n_interactions": 14,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 4,
+      "h_bond": 1,
+      "hydrophobic_contact": 9
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "301626325f33bc6b56490859ff5d501d575da45f904258657215d9519a16df35"
+  },
+  "AGEIBLLCZVGHLI-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "AGEIBLLCZVGHLI-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -8.173,
+    "stratum": "intermediate",
+    "n_interactions": 10,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 6,
+      "h_bond": 2,
+      "hydrophobic_contact": 2
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "03f0ff27d47f0221ee65fcacb265bd14f960361045e62d7683c83f445dcca0b6"
+  },
+  "AIKJBINJGKQOJL-UHFFFAOYSA-N__PI3Kalpha": {
+    "compound_id": "AIKJBINJGKQOJL-UHFFFAOYSA-N",
+    "isoform": "PI3Kalpha",
+    "docking_score": -9.145,
+    "stratum": "intermediate",
+    "n_interactions": 14,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 1,
+      "h_bond": 3,
+      "hydrophobic_contact": 9
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "3608bf425e45debb423dac1df0fb59a88ee055e2d62e70b9484d51f1614c2ddc"
+  },
+  "AIKJBINJGKQOJL-UHFFFAOYSA-N__PI3Kbeta": {
+    "compound_id": "AIKJBINJGKQOJL-UHFFFAOYSA-N",
+    "isoform": "PI3Kbeta",
+    "docking_score": -6.34,
+    "stratum": "intermediate",
+    "n_interactions": 22,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 9,
+      "h_bond": 1,
+      "hydrophobic_contact": 11
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "cb77e7a5abfc6743c2ed8f829ee3a3ef015cbf33bd7f7bbc3dbc39dfa873e669"
+  },
+  "AIKJBINJGKQOJL-UHFFFAOYSA-N__PI3Kgamma": {
+    "compound_id": "AIKJBINJGKQOJL-UHFFFAOYSA-N",
+    "isoform": "PI3Kgamma",
+    "docking_score": -8.557,
+    "stratum": "intermediate",
+    "n_interactions": 14,
+    "interaction_type_counts": {
+      "cation_pi": 1,
+      "charged_contact_candidate": 8,
+      "h_bond": 4,
+      "hydrophobic_contact": 1
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "9a4bf2ad6f299331c8831be916fdebba9e5866a8baa135d94f6180b8c7c28980"
+  },
+  "AIKJBINJGKQOJL-UHFFFAOYSA-N__PI3Kdelta": {
+    "compound_id": "AIKJBINJGKQOJL-UHFFFAOYSA-N",
+    "isoform": "PI3Kdelta",
+    "docking_score": -7.963,
+    "stratum": "intermediate",
+    "n_interactions": 15,
+    "interaction_type_counts": {
+      "charged_contact_candidate": 8,
+      "h_bond": 2,
+      "hydrophobic_contact": 5
+    },
+    "protonation_ambiguous": false,
+    "content_sha256": "94744ad6ba8488d3429a24b325d00a9ae4c767815a9e37857c3f6e2217391855"
+  }
+}
