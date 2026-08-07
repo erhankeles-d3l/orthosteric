@@ -146,6 +146,155 @@ def geometry_bin(interaction: AtomResidueInteraction) -> GeometryBin:
     return close_bin if d <= close_max else peripheral_bin
 
 
+# ── Geometry-sensitivity ladder (frozen BEFORE any Rep3b/Rep3c result is
+# computed) ------------------------------------------------------------------
+#
+# Boundaries are derived DETERMINISTICALLY from the already-committed
+# coarse boundary above and each type's own detector outer cutoff -- no
+# new number is chosen by inspecting results, and no boundary already
+# committed for "coarse" is ever moved.
+#
+# Rule, frozen once, applied identically to every interaction type:
+#   coarse (existing, 1 cutpoint):        close_max
+#   intermediate (2 cutpoints):           close_max UNCHANGED, plus
+#                                          midpoint(close_max, outer_cutoff)
+#   fine (3 cutpoints):                   both intermediate cutpoints
+#                                          UNCHANGED, plus
+#                                          midpoint(0, close_max)
+#
+# Aromatic/pi-pi remains DISTANCE-ONLY at every rung of this ladder --
+# ring-plane angle is deliberately NOT introduced here (that would be
+# "opportunistic" per the mandate's own instruction); a joint
+# distance x angle variant is a separate, explicitly deferred
+# sensitivity check, never silently folded into this ladder.
+_OUTER_CUTOFF_A: dict[InteractionType, float] = {
+    InteractionType.H_BOND: 3.5,  # _HBOND_DA_CUTOFF_A in the detector
+    InteractionType.HYDROPHOBIC_CONTACT: 4.5,  # _HYDROPHOBIC_CUTOFF_A
+    InteractionType.PI_PI: 6.0,  # _PI_PI_CENTROID_CUTOFF_A
+    InteractionType.CATION_PI: 6.0,  # _CATION_PI_CUTOFF_A
+    InteractionType.SALT_BRIDGE: 4.0,  # _CHARGED_CONTACT_CUTOFF_A
+    InteractionType.CHARGED_CONTACT_CANDIDATE: 4.0,
+}
+
+_COARSE_CLOSE_MAX_A: dict[InteractionType, float] = {
+    InteractionType.H_BOND: _HBOND_OPTIMAL_MAX_A,
+    InteractionType.HYDROPHOBIC_CONTACT: _HYDROPHOBIC_CLOSE_MAX_A,
+    InteractionType.PI_PI: _AROMATIC_CLOSE_MAX_A,
+    InteractionType.CATION_PI: _CATION_PI_CLOSE_MAX_A,
+    InteractionType.SALT_BRIDGE: _CHARGED_CLOSE_MAX_A,
+    InteractionType.CHARGED_CONTACT_CANDIDATE: _CHARGED_CLOSE_MAX_A,
+}
+
+
+def frozen_ladder_boundaries(interaction_type: InteractionType) -> dict[str, list[float]]:
+    """Return the sorted interior cutpoints for each ladder rung.
+
+    One interaction type at a time. Pure function of already-committed
+    constants -- no free parameter, so this cannot be tuned after seeing
+    a result.
+    """
+    close_max = _COARSE_CLOSE_MAX_A.get(interaction_type)
+    outer = _OUTER_CUTOFF_A.get(interaction_type)
+    if close_max is None or outer is None:
+        return {"coarse": [], "intermediate": [], "fine": []}
+    mid_peripheral = close_max + (outer - close_max) / 2
+    mid_close = close_max / 2
+    return {
+        "coarse": [close_max],
+        "intermediate": [close_max, mid_peripheral],
+        "fine": [mid_close, close_max, mid_peripheral],
+    }
+
+
+def geometry_bin_at_resolution(interaction: AtomResidueInteraction, resolution: str) -> str:
+    """Geometry bin at one of "coarse" / "intermediate" / "fine" ladder rungs.
+
+    Uses `frozen_ladder_boundaries`'s deterministic cutpoints.
+
+    Returns a self-describing string label
+    "{interaction_type}__{resolution}__bin{i}of{n}" rather than a fixed
+    enum member (the ladder has no principled reason to hand-name every
+    intermediate/fine bin the way the original coarse bins were
+    hand-named) -- deterministic, sortable, and traceable back to
+    `frozen_ladder_boundaries` for the exact numeric range.
+    """
+    d = interaction.distance_angstrom
+    itype = interaction.interaction_type
+    boundaries: list[float] = frozen_ladder_boundaries(itype).get(resolution, [])
+    if d is None or (not boundaries and itype not in _COARSE_CLOSE_MAX_A):
+        return "not_applicable"
+    n_bins = len(boundaries) + 1
+    bin_index = sum(1 for b in boundaries if d > b)
+    return f"{itype.value}__{resolution}__bin{bin_index}of{n_bins}"
+
+
+def aggregate_representation_3_at_resolution(
+    per_pose_interactions: list[list[AtomResidueInteraction]],
+    ligand_moiety_by_atom_name: dict[str, LigandMoiety],
+    canonical_position_lookup: dict[tuple[str, int], int | None],
+    resolution: str,
+) -> list[Representation3Occupancy]:
+    """Representation 3 at a specified ladder resolution.
+
+    "coarse" == identical output to `aggregate_representation_3`;
+    "intermediate" / "fine" use `geometry_bin_at_resolution`'s finer,
+    deterministically derived bins. Same occupancy/pooling discipline
+    throughout.
+    """
+    n_poses = len(per_pose_interactions)
+    counts: dict[Rep3Key, int] = defaultdict(int)
+    residue_ids: dict[Rep3Key, set[str]] = defaultdict(set)
+    canonical_positions: dict[Rep3Key, set[int]] = defaultdict(set)
+
+    for pose_interactions in per_pose_interactions:
+        seen_this_pose: set[Rep3Key] = set()
+        for it in pose_interactions:
+            moiety = ligand_moiety_by_atom_name.get(it.ligand_atom_name)
+            if moiety is None:
+                continue
+            rfc = residue_functional_class(it)
+            if rfc == ResidueFunctionalClass.UNRESOLVED_FUNCTIONAL_ROLE:
+                continue
+            gbin = geometry_bin_at_resolution(it, resolution)
+            key: Rep3Key = (moiety.value, rfc.value, it.interaction_type.value, gbin)
+            residue_ids[key].add(f"{it.residue_name}{it.residue_number}")
+            canon = canonical_position_lookup.get((it.chain_id, it.residue_number))
+            if canon is not None:
+                canonical_positions[key].add(canon)
+            if key in seen_this_pose:
+                continue
+            seen_this_pose.add(key)
+            counts[key] += 1
+
+    results = []
+    for key, n_with in counts.items():
+        moiety_val, rfc_val, itype_val, gbin_val = key
+        occupancy = n_with / n_poses if n_poses > 0 else 0.0
+        results.append(
+            Representation3Occupancy(
+                ligand_pharmacophore_class=moiety_val,
+                residue_functional_class=rfc_val,
+                interaction_type=itype_val,
+                geometry_bin=gbin_val,
+                n_poses_evaluated=n_poses,
+                n_poses_with_interaction=n_with,
+                occupancy=occupancy,
+                occupancy_class=classify_occupancy(occupancy, n_poses),
+                contributing_residue_identities=frozenset(residue_ids[key]),
+                contributing_canonical_positions=frozenset(canonical_positions[key]),
+            )
+        )
+    return sorted(
+        results,
+        key=lambda r: (
+            r.ligand_pharmacophore_class,
+            r.residue_functional_class,
+            r.interaction_type,
+            r.geometry_bin,
+        ),
+    )
+
+
 #: Rep2Key: (ligand_pharmacophore_class, residue_functional_class, interaction_type).
 #: Rep3Key: Rep2Key + (geometry_bin,).
 Rep2Key = tuple[str, str, str]
