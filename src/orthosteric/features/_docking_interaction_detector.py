@@ -250,6 +250,67 @@ def parse_pdbqt_atoms(path: Path, *, is_ligand: bool) -> list[PoseAtom]:
     return atoms
 
 
+def parse_pdbqt_multi_pose(path: Path, *, is_ligand: bool) -> list[list[PoseAtom]]:
+    """Parse a multi-MODEL PDBQT file (Vina's write_poses with n_poses>1).
+
+    Returns one atom list per pose.
+
+    ADDITIVE to `parse_pdbqt_atoms` (never changes its tested behaviour):
+    that function ignores MODEL/ENDMDL boundaries entirely and would
+    silently concatenate every pose's atoms into one flat list if pointed
+    at a multi-model file -- a real correctness hazard for occupancy
+    calculations, which is exactly why this separate, MODEL-aware
+    function exists rather than retrofitting the single-pose parser.
+    A single-MODEL (or model-less) file returns a length-1 list, so this
+    function is a strict superset of the single-pose case.
+    """
+    poses: list[list[PoseAtom]] = []
+    current: list[PoseAtom] = []
+    saw_any_model_marker = False
+    for line in path.read_text().splitlines():
+        if line.startswith("MODEL"):
+            saw_any_model_marker = True
+            current = []
+            continue
+        if line.startswith("ENDMDL"):
+            poses.append(current)
+            current = []
+            continue
+        if not line.startswith(("ATOM", "HETATM")):
+            continue
+        name = line[12:16].strip()
+        residue_name = line[17:20].strip()
+        chain_id = line[21].strip() or "A"
+        residue_seq = int(line[22:26])
+        x, y, z = float(line[30:38]), float(line[38:46]), float(line[46:54])
+        autodock_type = (
+            line[77:_PDBQT_ATOM_TYPE_COL_END].strip()
+            if len(line) >= _PDBQT_ATOM_TYPE_COL_END
+            else line.split()[-1]
+        )
+        element = autodock_type[0] if autodock_type else name[0]
+        current.append(
+            PoseAtom(
+                index=len(current),
+                name=name,
+                element=element,
+                autodock_type=autodock_type,
+                x=x,
+                y=y,
+                z=z,
+                residue_name=residue_name,
+                residue_seq=residue_seq,
+                chain_id=chain_id,
+                is_ligand=is_ligand,
+            )
+        )
+    if not saw_any_model_marker and current:
+        # no MODEL/ENDMDL markers at all -- single-pose file; still
+        # return the strict-superset shape (list of one pose)
+        poses.append(current)
+    return poses
+
+
 def _dist(a: PoseAtom, b: PoseAtom) -> float:
     return float(round(np.linalg.norm(a.coord - b.coord), 4))
 

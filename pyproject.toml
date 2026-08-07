@@ -153,6 +153,22 @@ warn_unreachable = false
 disable_error_code = ["no-untyped-call", "no-any-return"]
 
 [[tool.mypy.overrides]]
+# RDKit's own type stubs mark many Mol/Atom methods as untyped; same
+# rationale as the Bio.* and dimorphite_dl overrides.
+module = "orthosteric.features._ligand_moiety"
+warn_unreachable = false
+disable_error_code = ["no-untyped-call"]
+
+[[tool.mypy.overrides]]
+module = "orthosteric.features._ligand_moiety"
+disallow_any_generics = false
+
+[[tool.mypy.overrides]]
+# Bio.Align's PairwiseAligner/substitution_matrices ship no PEP 561 stubs.
+module = "orthosteric.pocket._sequence_correspondence"
+disable_error_code = ["no-untyped-call"]
+
+[[tool.mypy.overrides]]
 # dimorphite_dl ships no PEP 561 stubs; RDKit calls inside our thin wrapper
 # are untyped for the same reason as the Bio.* override below.
 module = ["dimorphite_dl"]
