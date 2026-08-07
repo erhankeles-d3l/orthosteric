@@ -10,6 +10,7 @@ layers =
     orthosteric.policy
     orthosteric.eval
     orthosteric.interpretation
+    orthosteric.discovery
     orthosteric.learning
     orthosteric.features
     orthosteric.pocket
@@ -34,4 +35,13 @@ source_modules =
     orthosteric.learning
 forbidden_modules =
     orthosteric.data.tier2_gate
+unmatched_ignore_imports_alerting = none
+
+[importlinter:contract:sealed_labels]
+name = Contract 5 - no discovery-phase path reaches sealed retrospective labels (Rev. 5 SS0.6.3)
+type = forbidden
+source_modules =
+    orthosteric.discovery
+forbidden_modules =
+    orthosteric.data.sealed_labels
 unmatched_ignore_imports_alerting = none
