@@ -9,7 +9,17 @@ this whole workstream exists to build:
     compound x isoform x residue x ligand-moiety x interaction-type
         -> occupancy, geometry statistics
     then, cross-isoform:
-        conserved / alpha-favored / other-favored / lost
+        conserved / alpha-favored / other-favored / lost / unmapped
+
+RESIDUE-LEVEL IS NOW PRIMARY (per the validation-campaign mandate that
+followed commits eafe327/2f26c5c). Ligand-atom-name-level keying is
+finer than any established structural interaction-fingerprint method
+uses (SIFt: Deng et al. 2004; ProLIF: Bouysset & Fiorucci 2021, J.
+Cheminform. -- both residue x interaction-type bit-vectors, never keyed
+to a specific ligand atom identity) and is retained only as an optional,
+secondary/provenance representation via
+`build_comparative_fingerprint_atom_level`, never as the primary
+biological claim.
 
 This module does NOT compute a reward or penalty score. It produces the
 raw comparative feature vector the mandate explicitly asks for and stops
@@ -22,17 +32,21 @@ from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any
 
-from orthosteric.features._interaction_occupancy import InteractionOccupancy
+from orthosteric.features._interaction_occupancy import (
+    InteractionOccupancy,
+    ResidueLevelOccupancy,
+)
 from orthosteric.pocket._sequence_correspondence import CorrespondenceTable
 
-FINGERPRINT_POLICY_ID = "comparative_interaction_fingerprint_v1"
+FINGERPRINT_POLICY_ID = "comparative_interaction_fingerprint_v2_residue_primary"
 
 #: Occupancy-difference threshold for calling an interaction
 #: "isoform-favored" rather than merely "differential." ENGINEERING
 #: CHOICE, documented, deterministic, not tuned on any experimental
 #: selectivity label -- matches the same 0.4 granularity already used
 #: for the RECURRENT occupancy threshold, for consistency, not because
-#: it was fit to any outcome.
+#: it was fit to any outcome. UNCHANGED from the atom-level version --
+#: this validation pass changes the KEY granularity, not this threshold.
 _FAVORED_OCCUPANCY_DELTA = 0.4
 #: Below this, both isoforms' occupancy are close enough to call the
 #: interaction conserved (non-selective structural compatibility).
@@ -42,10 +56,14 @@ _ISOFORMS = ("PI3Kalpha", "PI3Kbeta", "PI3Kgamma", "PI3Kdelta")
 
 
 class CrossIsoformPattern(StrEnum):
-    CONSERVED = "conserved"  # present at similar occupancy across all isoforms with data
+    CONSERVED = "conserved"  # present at similar occupancy across all mapped isoforms
     ALPHA_FAVORED = "alpha_favored"  # substantially higher occupancy in alpha
     OTHER_FAVORED = "other_favored"  # substantially higher occupancy in a non-alpha isoform
-    LOST = "lost"  # present (occupancy > 0) in one isoform, absent (0) in another
+    LOST_AT_MAPPED_POSITION = "lost_at_mapped_position"  # present in one isoform, genuinely
+    # absent (occupancy=0) in another isoform where a corresponding residue DOES exist
+    UNMAPPED_RESIDUE = "unmapped_residue"  # the canonical position has NO corresponding
+    # residue in one or more isoforms (an alignment gap/indel) -- NOT evidence the
+    # interaction was lost, since there is no homologous position to have lost it at
     DIFFERENTIAL_UNCLASSIFIED = (
         "differential_unclassified"  # differs, but not by enough to call favored/lost
     )
@@ -53,10 +71,11 @@ class CrossIsoformPattern(StrEnum):
 
 @dataclass(frozen=True, slots=True)
 class CompoundIsoformFingerprint:
-    """One compound's occupancy records for one isoform.
+    """One compound's atom-level occupancy records for one isoform.
 
-    Keyed by (interaction_type, canonical_residue_position or raw
-    residue_number when no correspondence is available, ligand_atom_name).
+    Kept for provenance/backward compatibility with the original 24-/
+    50-compound runs. New comparative analysis should prefer
+    `CompoundIsoformResidueFingerprint` below.
     """
 
     compound_id: str
@@ -71,65 +90,65 @@ class CompoundIsoformFingerprint:
         }
 
 
-def _canonical_key(
-    occ: InteractionOccupancy,
-    isoform: str,
-    reference_isoform: str,
-    table: CorrespondenceTable | None,
-) -> tuple[str, int | None, str]:
-    """Key an occupancy record by interaction_type, canonical alpha position, and atom name.
-
-    Uses the sequence-correspondence table when available. Returns
-    canonical_position=None (never a fabricated guess) when no
-    correspondence table was supplied or the residue has no mapped
-    correspondence.
-    """
-    if table is None:
-        return (occ.interaction_type, None, occ.ligand_atom_name)
-    if isoform == reference_isoform:
-        canon = occ.residue_number
-    else:
-        canon = None
-        for rec in table.by_target_isoform.get(isoform, []):
-            if rec.target_resnum == occ.residue_number:
-                canon = rec.reference_resnum
-                break
-    return (occ.interaction_type, canon, occ.ligand_atom_name)
-
-
 @dataclass(frozen=True, slots=True)
-class ComparativeInteractionRecord:
-    """One canonical (interaction_type, alpha-referenced position, atom) key.
+class CompoundIsoformResidueFingerprint:
+    """One compound's RESIDUE-LEVEL occupancy records for one isoform.
 
-    Tracks occupancy across all four isoforms, plus the derived
-    cross-isoform pattern.
+    Keyed by (interaction_type, residue_number) only -- ligand atom
+    identity is marginalized, per the SIFt/ProLIF convention. This is
+    now the PRIMARY representation for cross-isoform comparison.
     """
 
     compound_id: str
-    interaction_type: str
-    canonical_position: int | None
-    ligand_atom_name: str
-    occupancy_by_isoform: dict[
-        str, float
-    ]  # isoform -> occupancy (0.0 if genuinely absent, not missing)
-    pattern: CrossIsoformPattern
+    isoform: str
+    occupancies: tuple[ResidueLevelOccupancy, ...]
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "compound_id": self.compound_id,
-            "interaction_type": self.interaction_type,
-            "canonical_position": self.canonical_position,
-            "ligand_atom_name": self.ligand_atom_name,
-            "occupancy_by_isoform": self.occupancy_by_isoform,
-            "pattern": self.pattern.value,
+            "isoform": self.isoform,
+            "occupancies": [o.to_dict() for o in self.occupancies],
         }
 
 
-def _classify_pattern(occupancy_by_isoform: dict[str, float]) -> CrossIsoformPattern:
+def _is_mapped(
+    canonical_position: int | None,
+    isoform: str,
+    reference_isoform: str,
+    table: CorrespondenceTable | None,
+) -> bool:
+    """True iff `canonical_position` has a valid corresponding residue in `isoform`.
+
+    `canonical_position` is an alpha-referenced residue number. Always
+    True for the reference isoform itself and when no correspondence
+    table is available (in which case mapping status is simply
+    unknown/not assessed, and the record must not be misclassified as
+    UNMAPPED purely because no table was passed -- callers who care
+    about this distinction must supply a table).
+    """
+    if canonical_position is None or table is None or isoform == reference_isoform:
+        return True
+    return table.lookup(isoform, canonical_position) is not None
+
+
+def _classify_pattern(
+    occupancy_by_isoform: dict[str, float], mapped_by_isoform: dict[str, bool]
+) -> CrossIsoformPattern:
+    """Classify a comparative record given per-isoform mapping status.
+
+    `mapped_by_isoform[iso]` is False when this canonical position has
+    NO corresponding residue in that isoform (an alignment gap) -- an
+    interaction cannot be honestly called LOST, CONSERVED, or FAVORED
+    when part of the comparison set has no valid homologous position,
+    so UNMAPPED_RESIDUE takes priority over every other classification.
+    """
+    if not all(mapped_by_isoform.values()):
+        return CrossIsoformPattern.UNMAPPED_RESIDUE
+
     present = {iso: occ for iso, occ in occupancy_by_isoform.items() if occ > 0}
     absent_isoforms = [iso for iso, occ in occupancy_by_isoform.items() if occ == 0]
     if present and absent_isoforms:
-        return CrossIsoformPattern.LOST
+        return CrossIsoformPattern.LOST_AT_MAPPED_POSITION
     values = list(occupancy_by_isoform.values())
     spread = max(values) - min(values)
     if spread <= _CONSERVED_OCCUPANCY_DELTA:
@@ -143,23 +162,160 @@ def _classify_pattern(occupancy_by_isoform: dict[str, float]) -> CrossIsoformPat
     return CrossIsoformPattern.DIFFERENTIAL_UNCLASSIFIED
 
 
+@dataclass(frozen=True, slots=True)
+class ResidueComparativeRecord:
+    """One canonical (interaction_type, alpha-referenced position) key.
+
+    Tracks occupancy across all four isoforms, plus the derived
+    cross-isoform pattern. PRIMARY comparative representation.
+    """
+
+    compound_id: str
+    interaction_type: str
+    canonical_position: int | None
+    occupancy_by_isoform: dict[str, float]
+    mapped_by_isoform: dict[str, bool]
+    pattern: CrossIsoformPattern
+    correspondence_table_sha256: str | None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "compound_id": self.compound_id,
+            "interaction_type": self.interaction_type,
+            "canonical_position": self.canonical_position,
+            "occupancy_by_isoform": self.occupancy_by_isoform,
+            "mapped_by_isoform": self.mapped_by_isoform,
+            "pattern": self.pattern.value,
+            "correspondence_table_sha256": self.correspondence_table_sha256,
+            "policy": FINGERPRINT_POLICY_ID,
+        }
+
+
+def _residue_canonical_key(
+    occ: ResidueLevelOccupancy,
+    isoform: str,
+    reference_isoform: str,
+    table: CorrespondenceTable | None,
+) -> tuple[str, int | None]:
+    if table is None:
+        return (occ.interaction_type, None)
+    if isoform == reference_isoform:
+        return (occ.interaction_type, occ.residue_number)
+    for rec in table.by_target_isoform.get(isoform, []):
+        if rec.target_resnum == occ.residue_number:
+            return (occ.interaction_type, rec.reference_resnum)
+    return (occ.interaction_type, None)
+
+
+def build_residue_level_comparative_fingerprint(
+    compound_id: str,
+    fingerprints_by_isoform: dict[str, CompoundIsoformResidueFingerprint],
+    correspondence_table: CorrespondenceTable | None = None,
+    reference_isoform: str = "PI3Kalpha",
+) -> list[ResidueComparativeRecord]:
+    """Build the PRIMARY, residue-level cross-isoform comparative record set.
+
+    Ligand atom identity is marginalized (per SIFt/ProLIF convention);
+    see module docstring.
+    """
+    all_keys: set[tuple[str, int | None]] = set()
+    key_to_occ: dict[str, dict[tuple[str, int | None], float]] = {}
+
+    for isoform, fp in fingerprints_by_isoform.items():
+        key_to_occ[isoform] = {}
+        for occ in fp.occupancies:
+            key = _residue_canonical_key(occ, isoform, reference_isoform, correspondence_table)
+            all_keys.add(key)
+            key_to_occ[isoform][key] = occ.occupancy
+
+    table_hash = correspondence_table.content_sha256() if correspondence_table else None
+    records = []
+    for key in sorted(all_keys, key=lambda k: (k[0], k[1] if k[1] is not None else -1)):
+        interaction_type, canonical_position = key
+        occupancy_by_isoform = {
+            isoform: key_to_occ.get(isoform, {}).get(key, 0.0)
+            for isoform in fingerprints_by_isoform
+        }
+        mapped_by_isoform = {
+            isoform: _is_mapped(
+                canonical_position, isoform, reference_isoform, correspondence_table
+            )
+            for isoform in fingerprints_by_isoform
+        }
+        records.append(
+            ResidueComparativeRecord(
+                compound_id=compound_id,
+                interaction_type=interaction_type,
+                canonical_position=canonical_position,
+                occupancy_by_isoform=occupancy_by_isoform,
+                mapped_by_isoform=mapped_by_isoform,
+                pattern=_classify_pattern(occupancy_by_isoform, mapped_by_isoform),
+                correspondence_table_sha256=table_hash,
+            )
+        )
+    return records
+
+
+# ---------------------------------------------------------------------------
+# Atom-level representation: RETAINED for provenance/backward compatibility
+# only. Not the primary comparative claim as of this validation pass.
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True, slots=True)
+class ComparativeInteractionRecord:
+    """Atom-level comparative record. Secondary/provenance representation."""
+
+    compound_id: str
+    interaction_type: str
+    canonical_position: int | None
+    ligand_atom_name: str
+    occupancy_by_isoform: dict[str, float]
+    pattern: CrossIsoformPattern
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "compound_id": self.compound_id,
+            "interaction_type": self.interaction_type,
+            "canonical_position": self.canonical_position,
+            "ligand_atom_name": self.ligand_atom_name,
+            "occupancy_by_isoform": self.occupancy_by_isoform,
+            "pattern": self.pattern.value,
+        }
+
+
+def _atom_canonical_key(
+    occ: InteractionOccupancy,
+    isoform: str,
+    reference_isoform: str,
+    table: CorrespondenceTable | None,
+) -> tuple[str, int | None, str]:
+    if table is None:
+        return (occ.interaction_type, None, occ.ligand_atom_name)
+    if isoform == reference_isoform:
+        return (occ.interaction_type, occ.residue_number, occ.ligand_atom_name)
+    for rec in table.by_target_isoform.get(isoform, []):
+        if rec.target_resnum == occ.residue_number:
+            return (occ.interaction_type, rec.reference_resnum, occ.ligand_atom_name)
+    return (occ.interaction_type, None, occ.ligand_atom_name)
+
+
 def build_comparative_fingerprint(
     compound_id: str,
     fingerprints_by_isoform: dict[str, CompoundIsoformFingerprint],
     correspondence_table: CorrespondenceTable | None = None,
     reference_isoform: str = "PI3Kalpha",
 ) -> list[ComparativeInteractionRecord]:
-    """Build the cross-isoform comparative record set for one compound.
+    """Atom-level comparative fingerprint.
 
-    Every canonical key observed in ANY isoform's fingerprint gets a
-    record; isoforms where that key was never observed get occupancy 0.0
-    -- a REAL, DERIVED zero (the interaction genuinely did not occur in
-    that isoform's evaluated poses), never a fabricated placeholder for
-    missing data. This is distinct from a missing isoform (e.g. no
-    receptor available), which is simply absent from
-    `fingerprints_by_isoform` and produces no record contribution at all
-    for that isoform -- callers must check `fingerprints_by_isoform.keys()`
-    against `_ISOFORMS` to distinguish "genuinely zero" from "not evaluated."
+    SECONDARY/provenance representation as of this validation pass --
+    see module docstring and `build_residue_level_comparative_fingerprint`
+    for the primary one.
+
+    Behavior unchanged from the original implementation (commits
+    eafe327/2f26c5c): every canonical key observed in ANY isoform's
+    fingerprint gets a record; isoforms where that key was never
+    observed get occupancy 0.0, a real derived zero, never fabricated.
     """
     all_keys: set[tuple[str, int | None, str]] = set()
     key_to_occ: dict[str, dict[tuple[str, int | None, str], float]] = {}
@@ -167,7 +323,7 @@ def build_comparative_fingerprint(
     for isoform, fp in fingerprints_by_isoform.items():
         key_to_occ[isoform] = {}
         for occ in fp.occupancies:
-            key = _canonical_key(occ, isoform, reference_isoform, correspondence_table)
+            key = _atom_canonical_key(occ, isoform, reference_isoform, correspondence_table)
             all_keys.add(key)
             key_to_occ[isoform][key] = occ.occupancy
 
@@ -178,6 +334,12 @@ def build_comparative_fingerprint(
             isoform: key_to_occ.get(isoform, {}).get(key, 0.0)
             for isoform in fingerprints_by_isoform
         }
+        mapped_by_isoform = {
+            isoform: _is_mapped(
+                canonical_position, isoform, reference_isoform, correspondence_table
+            )
+            for isoform in fingerprints_by_isoform
+        }
         records.append(
             ComparativeInteractionRecord(
                 compound_id=compound_id,
@@ -185,7 +347,7 @@ def build_comparative_fingerprint(
                 canonical_position=canonical_position,
                 ligand_atom_name=ligand_atom_name,
                 occupancy_by_isoform=occupancy_by_isoform,
-                pattern=_classify_pattern(occupancy_by_isoform),
+                pattern=_classify_pattern(occupancy_by_isoform, mapped_by_isoform),
             )
         )
     return records

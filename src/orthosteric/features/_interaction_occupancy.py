@@ -164,3 +164,110 @@ def aggregate_occupancy(
             )
         )
     return sorted(results, key=lambda r: (r.interaction_type, r.residue_number, r.ligand_atom_name))
+
+
+@dataclass(frozen=True, slots=True)
+class ResidueLevelOccupancy:
+    """Aggregated occupancy for one (residue, interaction_type) key.
+
+    MARGINALIZED over which specific ligand atom carries the interaction.
+
+    Added per the SIFt/ProLIF-established interaction-fingerprint
+    convention (Deng et al. 2004; Bouysset & Fiorucci 2021) after the
+    atom-level primary key was identified as the likely dominant cause
+    of the 93-99% "lost" classification rate observed in the 24- and
+    50-compound runs (commits eafe327, 2f26c5c) -- ligand-atom-name-level
+    keying is finer than any established interaction-fingerprint method
+    uses, and residue-level is the field-standard granularity.
+
+    Computed directly from the raw per-pose interaction lists (the same
+    already-saved pose PDBQT files, re-parsed -- no new docking), NOT
+    approximated from the already-aggregated atom-level occupancy, so
+    that "did ANY atom hit this residue via this interaction type in
+    this pose" is counted correctly per pose rather than derived
+    after the fact from per-atom occupancy fractions (which would
+    under-count cases where different atoms carry the interaction in
+    different, non-overlapping poses).
+    """
+
+    interaction_type: str
+    residue_number: int
+    residue_name: str
+    chain_id: str
+    n_poses_evaluated: int
+    n_poses_with_interaction: int
+    occupancy: float
+    occupancy_class: OccupancyClass
+    contributing_atom_names: frozenset[str]  # provenance only, never the comparative key
+    distances: tuple[float, ...]
+
+    @property
+    def mean_distance(self) -> float | None:
+        return sum(self.distances) / len(self.distances) if self.distances else None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "interaction_type": self.interaction_type,
+            "residue_number": self.residue_number,
+            "residue_name": self.residue_name,
+            "chain_id": self.chain_id,
+            "n_poses_evaluated": self.n_poses_evaluated,
+            "n_poses_with_interaction": self.n_poses_with_interaction,
+            "occupancy": self.occupancy,
+            "occupancy_class": self.occupancy_class.value,
+            "contributing_atom_names": sorted(self.contributing_atom_names),
+            "mean_distance_angstrom": self.mean_distance,
+            "policy": OCCUPANCY_POLICY_ID + "_residue_level",
+        }
+
+
+def aggregate_residue_level_occupancy(
+    per_pose_interactions: list[list[Any]],
+) -> list[ResidueLevelOccupancy]:
+    """Residue-level counterpart of `aggregate_occupancy`.
+
+    Identical pose-counting discipline (never fabricates an absent
+    interaction; counts each interaction at most once per pose), but the
+    key drops `ligand_atom_name` -- if atom O7 and atom O9 both form an
+    H-bond with the same residue in the same pose, that pose counts once
+    toward that residue's H-bond occupancy, not twice, and it is the
+    SAME single count whether one atom or several carried it.
+    """
+    n_poses = len(per_pose_interactions)
+    counts: dict[tuple[str, int, str], int] = defaultdict(int)
+    distances: dict[tuple[str, int, str], list[float]] = defaultdict(list)
+    contributing_atoms: dict[tuple[str, int, str], set[str]] = defaultdict(set)
+    residue_names: dict[tuple[str, int, str], str] = {}
+
+    for pose_interactions in per_pose_interactions:
+        seen_this_pose: set[tuple[str, int, str]] = set()
+        for it in pose_interactions:
+            key = (it.interaction_type.value, it.residue_number, it.chain_id)
+            contributing_atoms[key].add(it.ligand_atom_name)
+            residue_names[key] = it.residue_name
+            if key in seen_this_pose:
+                continue
+            seen_this_pose.add(key)
+            counts[key] += 1
+            if it.distance_angstrom is not None:
+                distances[key].append(it.distance_angstrom)
+
+    results = []
+    for key, n_with in counts.items():
+        interaction_type, residue_number, chain_id = key
+        occupancy = n_with / n_poses if n_poses > 0 else 0.0
+        results.append(
+            ResidueLevelOccupancy(
+                interaction_type=interaction_type,
+                residue_number=residue_number,
+                residue_name=residue_names[key],
+                chain_id=chain_id,
+                n_poses_evaluated=n_poses,
+                n_poses_with_interaction=n_with,
+                occupancy=occupancy,
+                occupancy_class=classify_occupancy(occupancy, n_poses),
+                contributing_atom_names=frozenset(contributing_atoms[key]),
+                distances=tuple(distances.get(key, [])),
+            )
+        )
+    return sorted(results, key=lambda r: (r.interaction_type, r.residue_number))
