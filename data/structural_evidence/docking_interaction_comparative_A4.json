@@ -1,0 +1,187 @@
+{
+  "LY294002": {
+    "types": [
+      "cation_pi",
+      "charged_contact_candidate",
+      "h_bond",
+      "hydrophobic_contact"
+    ],
+    "rows": [
+      [
+        "PI3Kalpha",
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        "PI3Kbeta",
+        1,
+        2,
+        1,
+        2
+      ],
+      [
+        "PI3Kgamma",
+        0,
+        1,
+        1,
+        0
+      ],
+      [
+        "PI3Kdelta",
+        0,
+        1,
+        0,
+        3
+      ]
+    ]
+  },
+  "Quercetin": {
+    "types": [
+      "cation_pi",
+      "charged_contact_candidate",
+      "h_bond"
+    ],
+    "rows": [
+      [
+        "PI3Kalpha",
+        0,
+        5,
+        4
+      ],
+      [
+        "PI3Kbeta",
+        1,
+        3,
+        1
+      ],
+      [
+        "PI3Kgamma",
+        0,
+        5,
+        3
+      ],
+      [
+        "PI3Kdelta",
+        0,
+        7,
+        3
+      ]
+    ]
+  },
+  "Staurosporine_core": {
+    "types": [
+      "cation_pi",
+      "charged_contact_candidate",
+      "hydrophobic_contact"
+    ],
+    "rows": [
+      [
+        "PI3Kalpha",
+        0,
+        2,
+        8
+      ],
+      [
+        "PI3Kbeta",
+        1,
+        2,
+        8
+      ],
+      [
+        "PI3Kgamma",
+        1,
+        2,
+        10
+      ],
+      [
+        "PI3Kdelta",
+        0,
+        2,
+        12
+      ]
+    ]
+  },
+  "Simple_pyrimidine": {
+    "types": [
+      "cation_pi",
+      "charged_contact_candidate",
+      "h_bond",
+      "hydrophobic_contact",
+      "pi_pi"
+    ],
+    "rows": [
+      [
+        "PI3Kalpha",
+        0,
+        4,
+        1,
+        7,
+        1
+      ],
+      [
+        "PI3Kbeta",
+        1,
+        4,
+        2,
+        3,
+        0
+      ],
+      [
+        "PI3Kgamma",
+        0,
+        9,
+        1,
+        7,
+        1
+      ],
+      [
+        "PI3Kdelta",
+        0,
+        6,
+        2,
+        6,
+        1
+      ]
+    ]
+  },
+  "Morpholino_quinazoline": {
+    "types": [
+      "cation_pi",
+      "charged_contact_candidate",
+      "h_bond",
+      "hydrophobic_contact"
+    ],
+    "rows": [
+      [
+        "PI3Kalpha",
+        0,
+        2,
+        0,
+        9
+      ],
+      [
+        "PI3Kbeta",
+        1,
+        2,
+        1,
+        8
+      ],
+      [
+        "PI3Kgamma",
+        0,
+        4,
+        0,
+        10
+      ],
+      [
+        "PI3Kdelta",
+        0,
+        5,
+        0,
+        10
+      ]
+    ]
+  }
+}
