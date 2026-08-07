@@ -1,0 +1,136 @@
+{
+  "4bfr_self_consistency": {
+    "label": "4BFR_self",
+    "seed_results": [
+      {
+        "seed": 1,
+        "rmsd": 0.514,
+        "rmsd_error": null,
+        "score": -8.816,
+        "hinge_hbond_hit": false,
+        "dock_time_s": 18.0
+      },
+      {
+        "seed": 2,
+        "rmsd": 0.487,
+        "rmsd_error": null,
+        "score": -9.335,
+        "hinge_hbond_hit": false,
+        "dock_time_s": 16.8
+      },
+      {
+        "seed": 3,
+        "rmsd": 0.822,
+        "rmsd_error": null,
+        "score": -9.37,
+        "hinge_hbond_hit": false,
+        "dock_time_s": 16.9
+      },
+      {
+        "seed": 4,
+        "rmsd": 0.785,
+        "rmsd_error": null,
+        "score": -9.357,
+        "hinge_hbond_hit": false,
+        "dock_time_s": 17.3
+      },
+      {
+        "seed": 5,
+        "rmsd": 0.4,
+        "rmsd_error": null,
+        "score": -9.351,
+        "hinge_hbond_hit": false,
+        "dock_time_s": 17.9
+      }
+    ],
+    "n_valid_rmsd": 5,
+    "n_pass_2A": 5,
+    "n_hinge_hits": 0,
+    "gate1_style_verdict": "PASS"
+  },
+  "af_p42338_redocking": {
+    "label": "AF_P42338",
+    "seed_results": [
+      {
+        "seed": 1,
+        "score": -7.573,
+        "distance_from_box_center_a": 4.55,
+        "in_pocket_sanity_check": true,
+        "hinge_hbond_hit": false,
+        "dock_time_s": 20.4
+      },
+      {
+        "seed": 2,
+        "score": -8.578,
+        "distance_from_box_center_a": 4.22,
+        "in_pocket_sanity_check": true,
+        "hinge_hbond_hit": false,
+        "dock_time_s": 20.0
+      },
+      {
+        "seed": 3,
+        "score": -8.139,
+        "distance_from_box_center_a": 4.32,
+        "in_pocket_sanity_check": true,
+        "hinge_hbond_hit": false,
+        "dock_time_s": 19.9
+      },
+      {
+        "seed": 4,
+        "score": -7.983,
+        "distance_from_box_center_a": 3.9,
+        "in_pocket_sanity_check": true,
+        "hinge_hbond_hit": false,
+        "dock_time_s": 19.4
+      },
+      {
+        "seed": 5,
+        "score": -8.262,
+        "distance_from_box_center_a": 4.26,
+        "in_pocket_sanity_check": true,
+        "hinge_hbond_hit": false,
+        "dock_time_s": 19.8
+      }
+    ],
+    "n_in_pocket": 5,
+    "n_hinge_hits": 0
+  },
+  "box_center_4bfr": [
+    1.4497692307692307,
+    76.32392307692307,
+    80.2376923076923
+  ],
+  "box_center_af_pocket_centroid": [
+    -15.31356886227545,
+    5.774712574850304,
+    10.54990419161677
+  ],
+  "correction_note": "First run of this script checked the wrong hinge residue (773/779, the specificity-pocket Met, not the hinge) and reported a cross-frame RMSD for AF-P42338 that is methodologically meaningless (AF and 4BFR share no common coordinate frame). Both fixed here: hinge corrected to 851 (mouse) / 857 (human); AF validated by pocket-proximity sanity check + frame-independent interaction detection instead of a meaningless cross-frame RMSD.",
+  "CORRECTED_hinge_analysis": {
+    "hinge_position_correction": "Original hinge_resnum (851 mouse / 857 human) was a numerical coincidence, not a verified correspondence. Corrected via direct alpha-to-mouse-beta sequence alignment: alpha Val851 (established hinge anchor) maps to mouse-4BFR residue 848 (Val), which maps to human AF-P42338 residue 854 (Val). Both confirmed chemically consistent (Val-to-Val).",
+    "4bfr_self_hinge848": {
+      "hits": 5,
+      "total": 5,
+      "geometry": "donor role, 2.81-2.96 A across seeds"
+    },
+    "af_p42338_hinge854": {
+      "hits": 4,
+      "total": 5,
+      "geometry": "donor role, 2.88-3.05 A across seeds"
+    },
+    "interaction_type_overlap": {
+      "4bfr_types": [
+        "charged_contact_candidate",
+        "h_bond",
+        "hydrophobic_contact"
+      ],
+      "af_types": [
+        "charged_contact_candidate",
+        "h_bond",
+        "hydrophobic_contact"
+      ],
+      "overlap_fraction": 1.0
+    }
+  },
+  "dimension_3_composite_verdict": "PASS on all three sub-metrics (self-consistency 5/5, hinge recovery 4/5, interaction-type overlap 100%)"
+}
