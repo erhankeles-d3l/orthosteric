@@ -47,18 +47,36 @@
     },
     "sealed_labels_module": {
       "path": "src/orthosteric/data/sealed_labels.py",
-      "sha256": "4a291c49981e2cbeb438ab272733538f92bf8f8b5940131f2db86a2a3942cdb2",
-      "note": "Architectural barrier module; guard function + real (Contract-5-gated) loader, wired to the verified AuditEvent/log_audit_event signature."
+      "sha256": "bba29884fe69f327ca852ccad02fbe8a484d5540ed5e4eea0fc93f0952241f5d",
+      "note": "Architectural barrier module; guard function + real (Contract-5-gated) loader, wired to the verified AuditEvent/log_audit_event signature.",
+      "hash_correction": "CORRECTED after Stage C closure. The originally recorded hash (4a291c49981e2cbeb438ab272733538f92bf8f8b5940131f2db86a2a3942cdb2) was computed mid-session against the working-tree file, BEFORE a subsequent mypy no-any-return fix was applied to that same file and before the Stage C commit was made. The manifest was never refreshed, so it recorded a hash for a file state that was never committed -- an independent verifier would find a mismatch. The value above is the actual committed content, unchanged since commit 1e4deb4. No sealed DATA artifact is affected: all nine sealed data/script hashes in this manifest verify correctly against main; this was the barrier module (code) only."
     }
   },
   "operating_characteristic_curve_summary": {
     "n_primary_contrast": 44,
-    "delta_auc_0.10_boundary_calibration": {"independence": 0.036, "scaffold_correlated": 0.043, "expected_near": 0.025},
-    "delta_auc_0.15": {"independence": 0.080, "scaffold_correlated": 0.078},
-    "delta_auc_0.20": {"independence": 0.124, "scaffold_correlated": 0.154},
-    "delta_auc_0.25": {"independence": 0.286, "scaffold_correlated": 0.286},
-    "delta_auc_0.30": {"independence": 0.470, "scaffold_correlated": 0.480},
+    "delta_auc_0.10_boundary_calibration": {
+      "independence": 0.036,
+      "scaffold_correlated": 0.043,
+      "expected_near": 0.025
+    },
+    "delta_auc_0.15": {
+      "independence": 0.08,
+      "scaffold_correlated": 0.078
+    },
+    "delta_auc_0.20": {
+      "independence": 0.124,
+      "scaffold_correlated": 0.154
+    },
+    "delta_auc_0.25": {
+      "independence": 0.286,
+      "scaffold_correlated": 0.286
+    },
+    "delta_auc_0.30": {
+      "independence": 0.47,
+      "scaffold_correlated": 0.48
+    },
     "pre_registered_pass_threshold": "power >= 50% at some effect size in [0.20, 0.25]",
     "result": "FAIL -- even the largest tested effect (0.30) does not reach 50% under either sensitivity model"
-  }
+  },
+  "manifest_integrity_note": "Verified from a clean clone of main at 431b44a: 9/10 recorded hashes matched on first check; the sealed_labels_module entry did not, and has been corrected above with the cause disclosed rather than silently overwritten."
 }
