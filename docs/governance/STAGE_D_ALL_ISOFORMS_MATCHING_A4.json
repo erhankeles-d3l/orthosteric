@@ -1,0 +1,90 @@
+{
+  "snapshot_sha256": "05748f6627ead8f4177ee9deec51b1214920f4b8b86230da850dba9d429cc277",
+  "n_selectivity_targets": 1267,
+  "per_isoform": {
+    "PI3Kalpha": {
+      "n_pdb_entries": 135,
+      "n_distinct_ligands": 95,
+      "n_matched_compounds": 25,
+      "n_overlap_with_modeling_set": 11,
+      "overlap_pct": 0.87,
+      "overlap_inchikeys": [
+        "ADLJEZREHNJMCU-UHFFFAOYSA-N",
+        "BEUQXVWXFDOSAQ-UHFFFAOYSA-N",
+        "CBZPCOUPBNLTKW-UHFFFAOYSA-N",
+        "DLNUPKDFXMWRFP-UHFFFAOYSA-N",
+        "HBPXWEPKNBHKAX-NSHDSACASA-N",
+        "NUGMMEMSYIUTGA-YGRLFVJLSA-N",
+        "QDLHCMPXEPAAMD-QAIWCSMKSA-N",
+        "QYTXJLQBSYAMGR-UHFFFAOYSA-N",
+        "STUWGJZDJHPWGZ-LBPRGKRZSA-N",
+        "TUVCWJQQGGETHL-UHFFFAOYSA-N",
+        "XDLYKKIQACFMJG-WKILWMFISA-N"
+      ]
+    },
+    "PI3Kdelta": {
+      "n_pdb_entries": 20,
+      "n_distinct_ligands": 20,
+      "n_matched_compounds": 14,
+      "n_overlap_with_modeling_set": 2,
+      "overlap_pct": 0.16,
+      "overlap_inchikeys": [
+        "BEUQXVWXFDOSAQ-UHFFFAOYSA-N",
+        "BTLBFTXHIOZUGF-IYBDPMFKSA-N"
+      ]
+    }
+  },
+  "pik3kgamma_prior_result": {
+    "overlap_pct": 2.21,
+    "n_overlap": 28
+  },
+  "pik3kbeta_human_pdb_entries": 0,
+  "pik3kbeta_note": "Zero human PIK3CB (P42338) PDB entries exist. Two mouse-ortholog (Q8BTI9) entries (2Y3A, 4BFR) exist but are excluded as cross-species evidence -- see docs/STRUCTURAL_EVIDENCE_ALL_ISOFORMS_REPORT.md.",
+  "n_all_three_nonbeta_overlap": 0,
+  "n_any_nonbeta_overlap": 39,
+  "min_viable_for_split": 50,
+  "feasible_indicator_zero_fill_run": false,
+  "feasible_full_coverage_run": false,
+  "any_nonbeta_overlap_inchikeys": [
+    "ADGGYDAFIHSYFI-UHFFFAOYSA-N",
+    "ADLJEZREHNJMCU-UHFFFAOYSA-N",
+    "BEUQXVWXFDOSAQ-UHFFFAOYSA-N",
+    "BTLBFTXHIOZUGF-IYBDPMFKSA-N",
+    "CBZPCOUPBNLTKW-UHFFFAOYSA-N",
+    "CGBJSGAELGCMKE-UHFFFAOYSA-N",
+    "CWHUFRVAEUJCEF-UHFFFAOYSA-N",
+    "DJWGTNCIAUYYCQ-UHFFFAOYSA-N",
+    "DLNUPKDFXMWRFP-UHFFFAOYSA-N",
+    "DMMFPXAFVNDPCA-UHFFFAOYSA-N",
+    "DWZAEMINVBZMHQ-UHFFFAOYSA-N",
+    "DZXMARZBAUMWLK-UHFFFAOYSA-N",
+    "FEBJYEFFVIDUNF-UHFFFAOYSA-N",
+    "GEYLKEHPEKRUTC-UHFFFAOYSA-N",
+    "HBPXWEPKNBHKAX-NSHDSACASA-N",
+    "IRTDIKMSKMREGO-OAHLLOKOSA-N",
+    "JEGHXKRHKHPBJD-UHFFFAOYSA-N",
+    "JEHTXQHLTKVUGY-UHFFFAOYSA-N",
+    "JFVNFXCESCXMBC-UHFFFAOYSA-N",
+    "KWRYMZHCQIOOEB-LBPRGKRZSA-N",
+    "LHNIIDJUOCFXAP-UHFFFAOYSA-N",
+    "MWYBBCLGEHZSCP-UHFFFAOYSA-N",
+    "NUGMMEMSYIUTGA-YGRLFVJLSA-N",
+    "PLUDSXLHMVRUKP-UHFFFAOYSA-N",
+    "QDLHCMPXEPAAMD-QAIWCSMKSA-N",
+    "QPRMAEKTXODJGJ-INIZCTEOSA-N",
+    "QYTXJLQBSYAMGR-UHFFFAOYSA-N",
+    "RTARVPHTCQRSDW-UHFFFAOYSA-N",
+    "SQWZFLMPDUSYGV-POHAHGRESA-N",
+    "STUWGJZDJHPWGZ-LBPRGKRZSA-N",
+    "TUVCWJQQGGETHL-UHFFFAOYSA-N",
+    "TVUPSIBSWDXJGQ-UHFFFAOYSA-N",
+    "UOKGZPYGRJDACN-UHFFFAOYSA-N",
+    "UTNWCQOGZIRULH-UHFFFAOYSA-N",
+    "XAZDYPNMXGDMSA-UHFFFAOYSA-N",
+    "XDLYKKIQACFMJG-WKILWMFISA-N",
+    "XISVSTPEXYIKJL-UHFFFAOYSA-N",
+    "XUMALORDVCFWKV-IBGZPJMESA-N",
+    "YOVVNQKCSKSHKT-HNNXBMFYSA-N"
+  ],
+  "all_three_nonbeta_overlap_inchikeys": []
+}

@@ -1,0 +1,13 @@
+{
+  "correspondence_table_sha256": "08d88687328c93eb179b48a4daa00f41a9c475cca73aecd217f5911c76b4944b",
+  "24_compound": {
+    "n_processed": 96,
+    "n_missing": 0,
+    "wall_time_s": 314.5819983482361
+  },
+  "50_compound": {
+    "n_processed": 200,
+    "n_missing": 0,
+    "wall_time_s": 658.0293519496918
+  }
+}

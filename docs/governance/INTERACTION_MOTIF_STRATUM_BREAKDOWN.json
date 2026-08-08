@@ -1,0 +1,71 @@
+{
+  "pattern_by_interaction_type": {
+    "charged_contact_candidate": {
+      "lost": 343,
+      "differential_unclassified": 18,
+      "other_favored": 6
+    },
+    "h_bond": {
+      "lost": 304,
+      "differential_unclassified": 1
+    },
+    "hydrophobic_contact": {
+      "lost": 187,
+      "differential_unclassified": 60,
+      "conserved": 1,
+      "other_favored": 17,
+      "alpha_favored": 5
+    },
+    "salt_bridge": {
+      "lost": 7
+    }
+  },
+  "alpha_favored_by_stratum": {
+    "other_selective": 1,
+    "non_selective": 2,
+    "intermediate": 2
+  },
+  "other_favored_by_stratum": {
+    "alpha_selective": 4,
+    "other_selective": 4,
+    "non_selective": 4,
+    "intermediate": 11
+  },
+  "conserved_by_type": {
+    "hydrophobic_contact": 1
+  },
+  "alpha_favored_per_compound_by_stratum": {
+    "alpha_selective": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "other_selective": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    "non_selective": [
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "intermediate": [
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ]
+  }
+}

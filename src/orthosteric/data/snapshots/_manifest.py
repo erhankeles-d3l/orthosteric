@@ -3,8 +3,19 @@
 SoftwareProvenance  — RDKit, Python, git SHA, OS, lock hash
 PolicyManifest      — harmonization policy versions, rule-set IDs
 
-Both enter the snapshot hash.  They are not cosmetic metadata; changing
-any policy version or toolchain version must produce a new snapshot ID.
+Neither is cosmetic metadata, but per GDR-010 (accepted, Option A) they
+play different roles in snapshot identity:
+
+  PolicyManifest      — enters `snapshot_sha256` (scientific identity).
+                        Changing any policy version produces a new
+                        scientific snapshot, because a policy change can
+                        change what the records mean.
+  SoftwareProvenance  — enters `build_provenance_sha256` ONLY.  It is
+                        recorded and fully reportable, but a toolchain or
+                        environment change (git SHA, RDKit version, OS, ...)
+                        does NOT by itself change scientific snapshot
+                        identity — the same data, correctly rebuilt, is the
+                        same science regardless of the machine that built it.
 """
 
 from __future__ import annotations

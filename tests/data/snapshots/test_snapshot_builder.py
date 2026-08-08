@@ -6,11 +6,14 @@ Exit criteria (spec):
 
 Additional requirements:
   (3) Hash is sensitive to content changes.
-  (4) Hash is sensitive to policy/software-version changes.
+  (4) snapshot_sha256 is sensitive to policy-version changes, and — per
+      GDR-010 (accepted, Option A) — INVARIANT to software/environment
+      changes.  build_provenance_sha256 carries the software sensitivity.
   (5) Both positive and negative evidence enter the hash.
   (6) Structural source provenance is preserved (PDB vs AlphaFold).
   (7) Parent-snapshot lineage is preserved.
-  (8) Timestamps do NOT make identical inputs produce different hashes.
+  (8) Timestamps do NOT make identical inputs produce different hashes,
+      including `retrieval_timestamp` inside records (GDR-010).
   (9) Ordering invariance — same records in different order → same hash.
   (10) Fail-closed — snapshot records all evidence categories in manifest.
   (11) RULE_MISSING and GOVERNANCE_EXCEPTION counted in manifest.
@@ -167,32 +170,75 @@ def test_adding_record_changes_hash() -> None:
     assert snap1.manifest.snapshot_sha256 != snap2.manifest.snapshot_sha256
 
 
-# ── Requirement 4: policy/software sensitivity ────────────────────────────────
+# ── Requirement 4: policy sensitivity, software INVARIANCE (GDR-010) ─────────
 
 
-def test_different_rdkit_version_different_hash() -> None:
+def _sw_with(**overrides: Any) -> SoftwareProvenance:
+    base = dataclasses.asdict(_sw())
+    base.update(overrides)
+    return SoftwareProvenance(**base)
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"rdkit_version": "2025.1.0"},
+        {"python_version": "3.12.4 (test)"},
+        {"orthosteric_version": "0.2.0"},
+        {"git_sha": "0" * 40},
+        {"git_dirty": True},
+        {"os_platform": "Darwin"},
+        {"os_version": "6.99.0-generic"},
+        {"lockfile_hash": "cafef00d" * 8},
+        {"key_package_versions": {"rdkit": "2025.1.0", "extra": "1.0"}},
+    ],
+)
+def test_snapshot_sha256_invariant_to_software_provenance(overrides: dict[str, Any]) -> None:
+    """GDR-010 (accepted, Option A): environment changes must NOT change
+    scientific snapshot identity — the same data, rebuilt on a different
+    machine/toolchain, is the same science."""
     sw1 = _sw()
-    sw2 = SoftwareProvenance(
-        python_version=sw1.python_version,
-        rdkit_version="2025.1.0",
-        orthosteric_version=sw1.orthosteric_version,
-        git_sha=sw1.git_sha,
-        git_dirty=sw1.git_dirty,
-        os_platform=sw1.os_platform,
-        os_version=sw1.os_version,
-        lockfile_hash=sw1.lockfile_hash,
-        key_package_versions=sw1.key_package_versions,
-    )
+    sw2 = _sw_with(**overrides)
     b1 = SnapshotBuilder(software=sw1, policy=_policy())
     b2 = SnapshotBuilder(software=sw2, policy=_policy())
     records = [_rec()]
     snap1 = b1.build(records)
     snap2 = b2.build(records)
-    assert snap1.manifest.snapshot_sha256 != snap2.manifest.snapshot_sha256
+    assert snap1.manifest.snapshot_sha256 == snap2.manifest.snapshot_sha256
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"rdkit_version": "2025.1.0"},
+        {"git_sha": "0" * 40},
+        {"os_platform": "Darwin"},
+    ],
+)
+def test_build_provenance_sha256_sensitive_to_software(overrides: dict[str, Any]) -> None:
+    """The software sensitivity GDR-010 removes from snapshot_sha256 is
+    preserved in build_provenance_sha256 — it is recorded, just not
+    identity-defining."""
+    sw1 = _sw()
+    sw2 = _sw_with(**overrides)
+    b1 = SnapshotBuilder(software=sw1, policy=_policy())
+    b2 = SnapshotBuilder(software=sw2, policy=_policy())
+    records = [_rec()]
+    snap1 = b1.build(records)
+    snap2 = b2.build(records)
+    assert snap1.manifest.build_provenance_sha256 != snap2.manifest.build_provenance_sha256
+
+
+def test_build_provenance_sha256_reproducible() -> None:
+    b = _builder()
+    snap1 = b.build([_rec()])
+    snap2 = b.build([_rec()])
+    assert snap1.manifest.build_provenance_sha256 == snap2.manifest.build_provenance_sha256
 
 
 def test_different_policy_version_different_hash() -> None:
-
+    """Policy versions remain part of scientific identity (unchanged by
+    GDR-010): a policy change can change what the records mean."""
     p1 = _policy()
     p2_fields = dataclasses.asdict(p1)
     p2_fields["deduplication_policy"] = "sci0009_v2_hypothetical"
@@ -311,6 +357,23 @@ def test_created_at_utc_not_in_hash() -> None:
     # Timestamps are allowed to differ
     # (we can't force different times in a unit test but verify they're present)
     assert snap1.manifest.created_at_utc != ""
+
+
+def test_retrieval_timestamp_in_record_not_in_hash() -> None:
+    """GDR-010 (accepted): retrieval_timestamp is retrieval provenance, not
+    scientific content.  Re-downloading byte-identical data at a different
+    time must not change snapshot_sha256."""
+    b = _builder()
+    r1 = _rec("R1")
+    r1["retrieval_timestamp"] = "2026-01-01T00:00:00Z"
+    r2 = _rec("R1")
+    r2["retrieval_timestamp"] = "2099-12-31T23:59:59Z"
+    snap1 = b.build([r1])
+    snap2 = b.build([r2])
+    assert snap1.manifest.snapshot_sha256 == snap2.manifest.snapshot_sha256
+    # The field itself is still stored (provenance is retained, just not hashed).
+    assert snap1.records[0]["retrieval_timestamp"] == "2026-01-01T00:00:00Z"
+    assert snap2.records[0]["retrieval_timestamp"] == "2099-12-31T23:59:59Z"
 
 
 # ── Requirement 9: ordering invariance ───────────────────────────────────────

@@ -19,3 +19,12 @@ logs/runs/*
 logs/audit/*
 !logs/**/.gitkeep
 .env
+
+# Raw source-API response cache (ENGINEERING CHOICE, 2026-08-06).
+# Re-fetchable via scripts/stage0_acquire.py; the committed artefacts are the
+# content-hashed snapshot under data/snapshots/ and the acquisition manifest,
+# which together record exactly what was retrieved. Raw pages are a cache,
+# not a scientific artefact, and grow ~30MB per acquisition.
+data/raw/*/*/*/page_*.json
+data/raw/*/*/*/_count.json
+data/audit/

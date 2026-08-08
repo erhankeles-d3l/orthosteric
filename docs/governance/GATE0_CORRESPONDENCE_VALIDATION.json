@@ -1,0 +1,39 @@
+{
+  "fresh_content_sha256": "08d88687328c93eb179b48a4daa00f41a9c475cca73aecd217f5911c76b4944b",
+  "committed_content_sha256": "08d88687328c93eb179b48a4daa00f41a9c475cca73aecd217f5911c76b4944b",
+  "table_reproducible": true,
+  "anchors": [
+    {
+      "reference": "alpha Trp780",
+      "target": "delta (mapped)",
+      "method": "sequence_alignment_v1_provisional",
+      "residue_identity_plausible": true,
+      "fully_verified": true
+    },
+    {
+      "reference": "alpha Met772",
+      "target": "delta (mapped)",
+      "method": "sequence_alignment_v1_provisional",
+      "residue_identity_plausible": true,
+      "fully_verified": true
+    },
+    {
+      "reference": "delta Val828",
+      "target": "alpha[851] / gamma (mapped)",
+      "method": "sequence_alignment_v1_provisional",
+      "residue_identity_plausible": true,
+      "fully_verified": true
+    }
+  ],
+  "n_verified": 3,
+  "n_total": 3,
+  "gate_0_result": "PASS",
+  "beta_check": {
+    "note": "beta has NO independently-known literature anchor residue number (no human PI3Kbeta induced-pocket structure found this session) -- this is chemical-identity plausibility only, weaker than the alpha/gamma/delta positional match above, exactly per the mandate own instruction not to claim beta received equal validation strength.",
+    "alpha_Trp780_to_beta787_W": true,
+    "alpha_Met772_to_beta779_M": true,
+    "alpha_hingeVal851_to_beta854_V": true,
+    "pocket_region_750_900_mapping_coverage": "139/143"
+  },
+  "gate_0_result_all_isoforms": "PASS (alpha/gamma/delta: positional+chemical match to independent literature anchors; beta: chemical plausibility only, weaker evidence tier, no independent anchor number available)"
+}

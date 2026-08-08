@@ -1,0 +1,39 @@
+{
+  "snapshot_sha256": "05748f6627ead8f4177ee9deec51b1214920f4b8b86230da850dba9d429cc277",
+  "eligibility": "eligible",
+  "gate_status": "warning",
+  "gate_rationale": "Non-fatal concern(s) in ['confidence', 'structural_coverage']: reviewed at the SCI0-031 gate before proceeding, per GDR-002/GDR-003.",
+  "eligible_for_training": true,
+  "lifecycle_stage": "gate_decided_warning",
+  "dimension_summary": {
+    "connectivity": "non_degenerate_unquantified",
+    "coverage": "non_degenerate_unquantified",
+    "missingness": "non_degenerate_unquantified",
+    "publication_concentration": "non_degenerate_unquantified",
+    "scaffold_diversity": "governed_threshold_met",
+    "structural_coverage": "not_yet_available",
+    "confidence": "insufficient_data"
+  },
+  "result_sha256": "b61e0a27e046e68bb82e108937e0b27c8c566379af7b9a01a8d1e955a5fd87e2",
+  "engineering_params": {
+    "n_c": 10349,
+    "n_b": 2420,
+    "n_w": 4880,
+    "n_complete_compounds": 2992,
+    "n_complete_strata": 254
+  },
+  "graph_stats": {
+    "total_compounds": 16235,
+    "per_isoform": {
+      "PI3Kdelta": 10421,
+      "PI3Kbeta": 3641,
+      "PI3Kalpha": 8059,
+      "PI3Kgamma": 6896
+    },
+    "compounds_all4": 2500,
+    "within_study_four_isoform": 4880,
+    "largest_cc": 10349,
+    "n_components": 246,
+    "legacy_fallback_records": 0
+  }
+}

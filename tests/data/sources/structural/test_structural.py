@@ -17,6 +17,11 @@ from uuid import uuid4
 
 import pytest
 
+from orthosteric.data.sources.structural._evidence_record import (
+    EvidenceClass,
+    PoseStatus,
+    StructuralEvidenceRecord,
+)
 from orthosteric.data.sources.structural._isoform_map import (
     PI3K_UNIPROT_MAP,
     PI3KIsoform,
@@ -435,3 +440,139 @@ def test_alphafold_wrong_accession_raises_governance_exception(
 def test_alphafold_source_distinguishable_from_experimental() -> None:
     """Rule AF-8: ALPHAFOLD_FALLBACK ≠ EXPERIMENTAL_PDB — downstream can condition on it."""
     assert StructureSource.ALPHAFOLD_FALLBACK.value != StructureSource.EXPERIMENTAL_PDB.value
+
+
+# ── StructuralEvidenceRecord — evidence classification and missingness ────────
+# Stage D §8-10, §21, §39.  These tests enforce the invariants:
+#   UNAVAILABLE != ABSENT ; PREDICTED != OBSERVED
+
+
+def test_evidence_class_members_are_distinct() -> None:
+    """The six evidence levels plus UNRESOLVED are not interchangeable (§8)."""
+    values = {
+        EvidenceClass.EXPERIMENTAL_COMPLEX,
+        EvidenceClass.ANALOGUE_REFERENCE,
+        EvidenceClass.EXPERIMENTAL_RECEPTOR,
+        EvidenceClass.LITERATURE_BINDING_MODE,
+        EvidenceClass.ALPHAFOLD_RECEPTOR,
+        EvidenceClass.UNAVAILABLE,
+        EvidenceClass.UNRESOLVED,
+    }
+    assert len(values) == 7
+
+
+def test_unavailable_factory_is_not_experimental_not_docked() -> None:
+    """UNAVAILABLE != ABSENT: no evidence is not evidence of no binding (§21)."""
+    rec = StructuralEvidenceRecord.unavailable(
+        "CHEMBL999", "AAAAAAAAAAAAAA-BBBBBBBBBB-N", "PIK3CG", reason="no_search_run"
+    )
+    assert rec.evidence_class == EvidenceClass.UNAVAILABLE
+    assert rec.is_experimental is False
+    assert rec.is_alphafold is False
+    assert rec.is_docked is False
+    assert rec.pose_status == PoseStatus.UNAVAILABLE
+    # The record must carry the non-inference note explicitly.
+    assert "does not imply inactive" in rec.missingness_note
+
+
+def test_alphafold_evidence_is_never_experimental() -> None:
+    """ALPHAFOLD_RECEPTOR must never be labelled experimental (§20)."""
+    rec = StructuralEvidenceRecord(
+        compound_id="CHEMBL1",
+        inchikey=None,
+        isoform="PIK3CA",
+        evidence_class=EvidenceClass.ALPHAFOLD_RECEPTOR,
+        is_experimental=False,
+        is_alphafold=True,
+        is_docked=True,
+        pose_status=PoseStatus.DOCKED,
+    )
+    assert rec.is_alphafold is True
+    assert rec.is_experimental is False
+
+
+def test_analogue_reference_retains_distinct_reference_compound() -> None:
+    """An analogue's pose is never the target compound's pose (§9)."""
+    rec = StructuralEvidenceRecord(
+        compound_id="TARGET_X",
+        inchikey=None,
+        isoform="PIK3CG",
+        evidence_class=EvidenceClass.ANALOGUE_REFERENCE,
+        reference_compound_id="REFERENCE_Y",
+        is_experimental=False,
+        pose_status=PoseStatus.ABSENT,
+    )
+    assert rec.compound_id != rec.reference_compound_id
+    assert rec.evidence_class != EvidenceClass.EXPERIMENTAL_COMPLEX
+    assert rec.is_experimental is False
+
+
+def test_experimental_complex_carries_observed_pose() -> None:
+    """Level 1 evidence uses observed coordinates, not a docking hypothesis (§9)."""
+    rec = StructuralEvidenceRecord(
+        compound_id="CHEMBL2",
+        inchikey=None,
+        isoform="PIK3CG",
+        evidence_class=EvidenceClass.EXPERIMENTAL_COMPLEX,
+        receptor_pdb_id="1E7V",
+        is_experimental=True,
+        is_docked=False,
+        pose_status=PoseStatus.OBSERVED,
+    )
+    assert rec.is_experimental is True
+    assert rec.is_docked is False
+    assert rec.pose_status == PoseStatus.OBSERVED
+
+
+def test_content_hash_is_deterministic_and_sensitive() -> None:
+    """Identical content hashes equal; changed evidence class does not."""
+
+    def build(cls_: EvidenceClass) -> StructuralEvidenceRecord:
+        return StructuralEvidenceRecord(
+            compound_id="C", inchikey="K", isoform="PIK3CB", evidence_class=cls_
+        )
+
+    assert build(EvidenceClass.UNAVAILABLE).content_sha256() == (
+        build(EvidenceClass.UNAVAILABLE).content_sha256()
+    )
+    assert build(EvidenceClass.UNAVAILABLE).content_sha256() != (
+        build(EvidenceClass.EXPERIMENTAL_COMPLEX).content_sha256()
+    )
+
+
+def test_content_hash_excludes_mutable_provenance() -> None:
+    """Retrieval date must not change the scientific content hash."""
+    a = StructuralEvidenceRecord(
+        compound_id="C",
+        inchikey="K",
+        isoform="PIK3CB",
+        evidence_class=EvidenceClass.UNAVAILABLE,
+        retrieval_date="2026-01-01",
+    )
+    b = StructuralEvidenceRecord(
+        compound_id="C",
+        inchikey="K",
+        isoform="PIK3CB",
+        evidence_class=EvidenceClass.UNAVAILABLE,
+        retrieval_date="2026-08-06",
+    )
+    assert a.content_sha256() == b.content_sha256()
+
+
+def test_to_dict_roundtrip_preserves_evidence_flags() -> None:
+    """Serialization must not lose the observation/prediction distinction."""
+    rec = StructuralEvidenceRecord(
+        compound_id="C",
+        inchikey="K",
+        isoform="PIK3CD",
+        evidence_class=EvidenceClass.EXPERIMENTAL_RECEPTOR,
+        is_experimental=True,
+        is_docked=True,
+        pose_status=PoseStatus.DOCKED,
+    )
+    d = rec.to_dict()
+    assert d["is_experimental"] is True
+    assert d["is_docked"] is True
+    assert d["evidence_class"] == "experimental_receptor"
+    assert d["pose_status"] == "docked"
+    assert d["content_sha256"] == rec.content_sha256()

@@ -1,0 +1,242 @@
+[
+  {
+    "compound_id": "ADGGYDAFIHSYFI-UHFFFAOYSA-N",
+    "smiles": "Nc1cc(C(F)(F)F)c(-c2nc(N3CCOCC3)nc(N3CCOCC3)n2)cn1",
+    "pac_alpha": 7.48,
+    "lr_vs_beta": 1.3000000000000007,
+    "lr_vs_gamma": 1.33,
+    "lr_vs_delta": 1.1300000000000008,
+    "scaffold_family_id": "JHEVXVOEFSOBCC-UHFFFAOYSA-N",
+    "stratum": "alpha_selective"
+  },
+  {
+    "compound_id": "AIGSGJXYLHDMBA-UHFFFAOYSA-N",
+    "smiles": "COc1ccc(C(=O)NNC(=O)c2cc3nc(-c4cnc(N)nc4)nc(N4CCOCC4)c3s2)cc1",
+    "pac_alpha": 9.34,
+    "lr_vs_beta": 2.08,
+    "lr_vs_gamma": 1.4500000000000002,
+    "lr_vs_delta": 1.8399999999999999,
+    "scaffold_family_id": "BENPVXBOKGCJIP-UHFFFAOYSA-N",
+    "stratum": "alpha_selective"
+  },
+  {
+    "compound_id": "AOSQGSGJTZNGRW-UHFFFAOYSA-N",
+    "smiles": "O=C(O)c1ccc(CNc2nc3ccc(-c4nc(N5CCOCC5)nc(N5CCOCC5)n4)cc3o2)cc1",
+    "pac_alpha": 8.22,
+    "lr_vs_beta": 1.2200000000000006,
+    "lr_vs_gamma": 2.7600000000000007,
+    "lr_vs_delta": 0.9300000000000006,
+    "scaffold_family_id": "MXUKDTPOWFRPSV-UHFFFAOYSA-N",
+    "stratum": "alpha_selective"
+  },
+  {
+    "compound_id": "BDVSUNBERXCCGI-LBPRGKRZSA-N",
+    "smiles": "Cc1nc(NC(=O)N2CCC[C@H]2C(N)=O)sc1-c1csc(CC2CC2)n1",
+    "pac_alpha": 7.16,
+    "lr_vs_beta": 2.09,
+    "lr_vs_gamma": 1.96,
+    "lr_vs_delta": 1.3399999999999999,
+    "scaffold_family_id": "YLWVPQJIZUIUGD-UHFFFAOYSA-N",
+    "stratum": "alpha_selective"
+  },
+  {
+    "compound_id": "BLGWHBSBBJNKJO-UHFFFAOYSA-N",
+    "smiles": "Nc1nc2cc(-c3ccc4ncc(C(=O)N5CCOCC5)n4c3)ccc2o1",
+    "pac_alpha": 7.890000000000001,
+    "lr_vs_beta": 2.1,
+    "lr_vs_gamma": 1.83,
+    "lr_vs_delta": 2.2199999999999998,
+    "scaffold_family_id": "PNTGWVVDCGLNEB-UHFFFAOYSA-N",
+    "stratum": "alpha_selective"
+  },
+  {
+    "compound_id": "BSQLZYLYNZVTMY-VIFPVBQESA-N",
+    "smiles": "C[C@H](NC(=O)c1cnc2ccc(-c3ccc4oc(N)nc4c3)cn12)C(N)=O",
+    "pac_alpha": 8.34,
+    "lr_vs_beta": 2.25,
+    "lr_vs_gamma": 1.71,
+    "lr_vs_delta": 1.3999999999999995,
+    "scaffold_family_id": "QCBQPRLPIQPPDL-UHFFFAOYSA-N",
+    "stratum": "alpha_selective"
+  },
+  {
+    "compound_id": "APNVWSGILOQBOV-UHFFFAOYSA-N",
+    "smiles": "Cc1[nH]n2c(=O)cc(N3CCOCC3)nc2c1Cc1cccc2ccccc12",
+    "pac_alpha": 6.5,
+    "lr_vs_beta": -2.5,
+    "lr_vs_gamma": 0.2999999999999998,
+    "lr_vs_delta": -1.0999999999999996,
+    "scaffold_family_id": "YELOPLYANQTEBX-UHFFFAOYSA-N",
+    "stratum": "other_selective"
+  },
+  {
+    "compound_id": "AUNMZFMPIXHYCD-UHFFFAOYSA-N",
+    "smiles": "Cc1ccccc1-n1c(Cn2nc(-c3cc(O)cc(F)c3)c3c(N)ncnc32)nc2cccc(C)c2c1=O",
+    "pac_alpha": 5.89,
+    "lr_vs_beta": -0.7700000000000005,
+    "lr_vs_gamma": -1.5900000000000007,
+    "lr_vs_delta": -3.2600000000000007,
+    "scaffold_family_id": "LSVYARBQFRNOSI-UHFFFAOYSA-N",
+    "stratum": "other_selective"
+  },
+  {
+    "compound_id": "AXQKJTHCYRYSLF-UHFFFAOYSA-N",
+    "smiles": "CCOc1ccc2cc(-c3nn(C)c4ncnc(N)c34)ccc2c1",
+    "pac_alpha": 4.0,
+    "lr_vs_beta": -1.2800000000000002,
+    "lr_vs_gamma": -1.5700000000000003,
+    "lr_vs_delta": -1.4299999999999997,
+    "scaffold_family_id": "ZWIMZZMBPBVLFF-UHFFFAOYSA-N",
+    "stratum": "other_selective"
+  },
+  {
+    "compound_id": "BAFZKCJTJOBLQE-UHFFFAOYSA-N",
+    "smiles": "Cc1c(Cl)cccc1Cn1c(SCC(=O)O)nc(=O)c2sc(N3CCOCC3)nc21",
+    "pac_alpha": 6.4,
+    "lr_vs_beta": -3.9000000000000004,
+    "lr_vs_gamma": -0.39999999999999947,
+    "lr_vs_delta": -2.299999999999999,
+    "scaffold_family_id": "OMCAJEKCFXIKMN-UHFFFAOYSA-N",
+    "stratum": "other_selective"
+  },
+  {
+    "compound_id": "BONZFPDJDIJKQF-UHFFFAOYSA-N",
+    "smiles": "Cc1c(Cc2c[nH]n3c(=O)cc(N4CCOCC4)nc23)cccc1C(F)(F)F",
+    "pac_alpha": 6.5,
+    "lr_vs_beta": -1.8000000000000007,
+    "lr_vs_gamma": 0.20000000000000018,
+    "lr_vs_delta": -1.2000000000000002,
+    "scaffold_family_id": "QAYWOBFQPBKSCN-UHFFFAOYSA-N",
+    "stratum": "other_selective"
+  },
+  {
+    "compound_id": "BWVQDRRLGFHKGN-UHFFFAOYSA-N",
+    "smiles": "Cc1nc(N)nc(-n2c(Nc3ccn(C(F)F)n3)nc3ccccc32)n1",
+    "pac_alpha": 4.98,
+    "lr_vs_beta": 0.33000000000000007,
+    "lr_vs_gamma": -1.0899999999999999,
+    "lr_vs_delta": -1.2999999999999998,
+    "scaffold_family_id": "SYKQAMFUNDJEII-UHFFFAOYSA-N",
+    "stratum": "other_selective"
+  },
+  {
+    "compound_id": "AAHKGRWRYBCWDL-UHFFFAOYSA-N",
+    "smiles": "CCOc1ccc(-c2nn(C3CCCC3)c3ncnc(N)c23)cc1OC",
+    "pac_alpha": 6.87,
+    "lr_vs_beta": 0.33999999999999986,
+    "lr_vs_gamma": -0.07000000000000028,
+    "lr_vs_delta": -0.8999999999999995,
+    "scaffold_family_id": "IBMMIMZZHGUTOQ-UHFFFAOYSA-N",
+    "stratum": "non_selective"
+  },
+  {
+    "compound_id": "ABKTZGMEAXGKRA-FQEVSTJZSA-N",
+    "smiles": "Cc1ccccc1-n1c([C@H](C)NC(=O)c2c(N)nn3cccnc23)cc2cccc(C#Cc3cnn(C)c3)c2c1=O",
+    "pac_alpha": 5.7,
+    "lr_vs_beta": 0.0,
+    "lr_vs_gamma": 0.0900000000000003,
+    "lr_vs_delta": 0.0900000000000003,
+    "scaffold_family_id": "YCXRTNRHNBHVFM-UHFFFAOYSA-N",
+    "stratum": "non_selective"
+  },
+  {
+    "compound_id": "AFVKBPLUPVLQSJ-UHFFFAOYSA-N",
+    "smiles": "Nc1ncc(-c2ccc(Cl)c(S(=O)(=O)Nc3cccc(F)c3F)c2)cn1",
+    "pac_alpha": 5.78,
+    "lr_vs_beta": 0.20000000000000018,
+    "lr_vs_gamma": -1.4399999999999995,
+    "lr_vs_delta": -0.09999999999999964,
+    "scaffold_family_id": "SRVPAESJEKDOBK-UHFFFAOYSA-N",
+    "stratum": "non_selective"
+  },
+  {
+    "compound_id": "AJFNMVDOTHBCMX-UHFFFAOYSA-N",
+    "smiles": "O=c1ncn(Cc2ccsc2Cl)c2nc(N3CCOCC3)sc12",
+    "pac_alpha": 5.5,
+    "lr_vs_beta": -0.5999999999999996,
+    "lr_vs_gamma": 0.09999999999999964,
+    "lr_vs_delta": -0.09999999999999964,
+    "scaffold_family_id": "MIFAFMJFKQXEAC-UHFFFAOYSA-N",
+    "stratum": "non_selective"
+  },
+  {
+    "compound_id": "AJNRXFUIGQGJKY-UHFFFAOYSA-N",
+    "smiles": "O=c1oc2ccccc2c2nn(S(=O)(=O)c3ccccc3)cc12",
+    "pac_alpha": 4.28,
+    "lr_vs_beta": -0.20999999999999996,
+    "lr_vs_gamma": -0.13999999999999968,
+    "lr_vs_delta": 0.03000000000000025,
+    "scaffold_family_id": "AJNRXFUIGQGJKY-UHFFFAOYSA-N",
+    "stratum": "non_selective"
+  },
+  {
+    "compound_id": "AKWMLDWUORVTLQ-UHFFFAOYSA-N",
+    "smiles": "CN(C)C(=O)c1cc(CN2CCOc3c(F)cc(F)cc32)c2oc(N3CCOCC3)cc(=O)c2c1",
+    "pac_alpha": 7.9,
+    "lr_vs_beta": -0.20999999999999908,
+    "lr_vs_gamma": 1.7600000000000007,
+    "lr_vs_delta": 0.05000000000000071,
+    "scaffold_family_id": "GSFLXEQCEWPTJD-UHFFFAOYSA-N",
+    "stratum": "non_selective"
+  },
+  {
+    "compound_id": "ABEVETPHKVRJTO-UHFFFAOYSA-N",
+    "smiles": "CC(=O)NC1CCN(Cc2cc3nc(-c4cccc5[nH]ccc45)nc(N4CCOCC4)c3s2)C1",
+    "pac_alpha": 5.5,
+    "lr_vs_beta": -0.40000000000000036,
+    "lr_vs_gamma": -0.20000000000000018,
+    "lr_vs_delta": -1.7000000000000002,
+    "scaffold_family_id": "KAXMMIUHZALBOD-UHFFFAOYSA-N",
+    "stratum": "intermediate"
+  },
+  {
+    "compound_id": "ACCFLVVUVBJNGT-AWEZNQCLSA-N",
+    "smiles": "CO[C@@H](C)Cn1c(=O)n(C)c2cnc3ccc(-c4cncc(C(C)(C)O)c4)cc3c21",
+    "pac_alpha": 8.22,
+    "lr_vs_beta": 1.1100000000000003,
+    "lr_vs_gamma": 0.6000000000000005,
+    "lr_vs_delta": 0.8000000000000007,
+    "scaffold_family_id": "IIIPAYPKDZQFIA-UHFFFAOYSA-N",
+    "stratum": "intermediate"
+  },
+  {
+    "compound_id": "ADLJEZREHNJMCU-UHFFFAOYSA-N",
+    "smiles": "CC(=O)Nc1cn2cc(-c3cnc(N)c(OC(C)C(F)(F)F)n3)ccc2n1",
+    "pac_alpha": 8.52,
+    "lr_vs_beta": 0.3699999999999992,
+    "lr_vs_gamma": 1.2199999999999998,
+    "lr_vs_delta": 0.41999999999999993,
+    "scaffold_family_id": "MTSFXILTEHQJKU-UHFFFAOYSA-N",
+    "stratum": "intermediate"
+  },
+  {
+    "compound_id": "ADQKWHMLZWYXPE-UHFFFAOYSA-N",
+    "smiles": "CC(Nc1ccc(F)c(Cl)c1)c1cc(C(=O)N(C)C)cc2c(=O)cc(N3CCOCC3)oc12",
+    "pac_alpha": 6.77,
+    "lr_vs_beta": -1.1500000000000004,
+    "lr_vs_gamma": 1.0199999999999996,
+    "lr_vs_delta": -0.4200000000000008,
+    "scaffold_family_id": "TYFQGZQIRLVUQG-UHFFFAOYSA-N",
+    "stratum": "intermediate"
+  },
+  {
+    "compound_id": "AGEIBLLCZVGHLI-UHFFFAOYSA-N",
+    "smiles": "CC(C)n1nc(-c2ccc3nccnc3c2)c2c(N)ncnc21",
+    "pac_alpha": 6.69,
+    "lr_vs_beta": 0.6800000000000006,
+    "lr_vs_gamma": -0.3299999999999992,
+    "lr_vs_delta": -0.6199999999999992,
+    "scaffold_family_id": "FBWXCVNVOGDAKH-UHFFFAOYSA-N",
+    "stratum": "intermediate"
+  },
+  {
+    "compound_id": "AIKJBINJGKQOJL-UHFFFAOYSA-N",
+    "smiles": "COc1nc(-c2ccc(NC(=O)Nc3ccc(C(=O)NCCCCCC(=O)Nc4ccccc4N)cc3)cc2)nc(N2CCOCC2)n1",
+    "pac_alpha": 7.69,
+    "lr_vs_beta": 0.16000000000000014,
+    "lr_vs_gamma": 0.6700000000000008,
+    "lr_vs_delta": 1.0,
+    "scaffold_family_id": "HASBMBFWEPPHMY-UHFFFAOYSA-N",
+    "stratum": "intermediate"
+  }
+]

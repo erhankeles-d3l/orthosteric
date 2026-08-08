@@ -12,6 +12,14 @@ dependencies = [
     "rdkit>=2024.3",  # SCI0-008b; RDKit version affects InChIKey (SCI0-011)
     "biopython>=1.84",  # SCI1-002; structural preprocessing (pocket geometry, rotamer, SASA)
     "scikit-learn>=1.5",   # SCI1-020; proteochemometric baseline (PCM)
+    # EXACT pin, deliberately: PROTONATION_POLICY_ID in
+    # features/_ligand_protonation.py is the literal string
+    # "dimorphite_dl_2.0.2_ph7.4_first_state_v1" and is written into
+    # provenance records. A different version can yield different
+    # protonation states while that ID still claims 2.0.2, silently
+    # invalidating recorded provenance. Bumping this requires bumping
+    # the policy ID too.
+    "dimorphite_dl==2.0.2",
 ]
 
 [project.optional-dependencies]
@@ -40,11 +48,14 @@ select = ["E","F","I","N","UP","B","A","C4","DTZ","PT","RET","SIM","ARG","PL","R
 ignore = ["D203","D213"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "PLR2004", "D103", "D205", "D209", "PLR0913", "PLR0917", "RUF002", "ANN401"]
+"tests/*" = ["S101", "PLR2004", "D103", "D205", "D209", "PLR0913", "PLR0917", "RUF002", "ANN401", "ANN001", "ANN202", "RUF005", "ANN003"]
 "scripts/*" = ["S603", "S607", "S605", "S101", "PLR2004", "D103", "D205", "D400", "ANN", "T201", "INP001", "PLR0912", "PLR0915", "C901", "BLE001", "S110", "S112"]
 "src/orthosteric/pocket/_pocket_geometry.py" = ["RUF002", "ANN401"]
 "src/orthosteric/pocket/_rotamer_state.py" = ["RUF002", "RUF003", "ANN401"]
 "src/orthosteric/pocket/_solvent_accessibility.py" = ["ANN401"]
+"src/orthosteric/eval/_target_construction.py" = ["D205"]
+"src/orthosteric/learning/_baseline_models.py" = ["D205"]
+"src/orthosteric/learning/_model_v1.py" = ["D205"]
 "src/orthosteric/pocket/_residue_mapping.py" = ["RUF001", "RUF002"]
 "src/orthosteric/data/harmonization/*.py" = [
     "S110",  # try/except/pass in RDKit metal disconnection
@@ -120,8 +131,61 @@ disallow_any_explicit = false
 files = ["src", "tests"]
 
 [[tool.mypy.overrides]]
+# Pre-existing, unrelated system stub package (types-protobuf /
+# types-google-cloud-ndb) with a broken/incomplete google-stubs directory
+# under /usr/lib/python3/dist-packages. torch's own stub files reference
+# the google namespace (via a protobuf-adjacent dependency); mypy's
+# namespace-package resolution tries to read that broken system stub and
+# fails with a hard "Cannot read file" error unrelated to any real type
+# issue in this project. Discovered when installing torch this session
+# (confirmed via `import torch` alone in an isolated trivial file);
+# excluded here rather than left to silently break every mypy run.
+module = ["google.*"]
+ignore_missing_imports = true
+follow_imports = "skip"
+
+[[tool.mypy.overrides]]
 module = "sklearn.*"
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# torch ships its own inline type stubs (py.typed) but this repo's strict
+# mode + Any-heavy nn.Module composition in NeuralHead triggers noise
+# unrelated to real bugs; same rationale as the dimorphite_dl override above.
+module = ["torch.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "orthosteric.learning._neural_head"
+warn_unreachable = false
+disable_error_code = ["no-untyped-call", "no-any-return"]
+
+[[tool.mypy.overrides]]
+# RDKit's own type stubs mark many Mol/Atom methods as untyped; same
+# rationale as the Bio.* and dimorphite_dl overrides.
+module = "orthosteric.features._ligand_moiety"
+warn_unreachable = false
+disable_error_code = ["no-untyped-call"]
+
+[[tool.mypy.overrides]]
+module = "orthosteric.features._ligand_moiety"
+disallow_any_generics = false
+
+[[tool.mypy.overrides]]
+# Bio.Align's PairwiseAligner/substitution_matrices ship no PEP 561 stubs.
+module = "orthosteric.pocket._sequence_correspondence"
+disable_error_code = ["no-untyped-call"]
+
+[[tool.mypy.overrides]]
+# dimorphite_dl ships no PEP 561 stubs; RDKit calls inside our thin wrapper
+# are untyped for the same reason as the Bio.* override below.
+module = ["dimorphite_dl"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "orthosteric.features._ligand_protonation"
+warn_unreachable = false
+disable_error_code = ["no-untyped-call"]
 
 [[tool.mypy.overrides]]
 module = "orthosteric.eval._baselines"

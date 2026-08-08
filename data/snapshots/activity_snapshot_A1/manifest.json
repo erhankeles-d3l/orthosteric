@@ -1,0 +1,50 @@
+{
+  "accepted_count": 39002,
+  "censored_count": 0,
+  "conflict_count": 0,
+  "created_at_utc": "2026-08-06T13:02:59Z",
+  "excluded_count": 506,
+  "governance_exception_count": 0,
+  "parent_snapshot_sha256": null,
+  "policy": {
+    "adr0003_adjudication_procedure": "adr0003_procedure_v1.0",
+    "alphafold_fallback_policy": "sci0007_af_fallback_v1.0",
+    "auditor5_status": "INSUFFICIENT_EVIDENCE_frozen",
+    "chemical_standardization_policy": "sci0008b_rdkit_canonical_v1",
+    "cheng_prusoff_status": "BLOCKED/AUDITOR-5",
+    "confidence_assay_quality_rule": "RULE_MISSING",
+    "confidence_lit_tier_rule": "RULE_MISSING",
+    "confidence_scoring_policy": "sci0010_v1",
+    "deduplication_policy": "sci0009_log_median_v1",
+    "identifier_harmonization_policy": "sci0008c_inchikey_v1",
+    "within_group_conflict_threshold": "RULE_MISSING/SCI0-016_required"
+  },
+  "record_count": 39508,
+  "rule_missing_count": 0,
+  "schema_version": "sci0011_v1",
+  "snapshot_id": "SNAP-d5b806369495",
+  "snapshot_sha256": "d5b806369495ae5624e575764efb0fc4c864c054ad0cc04f6016a9440f3be089",
+  "software": {
+    "git_dirty": true,
+    "git_sha": "8e1b49aa110423006369a997eaf180fd8783a1a3",
+    "key_package_versions": {
+      "rdkit": "2026.03.5"
+    },
+    "lockfile_hash": "",
+    "orthosteric_version": "0.1.0",
+    "os_platform": "Linux",
+    "os_version": "7.0.0-28-generic",
+    "python_version": "3.12.3",
+    "rdkit_version": "2026.03.5"
+  },
+  "source_versions": {
+    "chembl": "ChEMBL_37",
+    "chembl_targets": "CHEMBL3145_CHEMBL3267_v1"
+  },
+  "structural_alphafold_fallback": 0,
+  "structural_experimental_pdb": 0,
+  "structural_inadmissible": 0,
+  "structural_records_total": 0,
+  "unresolved_count": 0,
+  "data_mode": "scientific_corpus"
+}

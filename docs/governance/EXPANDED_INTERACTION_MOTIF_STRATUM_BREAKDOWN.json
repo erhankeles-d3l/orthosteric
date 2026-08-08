@@ -1,0 +1,171 @@
+{
+  "n_compounds": 50,
+  "pattern_by_interaction_type": {
+    "charged_contact_candidate": {
+      "lost": 708,
+      "differential_unclassified": 35,
+      "other_favored": 17,
+      "conserved": 1
+    },
+    "h_bond": {
+      "lost": 622,
+      "differential_unclassified": 3,
+      "conserved": 1
+    },
+    "hydrophobic_contact": {
+      "lost": 393,
+      "differential_unclassified": 125,
+      "conserved": 7,
+      "other_favored": 29,
+      "alpha_favored": 9
+    },
+    "salt_bridge": {
+      "lost": 15,
+      "differential_unclassified": 3
+    }
+  },
+  "alpha_favored_by_stratum": {
+    "alpha_selective": 1,
+    "other_selective": 1,
+    "non_selective": 3,
+    "intermediate": 4
+  },
+  "other_favored_by_stratum": {
+    "alpha_selective": 10,
+    "other_selective": 6,
+    "non_selective": 11,
+    "intermediate": 19
+  },
+  "conserved_by_type": {
+    "hydrophobic_contact": 7,
+    "h_bond": 1,
+    "charged_contact_candidate": 1
+  },
+  "alpha_favored_per_compound_by_stratum": {
+    "alpha_selective": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    "other_selective": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "non_selective": [
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    "intermediate": [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0
+    ]
+  },
+  "other_favored_per_compound_by_stratum": {
+    "alpha_selective": [
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      3,
+      1,
+      0,
+      1
+    ],
+    "other_selective": [
+      1,
+      0,
+      1,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2
+    ],
+    "non_selective": [
+      0,
+      2,
+      0,
+      2,
+      0,
+      0,
+      0,
+      1,
+      3,
+      0,
+      0,
+      2,
+      0,
+      1
+    ],
+    "intermediate": [
+      1,
+      4,
+      3,
+      1,
+      2,
+      1,
+      1,
+      0,
+      1,
+      1,
+      4,
+      0
+    ]
+  },
+  "net_alpha_preference_by_stratum": {
+    "alpha_selective": -0.75,
+    "other_selective": -0.4166666666666667,
+    "non_selective": -0.5714285714285714,
+    "intermediate": -1.25
+  },
+  "matches_expected_order": false
+}

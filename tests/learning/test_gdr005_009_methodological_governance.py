@@ -6,13 +6,17 @@ These tests verify that:
 3. LOSS_N_OUTPUT_HEADS == 4 (frozen by Constitution §4.2(2)).
 4. LOSS_EQUAL_WEIGHT == 1.0 (frozen by §4.2(2) symmetric-evidence).
 5. ModelGenerationRecord can be constructed with all five governed fields set.
-6. No model-implementation files exist (SCI2-002 not yet authorized).
+6. Model-implementation files in learning/ require a recorded SCI1-022
+   GO decision (ADR-0015) to exist -- SI3 enforced as a precondition
+   check, not a hardcoded block, so the invariant self-updates when the
+   precondition is legitimately satisfied by a real executed gate record.
 
 These tests do NOT test model training, loss computation, or AD evaluation.
 """
 
 from __future__ import annotations
 
+import json
 import pathlib
 
 import pytest
@@ -197,13 +201,44 @@ def test_g15_model_generation_record_none_fields_valid_pre_training() -> None:
 # ---- G16: No SCI2-002 implementation files exist ----------------------------
 
 
-def test_g16_no_model_implementation_files_exist() -> None:
-    """SCI2-002 is not yet authorized. Only _interfaces.py and __init__.py allowed."""
-    authorized_files = {"_interfaces.py", "__init__.py"}
+def test_g16_model_implementation_files_require_recorded_sci1022_go() -> None:
+    """SI3: any learning/ implementation file beyond the sealed interface
+    schema requires a recorded SCI1-022 GO decision. This checks the
+    PRECONDITION (a GO gate record exists and actually votes GO) rather
+    than hardcoding "no implementation files" -- so the invariant remains
+    meaningful (and self-enforcing) after SCI2-002 is legitimately
+    authorized, instead of silently going stale.
+    """
+    interface_only_files = {"_interfaces.py", "__init__.py"}
     learning_files = {p.name for p in LEARNING_SRC.iterdir() if p.is_file()}
-    unauthorized = learning_files - authorized_files
-    assert not unauthorized, (
-        f"Unauthorized learning/ files exist (SCI2-002 not authorized): {unauthorized}"
+    implementation_files = learning_files - interface_only_files
+
+    if not implementation_files:
+        return  # SCI2-002 not yet started; nothing to check
+
+    gate_record_path = (
+        pathlib.Path(__file__).parents[2] / "docs" / "governance" / "SCI1022_GATE_RECORD_A4.json"
+    )
+    adr_path = (
+        pathlib.Path(__file__).parents[2]
+        / "docs"
+        / "governance"
+        / "decision-records"
+        / "ADR-0015-sci1022-gate-executed-go.md"
+    )
+    assert gate_record_path.exists(), (
+        f"learning/ implementation files exist ({implementation_files}) but no "
+        f"SCI1-022 gate record was found at {gate_record_path} -- SI3 violated."
+    )
+    assert adr_path.exists(), (
+        f"learning/ implementation files exist ({implementation_files}) but no "
+        f"ADR recording the SCI1-022 decision was found at {adr_path} -- SI3 violated."
+    )
+    record = json.loads(gate_record_path.read_text())
+    vote = record.get("gate_record", {}).get("vote")
+    assert vote == "go", (
+        f"learning/ implementation files exist but the recorded SCI1-022 vote "
+        f"is '{vote}', not 'go' -- SI3 violated."
     )
 
 

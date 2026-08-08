@@ -9,7 +9,16 @@ Gate constraint (SI3): no model implementation code until SCI1-022 has
 recorded a GO decision on real data AND phase commitment is recorded AND
 Stage 0 pre-registrations are sealed (SCI2-001 §0 blocking items).
 
-Current state: interfaces sealed; model code NOT YET AUTHORIZED.
+Current state: SCI1-022 executed and recorded GO on Activity Snapshot A4
+(ADR-0015, docs/governance/SCI1022_GATE_RECORD_A4.json, 2026-08-06).
+Phase commitment recorded (GDR-004, Core+Extension). Model implementation
+code (`_baseline_models.py`) is authorized for the SCI2-002 Core scope
+(Charter §9.0 Phase 1: comparative discrimination, degeneracy battery,
+determinant recovery -- criteria S1-S6). Phase 1 supports no determinant
+claim and no generality claim (Charter §9.0 claim ceiling). GGR-002a and
+GGR-002b remain GDR_REQUIRED and are NOT required for Phase 1 Core, per
+the Charter's own scoping -- see ADR-0015 and GDR-012/013 for why they are
+not blockers here.
 """
 
 from orthosteric.learning._interfaces import (

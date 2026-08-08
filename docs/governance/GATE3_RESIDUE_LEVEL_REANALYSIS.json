@@ -1,0 +1,254 @@
+{
+  "24_compound": {
+    "label": "24-compound (commit eafe327)",
+    "n_reparsed": 96,
+    "n_missing": 0,
+    "wall_time_s": 288.31820130348206,
+    "pattern_totals": {
+      "lost_at_mapped_position": 672,
+      "differential_unclassified": 76,
+      "conserved": 2,
+      "unmapped_residue": 9,
+      "other_favored": 27,
+      "alpha_favored": 5
+    },
+    "pattern_totals_pct": {
+      "lost_at_mapped_position": 85.0,
+      "differential_unclassified": 9.6,
+      "conserved": 0.3,
+      "unmapped_residue": 1.1,
+      "other_favored": 3.4,
+      "alpha_favored": 0.6
+    },
+    "alpha_favored_per_compound_by_stratum": {
+      "alpha_selective": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "other_selective": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "non_selective": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "intermediate": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "other_favored_per_compound_by_stratum": {
+      "alpha_selective": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      "other_selective": [
+        1,
+        0,
+        2,
+        2,
+        0,
+        0
+      ],
+      "non_selective": [
+        0,
+        2,
+        2,
+        2,
+        0,
+        0
+      ],
+      "intermediate": [
+        1,
+        4,
+        3,
+        1,
+        1,
+        1
+      ]
+    },
+    "net_by_stratum": {
+      "alpha_selective": -0.8333333333333334,
+      "other_selective": -0.8333333333333334,
+      "non_selective": -0.5,
+      "intermediate": -1.5
+    },
+    "correspondence_table_sha256": "08d88687328c93eb179b48a4daa00f41a9c475cca73aecd217f5911c76b4944b"
+  },
+  "50_compound": {
+    "label": "50-compound (commit 2f26c5c)",
+    "n_reparsed": 200,
+    "n_missing": 0,
+    "wall_time_s": 611.284663438797,
+    "pattern_totals": {
+      "lost_at_mapped_position": 1394,
+      "differential_unclassified": 166,
+      "conserved": 11,
+      "unmapped_residue": 17,
+      "other_favored": 50,
+      "alpha_favored": 8
+    },
+    "pattern_totals_pct": {
+      "lost_at_mapped_position": 84.7,
+      "differential_unclassified": 10.1,
+      "conserved": 0.7,
+      "unmapped_residue": 1.0,
+      "other_favored": 3.0,
+      "alpha_favored": 0.5
+    },
+    "alpha_favored_per_compound_by_stratum": {
+      "alpha_selective": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "other_selective": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "non_selective": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "intermediate": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0
+      ]
+    },
+    "other_favored_per_compound_by_stratum": {
+      "alpha_selective": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        3,
+        2,
+        0,
+        1
+      ],
+      "other_selective": [
+        1,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "non_selective": [
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        2,
+        3,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "intermediate": [
+        1,
+        4,
+        3,
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        2,
+        3,
+        1
+      ]
+    },
+    "net_by_stratum": {
+      "alpha_selective": -0.8333333333333333,
+      "other_selective": -0.5833333333333334,
+      "non_selective": -0.7142857142857143,
+      "intermediate": -1.25
+    },
+    "correspondence_table_sha256": "08d88687328c93eb179b48a4daa00f41a9c475cca73aecd217f5911c76b4944b"
+  },
+  "part_L_reclassification_verdict": {
+    "original_results_2f26c5c_eafe327_status": "INTERPRETATION_WAS_PENDING_VALIDATION -- now resolved by this re-analysis, not silently overwritten",
+    "preserved": "original atom-level data, commits, analysis scripts, and results remain unchanged and accessible at eafe327/2f26c5c",
+    "verdict": "MIXED, reported precisely rather than rounded to a single word: (1) the 93-99pct atom-level lost-interaction dominance was PARTIALLY -- not wholly -- a representation artifact: correcting to residue-level granularity (the established SIFt/ProLIF convention) reduces it to ~85pct, consistently across both independent sample sizes (24 and 50 compounds), a real and reproducible effect. (2) The core alpha-favored-motif finding does NOT change qualitatively: at the corrected granularity, alpha-selective compounds still fail to show the predicted enrichment (net alpha-vs-other-favored score for alpha_selective is -0.83 in both datasets, WORSE than or tied with other_selective in both). The negative result therefore survives chemically meaningful aggregation and is not primarily a granularity artifact -- this is now stronger evidence against the simple, single-residue alpha-favored-motif hypothesis than the original atom-level finding alone provided.",
+    "reproducibility_note": "lost-dominance reduction magnitude (93-99pct to ~85pct) and the qualitative stratum-order finding are consistent across the 24- and 50-compound datasets, computed independently via fresh re-parsing of the saved pose files -- not the same computation run twice on the same data."
+  }
+}

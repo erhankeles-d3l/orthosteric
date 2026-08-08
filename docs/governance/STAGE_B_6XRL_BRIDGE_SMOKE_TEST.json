@@ -1,0 +1,47 @@
+{
+  "n_compounds": 50,
+  "n_docked": 50,
+  "n_failed": 0,
+  "wall_time_s": 1543.8,
+  "box_center": [
+    -20.755575,
+    17.072250000000004,
+    -19.868949999999995
+  ],
+  "smoke_test": {
+    "total_pose_sets_checked": 50,
+    "detection_errors": 0,
+    "hinge_hbond_hits": 18,
+    "hinge_hbond_hit_rate": 0.36
+  },
+  "failed_compounds": [],
+  "cross_reference_analysis": {
+    "purpose": "Determine whether the 36.0pct top-pose hinge-hit rate is an outlier or continuous with already-trusted receptors, before drawing any conclusion from the raw number alone.",
+    "same_corpus_comparison": {
+      "PI3Kalpha_hinge851": {
+        "hits": 27,
+        "total": 50,
+        "rate": 0.54
+      },
+      "PI3Kdelta_hinge828": {
+        "hits": 22,
+        "total": 50,
+        "rate": 0.44
+      },
+      "PI3Kgamma_6XRL_hinge882": {
+        "hits": 18,
+        "total": 50,
+        "rate": 0.36
+      }
+    },
+    "interpretation": "Gamma-via-6XRL is lower than alpha and delta but in the same ballpark -- not an order-of-magnitude gap, not near-zero. All three isoforms show a moderate, sub-100pct top-pose hinge-hit rate across a chemically diverse 50-compound corpus, consistent with real chemical diversity (not every compound in a diverse library is a potent hinge-binder) rather than a pipeline failure specific to 6XRL.",
+    "score_correlation_check": {
+      "hinge_hit_compounds_n": 18,
+      "hinge_hit_mean_vina_score": -8.83,
+      "hinge_miss_compounds_n": 32,
+      "hinge_miss_mean_vina_score": -8.27,
+      "interpretation": "Hinge-hit compounds show a more favorable (more negative) mean docking score than hinge-miss compounds, in the chemically expected direction (hinge H-bond is a major established contributor to ATP-competitive binding affinity) -- consistent with the hit/miss split reflecting real, differentiated binding chemistry rather than noise or an artifact."
+    }
+  },
+  "stage_b_part_2_verdict": "PASS -- production-path pipeline confirmed working at real corpus scale (50/50 docked, 0 detection errors); gamma-via-6XRL hinge-recovery rate is continuous with, not an outlier from, the already Gate-1-validated alpha/delta receptors on the identical corpus."
+}

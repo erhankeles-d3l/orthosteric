@@ -4,16 +4,38 @@ Objective: SCI0-011.
 Exit criterion (spec): two builds from the same cache yield the same hash;
 a snapshot cannot be modified in place (SI9).
 
-Hash identity
--------------
-The snapshot SHA-256 is computed over:
-  1. Canonical JSON of the complete record list (all records — accepted AND
-     rejected — sorted by a deterministic key).
-  2. The PolicyManifest (all pipeline policy versions).
-  3. The SoftwareProvenance (RDKit, Python, git SHA, lockfile hash, OS).
+Hash identity (GDR-010, accepted — Option A)
+---------------------------------------------
+Scientific snapshot identity and build/environment provenance are two
+separate hashes.  `SoftwareProvenance` (RDKit, Python, git SHA, git-dirty,
+OS, lockfile) does NOT enter scientific identity: an environment change
+must never make otherwise-identical scientific data acquire a new identity.
 
-Neither timestamps nor random UUIDs enter the hash.  The snapshot ID
-is derived from the hash, making it content-addressed.
+  content_sha256 = SHA256( stable_json(content_view(sorted_records))
+                          + stable_json(policy.to_canonical_dict()) )
+
+  build_provenance_sha256 = SHA256( stable_json(software.to_canonical_dict()) )
+
+  snapshot_sha256 := content_sha256   # scientific identity — this is what
+                                       # parent_snapshot_sha256 lineage and
+                                       # SnapshotDiff key on
+  snapshot_id      = "SNAP-" + content_sha256[:12]
+
+`content_view(record)` additionally strips per-record fields that are
+retrieval provenance rather than scientific content — currently
+`retrieval_timestamp` — following the GDR-002 precedent that a timestamp
+must never make otherwise-identical data non-deterministic.  Re-downloading
+byte-identical upstream data at a different time therefore yields the same
+`content_sha256`.
+
+`build_provenance_sha256` is recorded on every manifest and is fully
+reportable, but it is not identity-defining: two snapshots with identical
+`content_sha256` and different `build_provenance_sha256` describe the SAME
+scientific corpus built on different machines/toolchains.
+
+Neither timestamps nor random UUIDs enter either hash.  Both hashes are
+content-addressed and reproducible — from data + policy (content), or from
+software (provenance) — alone.
 
 Immutability
 ------------
@@ -52,6 +74,21 @@ from orthosteric.data.snapshots._manifest import (
 
 _SNAPSHOT_SCHEMA_VERSION = "sci0011_v1"
 
+#: Record fields that are retrieval provenance, not scientific content
+#: (GDR-010, accepted).  Excluded from `content_sha256` so that re-acquiring
+#: byte-identical upstream data at a different time does not change
+#: scientific snapshot identity.  Mirrors the GDR-002 timestamp precedent.
+_PROVENANCE_ONLY_RECORD_FIELDS: frozenset[str] = frozenset({"retrieval_timestamp"})
+
+
+def _content_view(record: dict[str, Any]) -> dict[str, Any]:
+    """Return `record` with provenance-only fields removed, for hashing only.
+
+    Does not mutate `record` and is never used for storage — the stored
+    snapshot retains every field, including `retrieval_timestamp`.
+    """
+    return {k: v for k, v in record.items() if k not in _PROVENANCE_ONLY_RECORD_FIELDS}
+
 
 def _canonical_default(obj: Any) -> Any:
     """JSON default serializer for corpus types."""
@@ -85,8 +122,15 @@ class SnapshotManifestV2:
     Attributes:
     ----------
     schema_version:             Snapshot schema version.
-    snapshot_sha256:            SHA-256 over all records + policy + software.
-    snapshot_id:                Human-readable ID derived from sha256.
+    snapshot_sha256:            Scientific content identity — SHA-256 over
+                                all records (minus provenance-only fields)
+                                + policy.  Does NOT include software/
+                                environment (GDR-010, accepted, Option A).
+    build_provenance_sha256:    SHA-256 over software/environment provenance
+                                alone.  Reportable but not identity-defining:
+                                two snapshots may share snapshot_sha256 while
+                                differing here (built on different machines).
+    snapshot_id:                Human-readable ID derived from snapshot_sha256.
     parent_snapshot_sha256:     SHA-256 of the parent snapshot, if any.
     created_at_utc:             Creation timestamp (provenance metadata only;
                                 does NOT enter the hash).
@@ -109,6 +153,7 @@ class SnapshotManifestV2:
 
     schema_version: str
     snapshot_sha256: str
+    build_provenance_sha256: str
     snapshot_id: str
     parent_snapshot_sha256: str | None
     created_at_utc: str
@@ -131,6 +176,7 @@ class SnapshotManifestV2:
     def to_dict(self) -> dict[str, Any]:
         return {
             "accepted_count": self.accepted_count,
+            "build_provenance_sha256": self.build_provenance_sha256,
             "censored_count": self.censored_count,
             "conflict_count": self.conflict_count,
             "created_at_utc": self.created_at_utc,
@@ -203,14 +249,18 @@ class SnapshotBuilder:
     )
     ```
 
-    The SHA-256 is computed over:
-      - all activity records (canonically serialized)
-      - all structural records (canonically serialized)
+    `snapshot_sha256` (scientific content identity, GDR-010 Option A) is
+    computed over:
+      - all activity + structural records, minus provenance-only fields
+        (currently `retrieval_timestamp`)
       - the PolicyManifest
-      - the SoftwareProvenance
 
-    Timestamps do NOT enter the hash.  Two builds from the same inputs
-    produce the same SHA-256 (exit criterion 1).
+    `build_provenance_sha256` (recorded separately, NOT identity-defining)
+    is computed over the SoftwareProvenance alone.
+
+    Timestamps do NOT enter either hash.  Two builds from the same inputs
+    produce the same `snapshot_sha256` (exit criterion 1) regardless of the
+    software/environment they were built under.
     """
 
     def __init__(
@@ -265,15 +315,20 @@ class SnapshotBuilder:
 
         sorted_records = sorted(all_records, key=_sort_key)
 
-        # ── Compute hash ────────────────────────────────────────────────────
-        # Hash = SHA-256(canonical_records | canonical_policy | canonical_software)
-        # None of these include timestamps.
-        records_payload = _stable_json(sorted_records)
+        # ── Compute hashes (GDR-010, accepted — Option A) ────────────────────
+        # Scientific identity = records (minus provenance-only fields) + policy.
+        # Software/environment provenance is hashed separately and does NOT
+        # enter scientific identity.  Neither hash includes timestamps.
+        content_records = [_content_view(r) for r in sorted_records]
+        records_payload = _stable_json(content_records)
         policy_payload = _stable_json(self._policy.to_canonical_dict())
-        software_payload = _stable_json(self._software.to_canonical_dict())
+        content_composite = records_payload + "\n" + policy_payload
+        content_sha256 = _hash_payload(content_composite)
 
-        composite = records_payload + "\n" + policy_payload + "\n" + software_payload
-        sha256 = _hash_payload(composite)
+        software_payload = _stable_json(self._software.to_canonical_dict())
+        build_provenance_sha256 = _hash_payload(software_payload)
+
+        sha256 = content_sha256  # snapshot_sha256 := content_sha256
         snapshot_id = f"SNAP-{sha256[:12]}"
 
         # ── Count record categories ─────────────────────────────────────────
@@ -326,6 +381,7 @@ class SnapshotBuilder:
         manifest = SnapshotManifestV2(
             schema_version=_SNAPSHOT_SCHEMA_VERSION,
             snapshot_sha256=sha256,
+            build_provenance_sha256=build_provenance_sha256,
             snapshot_id=snapshot_id,
             parent_snapshot_sha256=parent_sha256,
             created_at_utc=created_at,

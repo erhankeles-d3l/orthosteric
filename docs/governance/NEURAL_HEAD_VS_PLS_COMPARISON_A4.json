@@ -1,0 +1,42 @@
+{
+  "snapshot_sha256": "05748f6627ead8f4177ee9deec51b1214920f4b8b86230da850dba9d429cc277",
+  "device_used": "cuda",
+  "train_n": 822,
+  "val_n": 191,
+  "test_n": 254,
+  "scaffold_overlap": 0,
+  "pls": {
+    "results": {
+      "beta": {
+        "rmse": 0.6748151149844521,
+        "sign_accuracy": 0.5748031496062992
+      },
+      "gamma": {
+        "rmse": 0.683731381645946,
+        "sign_accuracy": 0.6653543307086615
+      },
+      "delta": {
+        "rmse": 0.6316124611369555,
+        "sign_accuracy": 0.7834645669291339
+      }
+    },
+    "wall_time_s": 0.7689816951751709
+  },
+  "neural": {
+    "results": {
+      "beta": {
+        "rmse": 0.6684404551448359,
+        "sign_accuracy": 0.6141732283464567
+      },
+      "gamma": {
+        "rmse": 0.6769805561150851,
+        "sign_accuracy": 0.7165354330708661
+      },
+      "delta": {
+        "rmse": 0.6102338659748263,
+        "sign_accuracy": 0.8188976377952756
+      }
+    },
+    "wall_time_s": 1.4904518127441406
+  }
+}

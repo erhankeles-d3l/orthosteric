@@ -1,0 +1,57 @@
+{
+  "closure_timestamp_utc": "2026-08-07T22:45:50Z",
+  "purpose": "Consolidated SHA-256 manifest for the PI3Kbeta receptor remediation, computed at Stage-B closure. Every hash below was computed directly against the committed file on disk, not asserted.",
+  "artifacts": {
+    "pre_registered_admissibility_criteria": {
+      "path": "docs/governance/BETA_ADMISSIBILITY_CRITERIA_PREREGISTERED.md",
+      "sha256": "fc8ce55c762457c1d4e9e7cd038de183c6198584fc480be359c794cdf437e02e",
+      "frozen_before_any_comparison": true,
+      "committed_at": "2d478d9",
+      "note": "Hash unchanged from the freeze commit -- confirmed identical at closure, not recomputed on a modified file."
+    },
+    "mouse_human_sequence_correspondence": {
+      "path": "data/structural_evidence/beta_mouse4bfr_human_af_correspondence.json",
+      "sha256": "15e08d0ed09631c1b10ea3f046592f5dc7bcfdcd690538df1c1f7d29bd81b583"
+    },
+    "dimensions_1_2_script": {
+      "path": "analysis/beta_remediation_dimensions_1_2.py",
+      "sha256": "5f2be5fb90673fb3ad39ab2d4ce177e5a3cd8a57481ee640657577391d3b9010",
+      "role": "Reproduces all Dimension 1/2 numbers from committed inputs only; corrects the invalid REMARK-465 comparator found during closure"
+    },
+    "dimensions_1_2_results": {
+      "path": "data/structural_evidence/beta_remediation_dimensions_1_2.json",
+      "sha256": "a7bc430c3d94c18f8183cbaee1fb402ebc94e288e9e0977616a00de04832e8c6"
+    },
+    "dimension_3_script": {
+      "path": "analysis/beta_remediation_dimension3_redocking.py",
+      "sha256": "5cb4064ccb0f5d60b31e2a33342b25a6cccb222d4896d0ff283fda822ce9acf5",
+      "role": "Reproduces all redocking/hinge/interaction-overlap numbers; contains the corrected hinge-residue and frame-independent AF validation logic"
+    },
+    "dimension_3_results": {
+      "path": "docs/governance/BETA_DIMENSION3_REDOCKING.json",
+      "sha256": "a74f4919c8ef92b51f68517af2b9cc54296dc728c0eaa477c02be1701df6e619"
+    },
+    "amendment": {
+      "path": "docs/governance/BETA_RECEPTOR_REMEDIATION_AMENDMENT.md",
+      "sha256": "f242793cf60b9bd1b24f93ec0daf3eb765531afd8a785ef52590cba42f2621a8",
+      "role": "Consolidated decision record; FROZEN status, not modified except by a new, separately-dated amendment"
+    },
+    "mouse_receptor_source": {
+      "identifier": "4BFR",
+      "source": "RCSB PDB, downloaded this session",
+      "species": "Mus musculus",
+      "path": "/home/ubuntu/docking_pilot/receptors/4BFR_raw.pdb",
+      "sha256": "9bc166764d4c43cdaf0f6fbb923651e1414c480ebe2327fda73c445179218b10"
+    },
+    "human_af_receptor": {
+      "identifier": "AF-P42338",
+      "source": "AlphaFold, GDR-006/SCI0-007 fallback, already committed prior to this session",
+      "mean_plddt": 86.38,
+      "path": "/home/ubuntu/docking_pilot/receptors/AF-P42338.pdb",
+      "sha256": "44d4d99689d50a6432c743d71d930ac13ffe65e1bcefa6932c6bc011fa9cbf98",
+      "note": "Unmodified by this remediation -- hash recorded for provenance, not because it changed."
+    }
+  },
+  "decision": "CONDITIONAL PASS -- four-isoform endpoint restored",
+  "reproducibility_verified": "analysis/beta_remediation_dimensions_1_2.py and analysis/beta_remediation_dimension3_redocking.py were both re-run at closure and confirmed to reproduce the exact numbers reported in the amendment, from committed inputs only, with no reference to the sealed-labels module, the 24/50 corpora, or any downstream selectivity artifact."
+}

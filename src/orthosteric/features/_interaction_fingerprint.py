@@ -40,8 +40,21 @@ from orthosteric.pocket._structure_record import (
     StructureSource,
 )
 
+# Governed residue/atom-chemistry classification vocabulary (RULE_AVAILABLE,
+# standard biochemistry), exported below alongside the primary API so
+# other modules working with the same chemistry (e.g.
+# features._docking_interaction_detector, which operates on docking
+# poses rather than deposited PDB structures) reuse this single source
+# of truth instead of maintaining a second, potentially divergent copy:
+# ANIONIC_RESIDUES, AROMATIC_RING_ATOMS, CATION_ATOMS, CATIONIC_RESIDUES,
+# HYDROPHOBIC_RESIDUES.
 __all__ = [
+    "ANIONIC_RESIDUES",
+    "AROMATIC_RING_ATOMS",
+    "CATIONIC_RESIDUES",
+    "CATION_ATOMS",
     "FINGERPRINT_ALGORITHM_VERSION",
+    "HYDROPHOBIC_RESIDUES",
     "ComparativeFingerprint",
     "FingerprintConfig",
     "InteractionEvidence",
@@ -95,6 +108,13 @@ _CATION_ATOMS: dict[str, list[str]] = {
     "LYS": ["NZ"],
     "HIS": ["ND1", "NE2"],
 }
+
+# Public aliases for the classification vocabulary above (see __all__ note).
+AROMATIC_RING_ATOMS = _AROMATIC_RING_ATOMS
+ANIONIC_RESIDUES = _ANIONIC_RESIDUES
+CATIONIC_RESIDUES = _CATIONIC_RESIDUES
+CATION_ATOMS = _CATION_ATOMS
+HYDROPHOBIC_RESIDUES = _HYDROPHOBIC_RESIDUES
 
 
 class InteractionType(StrEnum):

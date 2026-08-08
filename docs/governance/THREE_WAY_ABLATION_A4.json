@@ -1,0 +1,86 @@
+{
+  "snapshot_sha256": "05748f6627ead8f4177ee9deec51b1214920f4b8b86230da850dba9d429cc277",
+  "seed": 42,
+  "train_n": 822,
+  "val_n": 191,
+  "test_n": 254,
+  "scaffold_overlap": 0,
+  "component_grid": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32
+  ],
+  "results": {
+    "baseline0_independent": {
+      "n_components": {
+        "beta": 2,
+        "gamma": 2,
+        "delta": 2
+      },
+      "test": {
+        "beta": {
+          "rmse": 0.6883169697404095,
+          "sign_accuracy": 0.5669291338582677
+        },
+        "gamma": {
+          "rmse": 0.6889504245819082,
+          "sign_accuracy": 0.6929133858267716
+        },
+        "delta": {
+          "rmse": 0.6682732697612457,
+          "sign_accuracy": 0.7047244094488189
+        }
+      }
+    },
+    "baseline1_multi_task_absolute": {
+      "n_components": 8,
+      "test": {
+        "beta": {
+          "rmse": 0.7572189325792051,
+          "sign_accuracy": 0.547244094488189
+        },
+        "gamma": {
+          "rmse": 0.6935881861300158,
+          "sign_accuracy": 0.6850393700787402
+        },
+        "delta": {
+          "rmse": 0.7068807534435351,
+          "sign_accuracy": 0.8228346456692913
+        }
+      }
+    },
+    "baseline2_comparative": {
+      "n_components": 8,
+      "test": {
+        "beta": {
+          "rmse": 0.6748151149844521,
+          "sign_accuracy": 0.5748031496062992
+        },
+        "gamma": {
+          "rmse": 0.683731381645946,
+          "sign_accuracy": 0.6653543307086615
+        },
+        "delta": {
+          "rmse": 0.6316124611369555,
+          "sign_accuracy": 0.7834645669291339
+        }
+      }
+    }
+  },
+  "aggregate": {
+    "baseline0_rmse": 0.6818468880278544,
+    "baseline0_sign": 0.6548556430446194,
+    "baseline1_rmse": 0.7192292907175853,
+    "baseline1_sign": 0.6850393700787402,
+    "baseline2_rmse": 0.6633863192557845,
+    "baseline2_sign": 0.6745406824146981
+  },
+  "decomposition": {
+    "shared_representation_gap": -0.03738240268973092,
+    "comparative_target_gap": 0.05584297146180084,
+    "classification": "MIXED"
+  }
+}

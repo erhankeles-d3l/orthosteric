@@ -1,0 +1,64 @@
+{
+  "closure_timestamp_utc": "2026-08-08T07:08:34Z",
+  "purpose": "Consolidated SHA-256 manifest for Stage C, computed at closure. Every hash below was computed directly against the committed file on disk, not asserted.",
+  "stage_c_outcome": "POWER CHECK FAIL -- decisive gate does not exist at available n. Stage D NOT authorized.",
+  "artifacts": {
+    "sealed_literature_panel": {
+      "path": "data/structural_evidence/sealed_literature_panel.json",
+      "sha256": "bc44bc0b60e23e93ad4f603df5f2c74e93eedfc08599fad4587380535d12954a",
+      "n_compounds": 5
+    },
+    "sealed_validation_structures": {
+      "path": "data/structural_evidence/sealed_validation_structures.json",
+      "sha256": "59c18f836ef729e4b6c840558c7a0ebe27b34f8bcad16040be80468d8ec5df2a",
+      "n_compounds": 2069,
+      "note": "Freely readable by discovery-phase code -- Contract 5 does not block this path."
+    },
+    "sealed_validation_labels": {
+      "path": "data/sealed/sealed_validation_labels.json",
+      "sha256": "00823cd5bba16172a470ab270a66af55f7c5253d38bc8af7c02f4608d99a245b",
+      "n_compounds": 2069,
+      "n_primary_contrast": 44,
+      "note": "Reachable only via orthosteric.data.sealed_labels.load_sealed_labels_for_unblinding(); Contract 5 forbids orthosteric.discovery from importing this module at all."
+    },
+    "step1_script": {
+      "path": "analysis/stage_c_step1_seal_literature_panel.py",
+      "sha256": "ea45a60eb0b15442d0b4e03a83d2d5e1ce262b60af6aacdcfb4374f99e2d5126"
+    },
+    "step2_script": {
+      "path": "analysis/stage_c_step2_seal_validation_set.py",
+      "sha256": "7b3f71f66385f0f9d303753693f82edad2bdc050b14a5c8996257b75dbb5904d"
+    },
+    "step3_script": {
+      "path": "analysis/stage_c_step3_statistical_assessment.py",
+      "sha256": "9d160151c96241da4087a5a61539694b2962f2ca28210d2b4e7286aee7c7971f"
+    },
+    "statistical_assessment_results": {
+      "path": "docs/governance/STAGE_C_STATISTICAL_ASSESSMENT.json",
+      "sha256": "06097aeb768817486d684448fddf1d2babb0e193a09de837feee2b8915be813c"
+    },
+    "decision_record": {
+      "path": "docs/governance/STAGE_C_DECISION_RECORD.md",
+      "sha256": "00a58eedc196ac79b84d2ac21653ad599ff3a1456e87213ed04aee008bdf901a"
+    },
+    "step2_summary": {
+      "path": "docs/governance/STAGE_C_STEP2_SUMMARY.md",
+      "sha256": "4fb77d990b3834a669af927de44687ef6c6155b5a6d816b9ffdd50ed49578a1f"
+    },
+    "sealed_labels_module": {
+      "path": "src/orthosteric/data/sealed_labels.py",
+      "sha256": "4a291c49981e2cbeb438ab272733538f92bf8f8b5940131f2db86a2a3942cdb2",
+      "note": "Architectural barrier module; guard function + real (Contract-5-gated) loader, wired to the verified AuditEvent/log_audit_event signature."
+    }
+  },
+  "operating_characteristic_curve_summary": {
+    "n_primary_contrast": 44,
+    "delta_auc_0.10_boundary_calibration": {"independence": 0.036, "scaffold_correlated": 0.043, "expected_near": 0.025},
+    "delta_auc_0.15": {"independence": 0.080, "scaffold_correlated": 0.078},
+    "delta_auc_0.20": {"independence": 0.124, "scaffold_correlated": 0.154},
+    "delta_auc_0.25": {"independence": 0.286, "scaffold_correlated": 0.286},
+    "delta_auc_0.30": {"independence": 0.470, "scaffold_correlated": 0.480},
+    "pre_registered_pass_threshold": "power >= 50% at some effect size in [0.20, 0.25]",
+    "result": "FAIL -- even the largest tested effect (0.30) does not reach 50% under either sensitivity model"
+  }
+}

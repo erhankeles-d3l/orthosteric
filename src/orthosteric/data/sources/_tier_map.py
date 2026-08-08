@@ -15,8 +15,9 @@ Source identifiers covered
 --------------------------
 ChEMBL   — IDs verified against ChEMBL 37 by UniProt-accession lookup (ADR-0011).
             Previous ChEMBL 34 IDs were WRONG in ChEMBL 37 and have been removed.
-            PIK3CA and PIK3CD ChEMBL 37 IDs are PENDING_API_VERIFICATION — not
-            included here until confirmed.  See ADR-0011 for the verification command.
+            PIK3CA (p110α) = CHEMBL4005 — confirmed ChEMBL 37: UniProt P42336 lookup.
+            PIK3CD (p110δ) = CHEMBL3130 — confirmed ChEMBL 37: UniProt O00329 lookup.
+            Verification date: 2026-08-06. See ADR-0011.
 Gene     — canonical gene symbol; used for BindingDB and PubChem matching.
 UniProt  — used where source returns UniProt ACs.  Version-independent.
 
@@ -32,12 +33,10 @@ from orthosteric.data.sources._base import Admissibility
 
 _TIER1_CHEMBL: frozenset[str] = frozenset(
     {
-        # PIK3CA (p110α): CHEMBL 37 ID PENDING_API_VERIFICATION — not included.
-        #   See ADR-0011 for verification command.
-        "CHEMBL3145",  # PIK3CB  (p110β) — confirmed ChEMBL 37: UniProt P42338 lookup (ADR-0011)
-        "CHEMBL3267",  # PIK3CG  (p110γ) — confirmed ChEMBL 37: UniProt P48736 lookup (ADR-0011)
-        # PIK3CD (p110δ): CHEMBL 37 ID PENDING_API_VERIFICATION — not included.
-        #   See ADR-0011 for verification command.
+        "CHEMBL4005",  # PIK3CA (p110α) — confirmed ChEMBL 37: UniProt P42336 lookup (2026-08-06)
+        "CHEMBL3145",  # PIK3CB (p110β)  — confirmed ChEMBL 37: UniProt P42338 lookup (ADR-0011)
+        "CHEMBL3267",  # PIK3CG (p110γ)  — confirmed ChEMBL 37: UniProt P48736 lookup (ADR-0011)
+        "CHEMBL3130",  # PIK3CD (p110δ) — confirmed ChEMBL 37: UniProt O00329 lookup (2026-08-06)
     }
 )
 

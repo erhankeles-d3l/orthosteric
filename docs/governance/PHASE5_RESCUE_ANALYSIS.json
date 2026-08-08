@@ -1,0 +1,80 @@
+{
+  "24_compound": {
+    "label": "24-compound",
+    "lost_at_mapped_position_records_examined": 675,
+    "lost_record_losing_isoform_pairs_examined": 1558,
+    "denominator_note": "All SS13.1/SS13.2 counts below are per (LOST record, losing_isoform) pair, not per record -- a single record can have more than one losing isoform out of the four. This is the corrected denominator; an earlier run of this script divided by the record count alone and produced fractions above 100%, a real bug caught and fixed before this result was reported.",
+    "13_1_same_position_rescue_count": 0,
+    "13_1_interpretation": "Expected to be exactly 0 by mathematical construction (see module docstring), not merely empirically rare -- a nonzero count would indicate an implementation bug, not evidence of chemical rescue.",
+    "13_1_examples_if_any": [],
+    "13_2_loose_pocket_redundancy_count": 1549,
+    "13_2_loose_pocket_redundancy_fraction": 0.9942,
+    "13_2_strict_pocket_redundancy_count": 1481,
+    "13_2_strict_pocket_redundancy_fraction": 0.9506,
+    "13_2_no_redundancy_count": 9,
+    "13_2_no_redundancy_fraction": 0.0058,
+    "13_2_interpretation": "LOOSE: the losing isoform expresses the SAME interaction_type somewhere else in its pocket for this compound, regardless of residue functional class. STRICT: same interaction_type AND the same residue_functional_class the winning isoform shows at the original position. Neither establishes conservation of a SPECIFIC determinant -- both describe pocket-level functional redundancy, distinct from same-position rescue (SS13.1).",
+    "ss20_specificity_pocket_breakdown_by_isoform": {
+      "PI3Kalpha": {
+        "pairs_examined": 11,
+        "loose_redundancy_hits": 11,
+        "loose_redundancy_fraction": 1.0
+      },
+      "PI3Kbeta": {
+        "pairs_examined": 12,
+        "loose_redundancy_hits": 12,
+        "loose_redundancy_fraction": 1.0
+      },
+      "PI3Kgamma": {
+        "pairs_examined": 7,
+        "loose_redundancy_hits": 7,
+        "loose_redundancy_fraction": 1.0
+      },
+      "PI3Kdelta": {
+        "pairs_examined": 5,
+        "loose_redundancy_hits": 5,
+        "loose_redundancy_fraction": 1.0
+      }
+    },
+    "ss20_note": "Canonical positions 780 (Trp780) and 772 (Met772), Gate-0-verified specificity-pocket anchors. Gamma's Gate-1 self-docking FAILED and was diagnosed to incompleteness in exactly this region of 6AUD -- its row above must be read with that evidentiary caveat and never pooled with alpha/delta's rows for any claim about this region."
+  },
+  "50_compound": {
+    "label": "50-compound",
+    "lost_at_mapped_position_records_examined": 1386,
+    "lost_record_losing_isoform_pairs_examined": 3195,
+    "denominator_note": "All SS13.1/SS13.2 counts below are per (LOST record, losing_isoform) pair, not per record -- a single record can have more than one losing isoform out of the four. This is the corrected denominator; an earlier run of this script divided by the record count alone and produced fractions above 100%, a real bug caught and fixed before this result was reported.",
+    "13_1_same_position_rescue_count": 0,
+    "13_1_interpretation": "Expected to be exactly 0 by mathematical construction (see module docstring), not merely empirically rare -- a nonzero count would indicate an implementation bug, not evidence of chemical rescue.",
+    "13_1_examples_if_any": [],
+    "13_2_loose_pocket_redundancy_count": 3143,
+    "13_2_loose_pocket_redundancy_fraction": 0.9837,
+    "13_2_strict_pocket_redundancy_count": 3009,
+    "13_2_strict_pocket_redundancy_fraction": 0.9418,
+    "13_2_no_redundancy_count": 52,
+    "13_2_no_redundancy_fraction": 0.0163,
+    "13_2_interpretation": "LOOSE: the losing isoform expresses the SAME interaction_type somewhere else in its pocket for this compound, regardless of residue functional class. STRICT: same interaction_type AND the same residue_functional_class the winning isoform shows at the original position. Neither establishes conservation of a SPECIFIC determinant -- both describe pocket-level functional redundancy, distinct from same-position rescue (SS13.1).",
+    "ss20_specificity_pocket_breakdown_by_isoform": {
+      "PI3Kalpha": {
+        "pairs_examined": 27,
+        "loose_redundancy_hits": 27,
+        "loose_redundancy_fraction": 1.0
+      },
+      "PI3Kbeta": {
+        "pairs_examined": 26,
+        "loose_redundancy_hits": 26,
+        "loose_redundancy_fraction": 1.0
+      },
+      "PI3Kgamma": {
+        "pairs_examined": 19,
+        "loose_redundancy_hits": 19,
+        "loose_redundancy_fraction": 1.0
+      },
+      "PI3Kdelta": {
+        "pairs_examined": 11,
+        "loose_redundancy_hits": 11,
+        "loose_redundancy_fraction": 1.0
+      }
+    },
+    "ss20_note": "Canonical positions 780 (Trp780) and 772 (Met772), Gate-0-verified specificity-pocket anchors. Gamma's Gate-1 self-docking FAILED and was diagnosed to incompleteness in exactly this region of 6AUD -- its row above must be read with that evidentiary caveat and never pooled with alpha/delta's rows for any claim about this region."
+  }
+}

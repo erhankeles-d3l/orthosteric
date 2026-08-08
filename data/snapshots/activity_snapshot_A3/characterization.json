@@ -1,0 +1,79 @@
+{
+  "total_records": 39508,
+  "accepted_records": 39002,
+  "excluded_records": 506,
+  "per_isoform": {
+    "PI3Kalpha": 9848,
+    "PI3Kbeta": 4818,
+    "PI3Kgamma": 9330,
+    "PI3Kdelta": 15006
+  },
+  "unique_inchikeys": 16235,
+  "unique_documents": 712,
+  "within_study_all4_isoforms": 3052,
+  "within_study_ge2_isoforms": 8410,
+  "within_study_isoform_count_histogram": {
+    "1": 12265,
+    "2": 4318,
+    "3": 1040,
+    "4": 3052
+  },
+  "replicate_groups": 782,
+  "censoring_distribution": {
+    "exact": 25135,
+    "right": 4712,
+    "left": 9155
+  },
+  "top_10_documents_by_records": [
+    [
+      "CHEMBL5729533",
+      2068
+    ],
+    [
+      "CHEMBL5725325",
+      1203
+    ],
+    [
+      "CHEMBL5726624",
+      824
+    ],
+    [
+      "CHEMBL1240340",
+      818
+    ],
+    [
+      "CHEMBL5727418",
+      816
+    ],
+    [
+      "CHEMBL5725838",
+      680
+    ],
+    [
+      "CHEMBL3886547",
+      656
+    ],
+    [
+      "CHEMBL5727800",
+      607
+    ],
+    [
+      "CHEMBL3638592",
+      596
+    ],
+    [
+      "CHEMBL5725589",
+      594
+    ]
+  ],
+  "snapshot_sha256": "5e5e54cb5590da829aaccbd7e121d4197d38f1de9923799b8eec8a0296b171da",
+  "snapshot_id": "SNAP-5e5e54cb5590",
+  "chembl_version": "ChEMBL_37",
+  "targets_acquired": [
+    "CHEMBL4005",
+    "CHEMBL3145",
+    "CHEMBL3267",
+    "CHEMBL3130"
+  ],
+  "voided_predecessor": "SNAP-2b8f5ce6f236 (A0) - VOID per ADR-0013"
+}

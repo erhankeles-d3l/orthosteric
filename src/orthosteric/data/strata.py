@@ -10,12 +10,21 @@ Exit criterion:
   "missing ≠ inactive anywhere in the schema; the within-study stratum is
    separable and its size reported."
 
-What is the within-study stratum?
-----------------------------------
-Constitution §2.3(1) as amended: "Selectivity computed only from within-study,
-within-assay panels."  A within-study stratum is the set of (compound, isoform,
-value) records that share the SAME study_id AND assay_id, and therefore can be
-used to compute a valid selectivity ratio without cross-study confounding.
+What is the within-study stratum? (GDR-011, accepted, Option D)
+-------------------------------------------------------------------
+A within-study stratum is `orthosteric.data.comparability.panel_key(record)`
+— `(study_id, protocol)`, where `protocol` is the `(bao_format, assay_type)`
+signature.  This REPLACES the previous `(study_id, assay_id)` definition:
+GDR-011 found every ChEMBL assay covers exactly one isoform, so
+`(study_id, assay_id)` can never produce a four-isoform stratum — the
+defect was structural, not a matter of corpus size.
+
+Records lacking `bao_format`/`assay_type` fall back to `(study_id,
+assay_id)`, tagged LEGACY_FALLBACK by `comparability.resolve_panel_key()`.
+Each `WithinStudyStratum` records its `panel_tier`; any GGR-002a/GGR-002b
+analysis MUST filter to `PanelKeyTier.C1_PRIMARY` strata before drawing a
+scientific conclusion — a LEGACY_FALLBACK stratum is not comparability
+evidence.
 
 Explicit missingness
 --------------------
@@ -33,15 +42,17 @@ stratum cell means exactly: this compound was not measured here.
 Stratum size
 ------------
 The stratum size is the number of compounds with complete measurements across
-all required isoforms within the same (study_id, assay_id) pair.  Incomplete
-strata (missing at least one isoform) are reported separately.  Stratum size
-is reported per (study_id, assay_id, isoforms_covered).
+all required isoforms within the same panel.  Incomplete strata (missing at
+least one isoform) are reported separately.  Stratum size is reported per
+(study_id, protocol, isoforms_covered).
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
+
+from orthosteric.data.comparability import PanelKeyTier, resolve_panel_key
 
 
 @dataclass
@@ -89,6 +100,9 @@ class WithinStudyStratum:
     complete_compounds: InChIKeys with measurements in ALL four Tier 1 isoforms.
     incomplete_compounds: InChIKeys missing at least one isoform.
     stratum_size:       Number of complete compounds (the evaluation unit).
+    panel_tier:         PanelKeyTier.C1_PRIMARY or LEGACY_FALLBACK
+                        (GDR-011).  Only C1_PRIMARY strata are scientific
+                        comparability evidence.
     """
 
     study_id: str
@@ -98,9 +112,18 @@ class WithinStudyStratum:
     complete_compounds: list[str]
     incomplete_compounds: list[str]
     stratum_size: int
+    panel_tier: PanelKeyTier = PanelKeyTier.LEGACY_FALLBACK
 
     def is_usable_for_selectivity(self, required_isoforms: set[str]) -> bool:
-        """True when the stratum contains at least one complete compound."""
+        """True when the stratum contains at least one complete compound.
+
+        Completeness-only signal (SCI0-013 exit criterion); does NOT gate
+        on `panel_tier`.  Any GGR-002a/GGR-002b/SCI-2-eligibility analysis
+        MUST additionally check `panel_tier is PanelKeyTier.C1_PRIMARY`
+        before treating this stratum as scientific comparability evidence
+        (GDR-011) — a complete LEGACY_FALLBACK stratum is still complete,
+        it is simply not built on the approved comparability unit.
+        """
         return self.stratum_size > 0 and required_isoforms.issubset(self.isoforms_covered)
 
 
@@ -129,8 +152,15 @@ class StratumReport:
     strata_by_key: dict[tuple[str, str], WithinStudyStratum] = field(default_factory=dict)
 
     def stratum_sizes(self) -> dict[tuple[str, str], int]:
-        """Map of (study_id, assay_id) → stratum size."""
+        """Map of panel key → stratum size."""
         return {(s.study_id, s.assay_id): s.stratum_size for s in self.strata}
+
+    def c1_primary_strata(self) -> list[WithinStudyStratum]:
+        """Strata built on the GDR-011 Option D comparability unit — the
+        only strata usable as scientific evidence for GGR-002a, GGR-002b,
+        or SCI-2 eligibility.  Excludes every LEGACY_FALLBACK stratum.
+        """
+        return [s for s in self.strata if s.panel_tier is PanelKeyTier.C1_PRIMARY]
 
 
 def extract_strata(
@@ -142,33 +172,48 @@ def extract_strata(
     Parameters
     ----------
     records:
-        List of evidence record dicts with at minimum:
-        inchikey, isoform, study_id, assay_id, activity_value, censoring,
-        exclusion_reason, source_record_id, publication_id (optional).
+        List of evidence record dicts with at minimum: inchikey, isoform,
+        study_id, assay_id, activity_value, censoring, exclusion_reason,
+        source_record_id, publication_id (optional).  bao_format and
+        assay_type (GDR-011) should be present for real ChEMBL data; their
+        absence degrades the stratum to LEGACY_FALLBACK (see module
+        docstring and `orthosteric.data.comparability`).
     required_isoforms:
         The set of isoforms that a compound must be measured in for the
         stratum entry to be complete.  Defaults to all four Tier 1 isoforms.
 
     Returns:
     -------
-    StratumReport with all strata and the stratum size report.
+    StratumReport with all strata and the stratum size report.  Each
+    stratum carries a `panel_tier`; use `StratumReport.c1_primary_strata()`
+    before drawing any scientific conclusion.
 
     Rules
     -----
     * Only accepted records (exclusion_reason is None) contribute.
     * Missing ≠ inactive: compounds not tested in a cell have is_missing=True.
     * No imputation: activity_value is None for missing cells.
-    * All measurements within a (inchikey, isoform, study_id, assay_id) cell
-      are retained — multiple measurements are not collapsed here.
+    * All measurements within a (inchikey, isoform, panel) cell are
+      retained — multiple measurements are not collapsed here.
+    * Grouping uses `comparability.resolve_panel_key()` (GDR-011, Option D),
+      not a raw `(study_id, assay_id)` pair.
     """
-    # Group by (study_id, assay_id)
+    # Group by panel key (GDR-011, accepted, Option D).
     by_stratum: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    stratum_tier: dict[tuple[str, str], PanelKeyTier] = {}
     for rec in records:
         if rec.get("exclusion_reason") is not None:
             continue  # excluded records do not contribute
-        study = str(rec.get("study_id", rec.get("assay_id", "unknown_study")))
-        assay = str(rec.get("assay_id", "unknown_assay"))
-        by_stratum.setdefault((study, assay), []).append(rec)
+        resolved = resolve_panel_key(rec)
+        key = resolved.key
+        by_stratum.setdefault(key, []).append(rec)
+        # Conservative: any LEGACY_FALLBACK contributor downgrades the whole
+        # stratum.  Ambiguity must never upgrade a stratum to C1_PRIMARY.
+        prior = stratum_tier.get(key, PanelKeyTier.C1_PRIMARY)
+        if resolved.tier is PanelKeyTier.LEGACY_FALLBACK or prior is PanelKeyTier.LEGACY_FALLBACK:
+            stratum_tier[key] = PanelKeyTier.LEGACY_FALLBACK
+        else:
+            stratum_tier[key] = PanelKeyTier.C1_PRIMARY
 
     strata: list[WithinStudyStratum] = []
 
@@ -230,6 +275,7 @@ def extract_strata(
                 complete_compounds=complete,
                 incomplete_compounds=incomplete,
                 stratum_size=len(complete),
+                panel_tier=stratum_tier[(study_id, assay_id)],
             )
         )
 

@@ -1,33 +1,28 @@
 {
   "source": "ChEMBL",
   "source_version": "ChEMBL_37",
-  "retrieval_timestamp_utc": "2026-08-06T11:57:40Z",
+  "retrieval_timestamp_utc": "2026-08-06T12:53:14Z",
   "targets": [
     {
-      "chembl_id": "CHEMBL3145",
-      "gene": "PIK3CB",
+      "chembl_id": "CHEMBL4005",
+      "gene": "PIK3CA",
       "tier": "tier1",
       "types": {
-        "IC50": null
+        "IC50": 10031
       },
-      "total_records": 0,
-      "errors": [
-        "CHEMBL3145/IC50: probe failed"
-      ]
+      "total_records": 10031,
+      "errors": []
     },
     {
-      "chembl_id": "CHEMBL3267",
-      "gene": "PIK3CG",
+      "chembl_id": "CHEMBL3130",
+      "gene": "PIK3CD",
       "tier": "tier1",
       "types": {
-        "IC50": "PARTIAL:1000/9414"
+        "IC50": 15146
       },
-      "total_records": 0,
-      "errors": [
-        "CHEMBL3267/IC50: page 5 failed",
-        "CHEMBL3267/IC50: partial (1000/9414)"
-      ]
+      "total_records": 15146,
+      "errors": []
     }
   ],
-  "total_complete_records": 0
+  "total_complete_records": 25177
 }
