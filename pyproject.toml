@@ -12,6 +12,14 @@ dependencies = [
     "rdkit>=2024.3",  # SCI0-008b; RDKit version affects InChIKey (SCI0-011)
     "biopython>=1.84",  # SCI1-002; structural preprocessing (pocket geometry, rotamer, SASA)
     "scikit-learn>=1.5",   # SCI1-020; proteochemometric baseline (PCM)
+    # EXACT pin, deliberately: PROTONATION_POLICY_ID in
+    # features/_ligand_protonation.py is the literal string
+    # "dimorphite_dl_2.0.2_ph7.4_first_state_v1" and is written into
+    # provenance records. A different version can yield different
+    # protonation states while that ID still claims 2.0.2, silently
+    # invalidating recorded provenance. Bumping this requires bumping
+    # the policy ID too.
+    "dimorphite_dl==2.0.2",
 ]
 
 [project.optional-dependencies]
