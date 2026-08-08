@@ -16,6 +16,8 @@ Exit criteria:
 
 from __future__ import annotations
 
+from typing import Any
+
 from orthosteric.data.sources.structural._evidence_record import EvidenceClass
 from orthosteric.data.sources.structural._pi3kg_complex_matching import (
     MATCH_TIER_EXACT,
@@ -25,7 +27,7 @@ from orthosteric.data.sources.structural._pi3kg_complex_matching import (
 )
 
 
-def _corpus_rec(ik, exclusion_reason=None):
+def _corpus_rec(ik: str, exclusion_reason: str | None = None) -> dict[str, Any]:
     return {"inchikey": ik, "exclusion_reason": exclusion_reason}
 
 

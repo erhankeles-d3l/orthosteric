@@ -20,6 +20,8 @@ Exit criteria (mandate SS9, SS12, SS16, SS19, SS27):
 
 from __future__ import annotations
 
+from typing import Any
+
 from orthosteric.features._docking_interaction_detector import (
     AtomResidueInteraction,
     InteractionGeometryStatus,
@@ -34,8 +36,14 @@ from orthosteric.features._representation_2_3 import (
 )
 
 
-def _interaction(itype, residue_number=852, residue_name="ASP", ligand_atom_name="O1", **overrides):
-    defaults = {
+def _interaction(
+    itype: Any,
+    residue_number: int = 852,
+    residue_name: str = "ASP",
+    ligand_atom_name: str = "O1",
+    **overrides: Any,
+) -> AtomResidueInteraction:
+    defaults: dict[str, Any] = {
         "interaction_type": itype,
         "status": InteractionGeometryStatus.OBSERVED,
         "ligand_atom_index": 0,
@@ -78,7 +86,10 @@ def test_asp_and_glu_same_role_merge_into_one_representation_2_bin() -> None:
         ligand_atom_name="N1",
     )
     moiety_map = {"N1": LigandMoiety.AMINE_N}
-    canon_lookup = {("A", 852): 852, ("A", 900): 852}  # both map to canonical 852
+    canon_lookup: dict[tuple[str, int], int | None] = {
+        ("A", 852): 852,
+        ("A", 900): 852,
+    }  # both map to canonical 852
 
     rec_asp = aggregate_representation_2([[asp_record]], moiety_map, canon_lookup)
     rec_glu = aggregate_representation_2([[glu_record]], moiety_map, canon_lookup)

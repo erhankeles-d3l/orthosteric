@@ -19,6 +19,8 @@ Exit criteria (mandate SS15, 19, 27):
 
 from __future__ import annotations
 
+from typing import Any
+
 from orthosteric.features._docking_interaction_detector import (
     AtomResidueInteraction,
     InteractionGeometryStatus,
@@ -31,8 +33,8 @@ from orthosteric.features._residue_functional_class import (
 )
 
 
-def _interaction(itype, **overrides):
-    defaults = {
+def _interaction(itype: Any, **overrides: Any) -> AtomResidueInteraction:
+    defaults: dict[str, Any] = {
         "interaction_type": itype,
         "status": InteractionGeometryStatus.OBSERVED,
         "ligand_atom_index": 0,

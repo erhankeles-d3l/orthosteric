@@ -18,6 +18,7 @@ Exit criteria:
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -33,7 +34,15 @@ from orthosteric.features._interaction_occupancy import (
 
 
 class _FakeInteraction:
-    def __init__(self, itype, resnum, chain, atom_name, resname="GLU", distance=3.0) -> None:
+    def __init__(
+        self,
+        itype: Any,
+        resnum: int,
+        chain: str,
+        atom_name: str,
+        resname: str = "GLU",
+        distance: float = 3.0,
+    ) -> None:
         self.interaction_type = itype
         self.residue_number = resnum
         self.chain_id = chain
@@ -78,7 +87,7 @@ def test_aggregate_occupancy_exact_fraction() -> None:
 def test_zero_occupancy_interaction_never_fabricated() -> None:
     """An interaction that never occurs in any pose must not appear as a
     zero-occupancy record -- there is nothing to report."""
-    poses = [[], [], []]
+    poses: list[list[Any]] = [[], [], []]
     results = aggregate_occupancy(poses)
     assert results == []
 

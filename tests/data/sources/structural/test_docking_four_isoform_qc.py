@@ -22,6 +22,7 @@ from __future__ import annotations
 import json
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 RECORDS_PATH = Path("data/structural_evidence/docking_pilot_four_isoform_A4.json")
 COMPARATIVE_PATH = Path("data/structural_evidence/docking_pilot_four_isoform_comparative_A4.json")
@@ -29,16 +30,18 @@ COMPARATIVE_PATH = Path("data/structural_evidence/docking_pilot_four_isoform_com
 _ISOFORMS = {"PI3Kalpha", "PI3Kbeta", "PI3Kgamma", "PI3Kdelta"}
 
 
-def _records() -> list[dict]:
-    return json.loads(RECORDS_PATH.read_text())
+def _records() -> list[dict[str, Any]]:
+    data: list[dict[str, Any]] = json.loads(RECORDS_PATH.read_text())
+    return data
 
 
-def _comparative() -> dict:
-    return json.loads(COMPARATIVE_PATH.read_text())
+def _comparative() -> dict[str, Any]:
+    data: dict[str, Any] = json.loads(COMPARATIVE_PATH.read_text())
+    return data
 
 
-def _by_compound() -> dict[str, dict[str, dict]]:
-    out: dict[str, dict[str, dict]] = defaultdict(dict)
+def _by_compound() -> dict[str, dict[str, dict[str, Any]]]:
+    out: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
     for r in _records():
         out[r["compound_id"]][r["isoform"]] = r
     return out

@@ -23,6 +23,8 @@ unit tests to pass.
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 import pytest
 
@@ -31,7 +33,9 @@ from orthosteric.learning._neural_head import NeuralHead, resolve_device
 torch = pytest.importorskip("torch")
 
 
-def _synthetic_regression_data(n=60, d=32, out_dim=1, seed=0):
+def _synthetic_regression_data(
+    n: int = 60, d: int = 32, out_dim: int = 1, seed: int = 0
+) -> tuple[np.ndarray[Any, Any], np.ndarray[Any, Any]]:
     rng = np.random.RandomState(seed)
     x = rng.randn(n, d)
     true_w = rng.randn(d, out_dim)

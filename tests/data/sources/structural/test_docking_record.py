@@ -15,6 +15,8 @@ Exit criteria:
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 
 from orthosteric.data.sources.structural._docking_record import (
@@ -121,7 +123,7 @@ def test_tier_none_when_receptor_source_class_unset() -> None:
 
 
 def test_content_sha256_deterministic() -> None:
-    kwargs = {
+    kwargs: dict[str, Any] = {
         "compound_id": "IK1",
         "inchikey": "IK1",
         "isoform": "PI3Kgamma",
@@ -140,7 +142,7 @@ def test_content_sha256_deterministic() -> None:
 
 
 def test_content_sha256_changes_with_score() -> None:
-    kwargs = {
+    kwargs: dict[str, Any] = {
         "compound_id": "IK1",
         "inchikey": "IK1",
         "isoform": "PI3Kgamma",

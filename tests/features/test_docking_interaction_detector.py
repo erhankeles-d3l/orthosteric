@@ -34,7 +34,18 @@ from orthosteric.features._docking_interaction_detector import (
 _META = {"compound_id": "IK1", "isoform": "PI3Kalpha", "receptor_id": "TEST", "docking_score": -8.0}
 
 
-def _atom(name, element, adtype, x, y, z, resname="UNL", resnum=1, chain="L", is_ligand=True):
+def _atom(
+    name: str,
+    element: str,
+    adtype: str,
+    x: float,
+    y: float,
+    z: float,
+    resname: str = "UNL",
+    resnum: int = 1,
+    chain: str = "L",
+    is_ligand: bool = True,
+) -> PoseAtom:
     return PoseAtom(
         index=0,
         name=name,
@@ -64,7 +75,9 @@ def test_hbond_positive_ligand_donor_protein_acceptor() -> None:
     hits = detect_hbonds([lig_o, lig_h], [prot_o], _META)
     assert len(hits) == 1
     assert hits[0].interaction_type is InteractionType.H_BOND
-    assert hits[0].angle_degrees > 170
+    angle = hits[0].angle_degrees
+    assert angle is not None
+    assert angle > 170
 
 
 def test_hbond_negative_correct_distance_wrong_angle() -> None:
@@ -219,8 +232,13 @@ def test_hydrophobic_negative_too_far() -> None:
 
 
 def _hexagon(
-    center_z: float, name_prefix: str, resname=None, resnum=None, chain="L", is_ligand=True
-):
+    center_z: float,
+    name_prefix: str,
+    resname: str | None = None,
+    resnum: int | None = None,
+    chain: str = "L",
+    is_ligand: bool = True,
+) -> list[PoseAtom]:
 
     atoms = []
     names = (
@@ -255,7 +273,9 @@ def test_pi_pi_positive_parallel_stacked() -> None:
     hits = detect_pi_pi(lig_ring, prot_ring, _META, lig_names)
     assert len(hits) == 1
     assert hits[0].interaction_type is InteractionType.PI_PI
-    assert hits[0].plane_angle_degrees < 10  # parallel rings
+    plane_angle = hits[0].plane_angle_degrees
+    assert plane_angle is not None
+    assert plane_angle < 10  # parallel rings
 
 
 def test_pi_pi_negative_too_far() -> None:

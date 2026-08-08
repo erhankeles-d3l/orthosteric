@@ -16,6 +16,8 @@ Exit criteria:
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 
 from orthosteric.data._comparative_example import ComparativeExample
@@ -49,10 +51,10 @@ def _examples() -> list[ComparativeExample]:
 class _ConstantEncoder:
     """Dummy encoder proving the interface is a real substitution point."""
 
-    def encode(self, smiles):  # noqa: ARG002
+    def encode(self, smiles: str) -> np.ndarray[Any, Any]:  # noqa: ARG002
         return np.array([1.0, 2.0, 3.0])
 
-    def output_dim(self):
+    def output_dim(self) -> int:
         return 3
 
 
@@ -60,12 +62,13 @@ class _MeanHead:
     """Dummy head proving the interface is a real substitution point."""
 
     def __init__(self) -> None:
-        self._mean = None
+        self._mean: np.ndarray[Any, Any] | None = None
 
-    def fit(self, x, y):  # noqa: ARG002
+    def fit(self, x: np.ndarray[Any, Any], y: np.ndarray[Any, Any]) -> None:  # noqa: ARG002
         self._mean = np.mean(y, axis=0)
 
-    def predict(self, x):
+    def predict(self, x: np.ndarray[Any, Any]) -> np.ndarray[Any, Any]:
+        assert self._mean is not None, "predict called before fit"
         return (
             np.tile(self._mean, (x.shape[0], 1))
             if self._mean.ndim
@@ -97,7 +100,10 @@ def test_comparative_objective_fits_and_predicts() -> None:
 
 def test_objective_swap_without_touching_encoder_or_head() -> None:
     """The exact modular-substitution proof: only `objective` changes."""
-    kwargs = {"encoder": MorganEncoder(), "head_factory": lambda: PLSHead(n_components=2)}
+    kwargs: dict[str, Any] = {
+        "encoder": MorganEncoder(),
+        "head_factory": lambda: PLSHead(n_components=2),
+    }
     m_indep = ComparativeSelectivityModelV1(objective=ComparativeObjective.INDEPENDENT, **kwargs)
     m_comp = ComparativeSelectivityModelV1(objective=ComparativeObjective.COMPARATIVE, **kwargs)
     m_indep.fit(_examples())
@@ -152,7 +158,9 @@ def test_compound_missing_from_structural_features_is_skipped_not_fabricated() -
     model.fit(examples, structural_features=partial_structural)
     # Only 1 of 8 examples had structural evidence -> effectively no usable
     # training rows for a >1-row fit; verify no crash and no fabricated result.
-    preds = model.predict(examples[1].smiles, structural_features=partial_structural)
+    smiles_1 = examples[1].smiles
+    assert smiles_1 is not None
+    preds = model.predict(smiles_1, structural_features=partial_structural)
     assert preds == {} or isinstance(preds, dict)  # must not raise; must not fabricate
 
 
@@ -172,7 +180,7 @@ def test_as_scorer_exposes_only_score() -> None:
 
 
 def test_deterministic_given_same_input() -> None:
-    kwargs = {
+    kwargs: dict[str, Any] = {
         "encoder": MorganEncoder(),
         "head_factory": lambda: PLSHead(n_components=2),
         "objective": ComparativeObjective.COMPARATIVE,
@@ -213,10 +221,10 @@ class _FixedJointHead:
     row, regardless of fit data or input -- used to test the EXACT
     reconstruction arithmetic in predict(), not just output key presence."""
 
-    def fit(self, x, y):
+    def fit(self, x: np.ndarray[Any, Any], y: np.ndarray[Any, Any]) -> None:
         pass
 
-    def predict(self, x):
+    def predict(self, x: np.ndarray[Any, Any]) -> np.ndarray[Any, Any]:
         return np.tile(np.array([7.0, 3.0, 2.0, 1.0]), (x.shape[0], 1))
 
 
@@ -260,7 +268,10 @@ def test_three_objectives_all_swappable_independently_of_encoder_and_head() -> N
     encoder/head_factory pair -- the target formulation is a genuine
     third independent axis of variation, not a special case of the other
     two."""
-    kwargs = {"encoder": MorganEncoder(), "head_factory": lambda: PLSHead(n_components=2)}
+    kwargs: dict[str, Any] = {
+        "encoder": MorganEncoder(),
+        "head_factory": lambda: PLSHead(n_components=2),
+    }
     for objective in ComparativeObjective:
         model = ComparativeSelectivityModelV1(objective=objective, **kwargs)
         model.fit(_examples())
@@ -335,7 +346,9 @@ def test_indicator_zero_fill_fits_and_predicts_without_error() -> None:
     examples = _examples()
     partial = {examples[0].compound_id: np.array([9.0, 1.0])}
     model.fit(examples, structural_features=partial)
-    preds = model.predict(examples[0].smiles, structural_features=partial)
+    smiles_0 = examples[0].smiles
+    assert smiles_0 is not None
+    preds = model.predict(smiles_0, structural_features=partial)
     assert "PI3Kbeta" in preds
     preds_missing = model.predict("CCCCCC", structural_features=partial)
     assert preds_missing == {} or "PI3Kbeta" in preds_missing  # never raises

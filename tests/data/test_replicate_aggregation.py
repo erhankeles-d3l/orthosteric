@@ -13,6 +13,7 @@ Exit criteria:
 from __future__ import annotations
 
 import random
+from typing import Any
 
 from orthosteric.data.replicate_aggregation import (
     ReplicateType,
@@ -22,17 +23,17 @@ from orthosteric.data.replicate_aggregation import (
 
 
 def _r(
-    pchembl=None,
-    source_record_id="R1",
-    assay_id="A1",
-    censoring="exact",
-    inchikey="IK1",
-    isoform="PI3Kalpha",
-    study_id="S1",
-    bao_format="BAO_1",
-    assay_type="B",
-    exclusion_reason=None,
-):
+    pchembl: float | None = None,
+    source_record_id: str = "R1",
+    assay_id: str = "A1",
+    censoring: str = "exact",
+    inchikey: str = "IK1",
+    isoform: str = "PI3Kalpha",
+    study_id: str = "S1",
+    bao_format: str = "BAO_1",
+    assay_type: str = "B",
+    exclusion_reason: str | None = None,
+) -> dict[str, Any]:
     return {
         "pchembl_value": pchembl,
         "source_record_id": source_record_id,

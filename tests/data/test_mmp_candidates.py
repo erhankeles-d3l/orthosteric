@@ -16,6 +16,7 @@ Exit criteria:
 from __future__ import annotations
 
 import random
+from typing import Any
 
 from orthosteric.data.mmp_candidates import (
     ScaffoldPairEvidenceClass,
@@ -24,17 +25,17 @@ from orthosteric.data.mmp_candidates import (
 
 
 def _r(
-    inchikey,
-    isoform,
-    pchembl,
-    scaffold_family_id="FAM1",
-    source_record_id=None,
-    assay_id="A1",
-    censoring="exact",
-    study_id="S1",
-    bao_format="BAO_1",
-    assay_type="B",
-):
+    inchikey: str,
+    isoform: str,
+    pchembl: float | None,
+    scaffold_family_id: str = "FAM1",
+    source_record_id: str | None = None,
+    assay_id: str = "A1",
+    censoring: str = "exact",
+    study_id: str = "S1",
+    bao_format: str = "BAO_1",
+    assay_type: str = "B",
+) -> dict[str, Any]:
     return {
         "inchikey": inchikey,
         "isoform": isoform,
@@ -50,7 +51,14 @@ def _r(
     }
 
 
-def _complete_compound(ik, alpha, beta, gamma, delta, scaffold="FAM1"):
+def _complete_compound(
+    ik: str,
+    alpha: float | None,
+    beta: float | None,
+    gamma: float | None,
+    delta: float | None,
+    scaffold: str = "FAM1",
+) -> list[dict[str, Any]]:
     return [
         _r(ik, "PI3Kalpha", alpha, scaffold_family_id=scaffold),
         _r(ik, "PI3Kbeta", beta, scaffold_family_id=scaffold),
@@ -70,7 +78,12 @@ def test_every_candidate_is_exploratory_bemis_murcko() -> None:
     assert report.candidates  # sanity: something was generated
     for c in report.candidates:
         assert c.evidence_class is ScaffoldPairEvidenceClass.EXPLORATORY_BEMIS_MURCKO
-        assert c.evidence_class is not ScaffoldPairEvidenceClass.MMP_CONFIRMED
+        # Deliberate defensive assertion: mypy narrows this to a
+        # non-overlapping comparison via the line above, but the check
+        # must survive if that line is ever weakened.
+        assert (
+            c.evidence_class is not ScaffoldPairEvidenceClass.MMP_CONFIRMED  # type: ignore[comparison-overlap]
+        )
     assert "NOT matched molecular pair" in report.evidence_class_note
 
 

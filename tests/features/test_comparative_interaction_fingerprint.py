@@ -29,6 +29,8 @@ Exit criteria:
 
 from __future__ import annotations
 
+from typing import Any
+
 from orthosteric.features._comparative_interaction_fingerprint import (
     CompoundIsoformFingerprint,
     CompoundIsoformResidueFingerprint,
@@ -44,7 +46,14 @@ from orthosteric.features._interaction_occupancy import (
 from orthosteric.pocket._sequence_correspondence import CorrespondenceRecord, CorrespondenceTable
 
 
-def _occ(itype, resnum, occupancy, chain="A", atom_name="O1", resname="GLU"):
+def _occ(
+    itype: Any,
+    resnum: int,
+    occupancy: float,
+    chain: str = "A",
+    atom_name: str = "O1",
+    resname: str = "GLU",
+) -> InteractionOccupancy:
     return InteractionOccupancy(
         interaction_type=itype,
         residue_number=resnum,
@@ -59,7 +68,14 @@ def _occ(itype, resnum, occupancy, chain="A", atom_name="O1", resname="GLU"):
     )
 
 
-def _residue_occ(itype, resnum, occupancy, chain="A", resname="GLU", atoms=frozenset({"O1"})):
+def _residue_occ(
+    itype: Any,
+    resnum: int,
+    occupancy: float,
+    chain: str = "A",
+    resname: str = "GLU",
+    atoms: frozenset[str] = frozenset({"O1"}),
+) -> ResidueLevelOccupancy:
     return ResidueLevelOccupancy(
         interaction_type=itype,
         residue_number=resnum,

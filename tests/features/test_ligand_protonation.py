@@ -54,6 +54,8 @@ def test_unparseable_smiles_returns_none() -> None:
 def test_result_is_deterministic() -> None:
     r1 = protonate_ligand("c1ccccc1C(=O)O", ph=7.4)
     r2 = protonate_ligand("c1ccccc1C(=O)O", ph=7.4)
+    assert r1 is not None
+    assert r2 is not None
     assert r1.content_sha256() == r2.content_sha256()
 
 
@@ -95,6 +97,7 @@ class _FakeAtom:
 def test_charged_atom_names_empty_when_no_charged_atoms() -> None:
     result = protonate_ligand("c1ccc(N2CCOCC2)cc1", ph=7.4)
     pose_atoms = [_FakeAtom(f"A{i}", "C") for i in range(20)]
+    assert result is not None
     assert charged_atom_names_from_pose(result, pose_atoms) == frozenset()
 
 

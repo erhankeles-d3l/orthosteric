@@ -25,7 +25,7 @@ from orthosteric.data.noise_floor import (
 from orthosteric.data.replicate_aggregation import AggregatedCell, ReplicateType
 
 
-def _cell(isoform, exact_values, replicate_type):
+def _cell(isoform: str, exact_values: list[float], replicate_type: ReplicateType) -> AggregatedCell:
     return AggregatedCell(
         panel_key=("S1", "BAO_1::B"),
         inchikey="IK1",

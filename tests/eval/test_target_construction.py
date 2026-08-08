@@ -13,6 +13,8 @@ Exit criteria:
 
 from __future__ import annotations
 
+from typing import Any
+
 from orthosteric.eval._target_construction import (
     build_selectivity_targets,
     compounds_for_split,
@@ -20,16 +22,16 @@ from orthosteric.eval._target_construction import (
 
 
 def _r(
-    ik,
-    iso,
-    pchembl,
-    smiles="CCO",
-    study_id="S1",
-    bao_format="BAO_1",
-    assay_type="B",
-    source_record_id=None,
-    assay_id="A1",
-):
+    ik: str,
+    iso: str,
+    pchembl: float | None,
+    smiles: str = "CCO",
+    study_id: str = "S1",
+    bao_format: str = "BAO_1",
+    assay_type: str = "B",
+    source_record_id: str | None = None,
+    assay_id: str = "A1",
+) -> dict[str, Any]:
     return {
         "inchikey": ik,
         "isoform": iso,
@@ -45,7 +47,9 @@ def _r(
     }
 
 
-def _complete(ik, a, b, g, d, **kw):
+def _complete(
+    ik: str, a: float | None, b: float | None, g: float | None, d: float | None, **kw: Any
+) -> list[dict[str, Any]]:
     return [
         _r(ik, "PI3Kalpha", a, **kw),
         _r(ik, "PI3Kbeta", b, **kw),

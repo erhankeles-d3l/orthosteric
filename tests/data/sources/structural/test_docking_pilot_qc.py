@@ -22,12 +22,14 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 RECORDS_PATH = Path("data/structural_evidence/docking_pilot_A4.json")
 
 
-def _records() -> list[dict]:
-    return json.loads(RECORDS_PATH.read_text())
+def _records() -> list[dict[str, Any]]:
+    data: list[dict[str, Any]] = json.loads(RECORDS_PATH.read_text())
+    return data
 
 
 def test_pilot_file_exists_and_nonempty() -> None:
