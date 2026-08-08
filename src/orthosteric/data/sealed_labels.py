@@ -11,24 +11,40 @@ read by any label-blinded discovery-phase code (SS5-SS11: corpus
 assembly, motif enumeration, eligibility, permutation nulls,
 generalization) before the one-time unblinding event at SS12.
 
-This module provides a single guard function that raises
-``SealedLabelViolationError`` if a sealed label is passed to any
-discovery-phase component. It is invoked at the boundary between
-sealing (SS1/SS2) and discovery (SS5-SS11).
+Two physically separate artifacts exist:
+  - sealed_validation_structures.json (compound_id, SMILES, isoform
+    panel identifiers) -- lives under data/structural_evidence/, freely
+    readable by discovery-phase code, since it needs structures to dock.
+  - sealed_validation_labels.json (compound_id, pAct per isoform,
+    selectivity stratum) -- lives under data/sealed/, reachable ONLY
+    through this module's load_sealed_labels_for_unblinding().
 
-The barrier is *not* a policy document -- it is enforced in code, and
-additionally in import structure via `.importlinter` Contract 5, which
-forbids `orthosteric.discovery` from importing this module at all. A
-discovery-phase module that needs this module imported is already a
-violation before it ever calls anything in it.
+The barrier is enforced two ways: (1) in code, via the guard function
+below, and (2) in import structure, via `.importlinter` Contract 5,
+which forbids `orthosteric.discovery` from importing this module AT
+ALL. A discovery-phase module that needs this module imported is
+already a violation before it ever calls anything in it -- including
+calling the legitimate loading function, which exists for the SS12
+unblinding event alone.
 
-Every read of a sealed label, wherever legitimately permitted (SS12
-unblinding only), must be logged via
+Every read of the sealed labels, wherever legitimately permitted (SS12
+unblinding only), is logged via
 `runtime.audit_log.AuditEventType.SEAL_READ` -- that event type already
-exists and is reused here, not reinvented.
+exists and is reused here, not reinvented. Signature verified directly
+against the real audit_log module before use, not assumed.
 """
 
 from __future__ import annotations
+
+import json
+from pathlib import Path
+from typing import Any
+
+from orthosteric.runtime.audit_log import AuditEvent, AuditEventType, log_audit_event
+
+_REPO_ROOT = Path("/home/ubuntu/Documents/orthosteric")
+_SEALED_LABELS_PATH = _REPO_ROOT / "data" / "sealed" / "sealed_validation_labels.json"
+_AUDIT_DIR = _REPO_ROOT / "data" / "audit"
 
 
 class SealedLabelViolationError(Exception):
@@ -60,3 +76,45 @@ def assert_not_discovery_phase(context: str = "") -> None:
         "the call site -- this function existing on the call stack at "
         "all is the violation, independent of its return value."
     )
+
+
+def load_sealed_labels_for_unblinding(
+    unblinding_context: str, model_generation_hash: str, run_id: str
+) -> dict[str, Any]:
+    """Load the sealed validation labels. SS12 ONLY -- one-time event.
+
+    This is a real, working loader, not a stub -- but it is only
+    reachable at all by code that is permitted to import this module,
+    which Contract 5 (.importlinter) guarantees excludes every
+    discovery-phase module. Calling this from anywhere other than the
+    single SS12 unblinding step is a governance violation even though
+    the import barrier does not block it structurally within
+    non-discovery code -- the barrier here is the audit log record,
+    which makes every call visible and dated, not silent.
+
+    Parameters
+    ----------
+    unblinding_context:
+        Free-text description of what is being tested (e.g. "SS12
+        baseline ladder, B7 vs B2, frozen signature hash ...").
+    model_generation_hash:
+        The frozen B7 definition hash (SS11.5), or another appropriate
+        frozen-artifact hash, logged so this call can be tied to a
+        specific, already-frozen decision rather than an ad hoc query.
+    run_id:
+        Identifier for this unblinding run, per AuditEvent's schema.
+    """
+    log_audit_event(
+        AuditEvent(
+            event_type=AuditEventType.SEAL_READ,
+            run_id=run_id,
+            detail={
+                "artifact": "sealed_validation_labels",
+                "unblinding_context": unblinding_context,
+                "model_generation_hash": model_generation_hash,
+            },
+        ),
+        audit_dir=_AUDIT_DIR,
+    )
+    loaded: dict[str, Any] = json.loads(_SEALED_LABELS_PATH.read_text())
+    return loaded

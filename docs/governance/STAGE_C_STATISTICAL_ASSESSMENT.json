@@ -1,0 +1,161 @@
+{
+  "sealed_set_composition": {
+    "n_total_primary_contrast": 44,
+    "n_alpha_selective": 31,
+    "n_other_selective": 13,
+    "n_distinct_scaffolds": 33,
+    "scaffold_size_distribution": [
+      5,
+      3,
+      3,
+      2,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "note": "The full sealed set is 2069 compounds, but only 44 qualify for the frozen primary endpoint (alpha_selective vs other_selective) -- most of the sealed set lacks a complete four-isoform pAct panel needed to assign a stratum. This 44 is the number that actually matters for SS12.2's decisive gate."
+  },
+  "b2_baseline_auc_assumption": 0.6,
+  "boundary_calibration": {
+    "independence_assumed": {
+      "target_delta": 0.1,
+      "scaffold_correlated": false,
+      "n_outer": 1000,
+      "pass_fraction_ci_lower_gt_0.10": 0.036,
+      "ci_lower_median": -0.1521192822195928,
+      "ci_lower_p10": -0.323563725490196,
+      "ci_lower_p90": 0.02485723742224748,
+      "wall_time_s": 300.9
+    },
+    "scaffold_correlated": {
+      "target_delta": 0.1,
+      "scaffold_correlated": true,
+      "n_outer": 1000,
+      "pass_fraction_ci_lower_gt_0.10": 0.043,
+      "ci_lower_median": -0.15002604166666667,
+      "ci_lower_p10": -0.335646585008654,
+      "ci_lower_p90": 0.03533756973863927,
+      "wall_time_s": 296.8
+    }
+  },
+  "operating_characteristic_curve": [
+    {
+      "target_delta": 0.15,
+      "independence_assumed": {
+        "target_delta": 0.15,
+        "scaffold_correlated": false,
+        "n_outer": 500,
+        "pass_fraction_ci_lower_gt_0.10": 0.08,
+        "ci_lower_median": -0.08299040562363451,
+        "ci_lower_p10": -0.2644843311180237,
+        "ci_lower_p90": 0.08697235567205863,
+        "wall_time_s": 151.4
+      },
+      "scaffold_correlated": {
+        "target_delta": 0.15,
+        "scaffold_correlated": true,
+        "n_outer": 500,
+        "pass_fraction_ci_lower_gt_0.10": 0.078,
+        "ci_lower_median": -0.09635497374311291,
+        "ci_lower_p10": -0.26589616927852217,
+        "ci_lower_p90": 0.08264338289551354,
+        "wall_time_s": 152.0
+      }
+    },
+    {
+      "target_delta": 0.2,
+      "independence_assumed": {
+        "target_delta": 0.2,
+        "scaffold_correlated": false,
+        "n_outer": 500,
+        "pass_fraction_ci_lower_gt_0.10": 0.124,
+        "ci_lower_median": -0.045138888888888895,
+        "ci_lower_p10": -0.211029305875576,
+        "ci_lower_p90": 0.11430905060655507,
+        "wall_time_s": 150.6
+      },
+      "scaffold_correlated": {
+        "target_delta": 0.2,
+        "scaffold_correlated": true,
+        "n_outer": 500,
+        "pass_fraction_ci_lower_gt_0.10": 0.154,
+        "ci_lower_median": -0.03906272449712644,
+        "ci_lower_p10": -0.21865105449507383,
+        "ci_lower_p90": 0.1434145243226601,
+        "wall_time_s": 152.4
+      }
+    },
+    {
+      "target_delta": 0.25,
+      "independence_assumed": {
+        "target_delta": 0.25,
+        "scaffold_correlated": false,
+        "n_outer": 500,
+        "pass_fraction_ci_lower_gt_0.10": 0.286,
+        "ci_lower_median": 0.03529411764705881,
+        "ci_lower_p10": -0.12431804510250252,
+        "ci_lower_p90": 0.1823515625,
+        "wall_time_s": 151.9
+      },
+      "scaffold_correlated": {
+        "target_delta": 0.25,
+        "scaffold_correlated": true,
+        "n_outer": 500,
+        "pass_fraction_ci_lower_gt_0.10": 0.286,
+        "ci_lower_median": 0.0317540322580645,
+        "ci_lower_p10": -0.1361993890685927,
+        "ci_lower_p90": 0.1942597340731676,
+        "wall_time_s": 149.7
+      }
+    },
+    {
+      "target_delta": 0.3,
+      "independence_assumed": {
+        "target_delta": 0.3,
+        "scaffold_correlated": false,
+        "n_outer": 500,
+        "pass_fraction_ci_lower_gt_0.10": 0.47,
+        "ci_lower_median": 0.09375,
+        "ci_lower_p10": -0.05210915977961426,
+        "ci_lower_p90": 0.22321924639184168,
+        "wall_time_s": 151.1
+      },
+      "scaffold_correlated": {
+        "target_delta": 0.3,
+        "scaffold_correlated": true,
+        "n_outer": 500,
+        "pass_fraction_ci_lower_gt_0.10": 0.48,
+        "ci_lower_median": 0.09418356997971605,
+        "ci_lower_p10": -0.07142857142857141,
+        "ci_lower_p90": 0.24447012867647064,
+        "wall_time_s": 151.7
+      }
+    }
+  ]
+}

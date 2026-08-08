@@ -27,3 +27,4 @@ logs/audit/*
 # not a scientific artefact, and grow ~30MB per acquisition.
 data/raw/*/*/*/page_*.json
 data/raw/*/*/*/_count.json
+data/audit/
